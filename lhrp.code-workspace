@@ -11,7 +11,8 @@
 			"**/.hg": true,
 			"**/CVS": true,
 			"**/.DS_Store": true,
-			"**/obj":true
+			"**/obj": true,
+			"**/bin": true
 		}
 	}
 }
