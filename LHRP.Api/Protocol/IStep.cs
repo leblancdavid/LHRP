@@ -1,7 +1,9 @@
+using LHRP.Api.Instrument;
+
 namespace LHRP.Api.Protocol
 {
     public interface IStep
     {
-         void Run();
+         void Run(IInstrument instrument);
     }
 }

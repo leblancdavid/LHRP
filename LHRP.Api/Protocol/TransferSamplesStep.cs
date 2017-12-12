@@ -1,23 +1,24 @@
 using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Instrument;
+using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Protocol
 {
     public class TransferSamplesStep : IStep
     {
-        private IPipettor _pipettor;
-        public TransferSamplesStep(IPipettor pipettor)
+        public TransferSamplesStep()
         {
-            _pipettor = pipettor;
         }
 
-        public void Run()
+        public void Run(IInstrument instrument)
         {
+            var pipettor = instrument.GetPipettor();
             for(int i = 0; i < 8; ++i)
             {
-                _pipettor.PickupTips(new TipPickupParameters());
-                _pipettor.Aspirate(new AspirateParameters());
-                _pipettor.Dispense(new DispenseParameters());
-                _pipettor.DropTips(new TipDropParameters());
+                pipettor.PickupTips(new TipPickupParameters());
+                pipettor.Aspirate(new AspirateParameters());
+                pipettor.Dispense(new DispenseParameters());
+                pipettor.DropTips(new TipDropParameters());
             }
         }
     }

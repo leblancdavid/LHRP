@@ -36,5 +36,10 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
         {
             _executor = commandExecutor;
         }
+
+        public void SetExecutor(ICommandExecutor commandExecutor)
+        {
+            _executor = commandExecutor;
+        }
   }
 }
