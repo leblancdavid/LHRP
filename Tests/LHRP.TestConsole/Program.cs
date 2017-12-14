@@ -17,11 +17,6 @@ namespace LHRP.TestConsole
             var transferSampleStep = new TransferSamplesStep(numbusLiteInstrument.GetPipettor());
             protocol.AddStep(transferSampleStep);
 
-            //you can schedule/run the individual step
-            var stepSchedule = numbusLiteInstrument.Schedule(transferSampleStep);
-            numbusLiteInstrument.Run(transferSampleStep);
-
-            //or the whole protocol
             var protocolSchedule = numbusLiteInstrument.Schedule(protocol);
             numbusLiteInstrument.Run(protocol);
         }

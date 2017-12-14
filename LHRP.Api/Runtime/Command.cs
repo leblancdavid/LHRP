@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 namespace LHRP.Api.Runtime
 {
@@ -11,7 +12,17 @@ namespace LHRP.Api.Runtime
             Name = name;
         }
         
-        public string Name { get; protected set; }
+        public string Name 
+        { 
+            get
+            {
+                return _commandData["Name"].ToString();
+            }
+            protected set
+            {
+                _commandData["Name"] = value;
+            }
+        }
 
         public void SetValue(string key, object value)
         {
@@ -20,6 +31,17 @@ namespace LHRP.Api.Runtime
         public object GetValue(string key)
         {
             return _commandData[key];
+        }
+
+        public override string ToString()
+        {
+            var strBuilder = new StringBuilder();
+            foreach(var data in _commandData)
+            {
+                strBuilder.Append(data.Key + ":" + data.Value.ToString() + ", ");
+            } 
+
+            return strBuilder.ToString();
         }
     }
 }

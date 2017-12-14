@@ -16,9 +16,23 @@ namespace LHRP.Api.Protocol
         {
             for(int i = 0; i < 8; ++i)
             {
-                _pipettor.PickupTips(new TipPickupParameters(), commandExecutor);
-                _pipettor.Aspirate(new AspirateParameters(), commandExecutor);
-                _pipettor.Dispense(new DispenseParameters(), commandExecutor);
+                _pipettor.PickupTips(new TipPickupParameters()
+                {
+                    ChannelPattern = "11",
+                    Position = i
+                }, commandExecutor);
+
+                _pipettor.Aspirate(new AspirateParameters()
+                {
+                    Volume = 50,
+                    Position = i,
+                }, commandExecutor);
+
+                _pipettor.Dispense(new DispenseParameters(){
+                    Volume = 50,
+                    Position = i,
+                }, commandExecutor);
+                
                 _pipettor.DropTips(new TipDropParameters(), commandExecutor);
             }
         }
