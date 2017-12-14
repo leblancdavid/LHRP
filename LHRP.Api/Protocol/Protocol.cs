@@ -6,7 +6,7 @@ namespace LHRP.Api.Protocol
 {
     public class Protocol : IRunnable
     {
-        private List<IRunnable> _steps;
+        private List<IRunnable> _steps = new List<IRunnable>();
         public IEnumerable<IRunnable> Steps => _steps;
         public void AddStep(IRunnable step)
         {

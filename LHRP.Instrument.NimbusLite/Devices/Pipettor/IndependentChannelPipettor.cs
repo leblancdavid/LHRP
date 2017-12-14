@@ -11,23 +11,23 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
         public void Aspirate(AspirateParameters parameters, ICommandExecutor commandExecutor)
         {
-            commandExecutor.ExecuteCommand(new Command());
+            commandExecutor.ExecuteCommand(new AspirateCommand(parameters.Volume, parameters.Position));
         }
 
         public void Dispense(DispenseParameters parameters, ICommandExecutor commandExecutor)
         {
-            commandExecutor.ExecuteCommand(new Command());
+            commandExecutor.ExecuteCommand(new DispenseCommand(parameters.Volume, parameters.Position));
 
         }
 
         public void PickupTips(TipPickupParameters parameters, ICommandExecutor commandExecutor)
         {
-            commandExecutor.ExecuteCommand(new Command());
+            commandExecutor.ExecuteCommand(new PickupTipsCommand(parameters.ChannelPattern, parameters.Position));
         }
 
         public void DropTips(TipDropParameters parameters, ICommandExecutor commandExecutor)
         {
-            commandExecutor.ExecuteCommand(new Command());
+            commandExecutor.ExecuteCommand(new DropTipsCommand());
         }
   }
 }
