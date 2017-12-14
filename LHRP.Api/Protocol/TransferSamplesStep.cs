@@ -4,21 +4,22 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Protocol
 {
-    public class TransferSamplesStep : IStep
+    public class TransferSamplesStep : IRunnable
     {
-        public TransferSamplesStep()
+        private IPipettor _pipettor;
+        public TransferSamplesStep(IPipettor pipettor)
         {
+            _pipettor = pipettor;
         }
 
-        public void Run(IInstrument instrument)
+        public void Run(ICommandExecutor commandExecutor)
         {
-            var pipettor = instrument.GetPipettor();
             for(int i = 0; i < 8; ++i)
             {
-                pipettor.PickupTips(new TipPickupParameters());
-                pipettor.Aspirate(new AspirateParameters());
-                pipettor.Dispense(new DispenseParameters());
-                pipettor.DropTips(new TipDropParameters());
+                _pipettor.PickupTips(new TipPickupParameters(), commandExecutor);
+                _pipettor.Aspirate(new AspirateParameters(), commandExecutor);
+                _pipettor.Dispense(new DispenseParameters(), commandExecutor);
+                _pipettor.DropTips(new TipDropParameters(), commandExecutor);
             }
         }
     }

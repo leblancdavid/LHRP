@@ -4,41 +4,21 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Protocol
 {
-    public class Protocol
+    public class Protocol : IRunnable
     {
-        private List<IStep> _steps;
-        public IEnumerable<IStep> Steps => _steps;
-        void AddStep(IStep step)
+        private List<IRunnable> _steps;
+        public IEnumerable<IRunnable> Steps => _steps;
+        public void AddStep(IRunnable step)
         {
             _steps.Add(step);
         }
 
-        void Run(IInstrument instrument)
+        public void Run(ICommandExecutor commandExecutor)
         {
-            instrument.ExecutionMode = ExecutionMode.Execution;
             foreach(var step in _steps)
             {
-                step.Run(instrument);
+                step.Run(commandExecutor);
             }
         }
-
-        void Simulate(IInstrument instrument)
-        {
-            instrument.ExecutionMode = ExecutionMode.Simulation;
-            foreach(var step in _steps)
-            {
-                step.Run(instrument);
-            }
-        }
-
-        void Schedule(IInstrument instrument)
-        {
-            instrument.ExecutionMode = ExecutionMode.Scheduling;
-            foreach(var step in _steps)
-            {
-                step.Run(instrument);
-            }
-        }
-         
     }
 }

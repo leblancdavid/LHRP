@@ -1,6 +1,7 @@
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
+using LHRP.Api.Protocol;
 using LHRP.Api.Runtime;
 using LHRP.Instrument.NimbusLite.Devices.Pipettor;
 using LHRP.Instrument.NimbusLite.Runtime;
@@ -12,46 +13,39 @@ namespace LHRP.Instrument.NimbusLite.Instrument
         public NimbusLiteInstrument()
         {
             Executor = new NimbusLiteCommandExecutor();
-            _pipettor = new IndependentChannelPipettor(Executor);
+            _pipettor = new IndependentChannelPipettor();
 
         }
-        private ExecutionMode _executionMode;
-        public ExecutionMode ExecutionMode 
-        { 
-            get
-            {
-                return _executionMode;
-            }
-            set
-            {
-                _executionMode = value;
-                switch(_executionMode)
-                {
-                    case ExecutionMode.Scheduling:
-                        Executor = new NimbusLiteCommandScheduler();
-                        break;
-                    case ExecutionMode.Execution:
-                        Executor = new NimbusLiteCommandExecutor();
-                        break;
-                    case ExecutionMode.Simulation:
-                        Executor = new NimbusLiteCommandSimulator();
-                        break;
-                }
-                _pipettor.SetExecutor(Executor);
-            }
-        }
-
+        
         public ICommandExecutor Executor { get; private set; }
+
+        public ICommandScheduler Scheduler { get; private set; }
 
         public IDevice GetDevice(int id)
         {
-        throw new System.NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         private IndependentChannelPipettor _pipettor; 
         public IPipettor GetPipettor()
         {
-        throw new System.NotImplementedException();
+            return _pipettor;
         }
-    }
+
+        public void Run(IRunnable run)
+        {
+            run.Run(Executor);
+        }
+
+        public Schedule Schedule(IRunnable run)
+        {
+            run.Run(Scheduler);
+            return Scheduler.GetSchedule();
+        }
+
+        public void Simulate(IRunnable run)
+        {
+            run.Run(new NimbusLiteCommandSimulator());
+        }
+  }
 }

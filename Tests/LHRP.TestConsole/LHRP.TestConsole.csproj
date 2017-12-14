@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\LHRP.Api\LHRP.Api.csproj" />
+    <ProjectReference Include="..\..\LHRP.Instrument.NimbusLite\LHRP.Instrument.NimbusLite.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

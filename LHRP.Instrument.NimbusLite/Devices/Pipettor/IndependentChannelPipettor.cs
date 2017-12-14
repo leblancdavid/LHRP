@@ -5,41 +5,29 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 {
     public class IndependentChannelPipettor : IPipettor
     {
-        private ICommandExecutor _executor;
-        public IndependentChannelPipettor(ICommandExecutor executor)
+        public IndependentChannelPipettor()
         {
-            _executor = executor;
         }
 
-        public void Aspirate(AspirateParameters parameters)
+        public void Aspirate(AspirateParameters parameters, ICommandExecutor commandExecutor)
         {
-            _executor.ExecuteCommand(new Command());
+            commandExecutor.ExecuteCommand(new Command());
         }
 
-        public void Dispense(DispenseParameters parameters)
+        public void Dispense(DispenseParameters parameters, ICommandExecutor commandExecutor)
         {
-            _executor.ExecuteCommand(new Command());
+            commandExecutor.ExecuteCommand(new Command());
 
         }
 
-        public void PickupTips(TipPickupParameters parameters)
+        public void PickupTips(TipPickupParameters parameters, ICommandExecutor commandExecutor)
         {
-            _executor.ExecuteCommand(new Command());
+            commandExecutor.ExecuteCommand(new Command());
         }
 
-        public void DropTips(TipDropParameters parameters)
+        public void DropTips(TipDropParameters parameters, ICommandExecutor commandExecutor)
         {
-            _executor.ExecuteCommand(new Command());
-        }
-
-        public void SetExecutionMode(ICommandExecutor commandExecutor)
-        {
-            _executor = commandExecutor;
-        }
-
-        public void SetExecutor(ICommandExecutor commandExecutor)
-        {
-            _executor = commandExecutor;
+            commandExecutor.ExecuteCommand(new Command());
         }
   }
 }
