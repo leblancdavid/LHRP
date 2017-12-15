@@ -2,6 +2,7 @@
 using LHRP.Api;
 using LHRP.Api.Protocol;
 using LHRP.Instrument.NimbusLite.Instrument;
+using LHRP.Instrument.NimbusLite.Runtime;
 
 namespace LHRP.TestConsole
 {
@@ -9,16 +10,16 @@ namespace LHRP.TestConsole
     {
         static void Main(string[] args)
         {
-            //Setup the instrument
-            var numbusLiteInstrument = new NimbusLiteInstrument();
-            
             //Setup protocol and steps
             var protocol = new Protocol();
-            var transferSampleStep = new TransferSamplesStep(numbusLiteInstrument.GetPipettor());
+            var transferSampleStep = new TransferSamplesStep();
             protocol.AddStep(transferSampleStep);
 
-            var protocolSchedule = numbusLiteInstrument.Schedule(protocol);
-            numbusLiteInstrument.Run(protocol);
+            var nimbusLiteSimulation = new NimbusLiteSimulationEngine();
+            nimbusLiteSimulation.Run(protocol);
+
+            var nimbusLiteRun = new NimbusLiteRuntimeEngine();
+            nimbusLiteRun.Run(protocol);
         }
     }
 }

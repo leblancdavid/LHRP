@@ -3,11 +3,12 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 {
-    public class IndependentChannelPipettor : IPipettor
+    public class IndependentChannelSimulatedPipettor: IPipettor, ISimulation
     {
-        public IndependentChannelPipettor()
+    
+        public IndependentChannelSimulatedPipettor()
         {
-            
+
         }
 
         public void Aspirate(AspirateParameters parameters)
@@ -26,7 +27,9 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
         public void DropTips(TipDropParameters parameters)
         {
-
+            
         }
+
+        public SimulationSpeedMode SpeedMode { get; set; }
   }
 }

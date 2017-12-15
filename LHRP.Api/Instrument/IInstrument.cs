@@ -9,12 +9,6 @@ namespace LHRP.Api.Instrument
     {
         IPipettor GetPipettor();
         IDevice GetDevice(int id);
-        ICommandExecutor Executor { get; }
-        ICommandScheduler Scheduler { get; }
-
-        void Run(IRunnable run);
-        Schedule Schedule(IRunnable run);
-        void Simulate(IRunnable run);
 
     }
 }
