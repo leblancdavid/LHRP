@@ -17,9 +17,11 @@ namespace LHRP.TestConsole
 
             var nimbusLiteSimulation = new NimbusLiteSimulationEngine();
             nimbusLiteSimulation.Run(protocol);
+            nimbusLiteSimulation.Run(transferSampleStep);
 
             var nimbusLiteRun = new NimbusLiteRuntimeEngine();
             nimbusLiteRun.Run(protocol);
+            nimbusLiteRun.Run(transferSampleStep);
         }
     }
 }
