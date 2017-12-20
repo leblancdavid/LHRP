@@ -5,7 +5,7 @@ using LHRP.Instrument.NimbusLite.Instrument;
 
 namespace LHRP.Instrument.NimbusLite.Runtime
 {
-    public class NimbusLiteSimulationEngine : IRuntimeEngine, ISimulation
+    public class NimbusLiteSimulationEngine : IRuntimeEngine, ISimulation, IScheduler
     {
         NimbusLiteSimulatedInstrument _instrument;
         public NimbusLiteSimulationEngine()
@@ -35,9 +35,14 @@ namespace LHRP.Instrument.NimbusLite.Runtime
             }
         }
 
-        public void Run(IRunnable run)
+        public ProcessResult Run(IRunnable run)
         {
-            run.Run(Instrument);
+            return run.Run(Instrument);
+        }
+
+        public Schedule GetSchedule()
+        {
+            return new Schedule();
         }
     }
 }

@@ -13,12 +13,15 @@ namespace LHRP.Api.Protocol
             _steps.Add(step);
         }
 
-        public void Run(IInstrument instrument)
+        public ProcessResult Run(IInstrument instrument)
         {
+            var result = new ProcessResult();
             foreach(var step in _steps)
             {
-                step.Run(instrument);
+                result.AppendSubProcessResult(step.Run(instrument));
             }
+
+            return result;
         }
     }
 }

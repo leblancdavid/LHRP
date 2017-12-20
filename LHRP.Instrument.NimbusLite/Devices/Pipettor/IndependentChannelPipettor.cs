@@ -11,24 +11,28 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             
         }
 
-        public void Aspirate(AspirateParameters parameters)
+        public ProcessResult Aspirate(AspirateParameters parameters)
         {
             Console.WriteLine(parameters);
+            return new ProcessResult();
         }
 
-        public void Dispense(DispenseParameters parameters)
+        public ProcessResult Dispense(DispenseParameters parameters)
         {
             Console.WriteLine(parameters);
+            return new ProcessResult();
         }
 
-        public void PickupTips(TipPickupParameters parameters)
+        public ProcessResult PickupTips(TipPickupParameters parameters)
         {
             Console.WriteLine(parameters);
+            return new ProcessResult();
         }
 
-        public void DropTips(TipDropParameters parameters)
+        public ProcessResult DropTips(TipDropParameters parameters)
         {
             Console.WriteLine(parameters);
+            return new ProcessResult();
         }
   }
 }

@@ -11,30 +11,37 @@ namespace LHRP.Api.Protocol
 
         }
 
-        public void Run(IInstrument instrument)
+        public ProcessResult Run(IInstrument instrument)
         {
+            var result = new ProcessResult();
             var pipettor = instrument.GetPipettor();
             for(int i = 0; i < 8; ++i)
             {
-                pipettor.PickupTips(new TipPickupParameters()
-                {
-                    ChannelPattern = "11",
-                    Position = i
-                });
+                result.AppendSubProcessResult(
+                    pipettor.PickupTips(new TipPickupParameters()
+                    {
+                        ChannelPattern = "11",
+                        Position = i
+                    }));
 
-                pipettor.Aspirate(new AspirateParameters()
-                {
-                    Volume = 50,
-                    Position = i,
-                });
+                result.AppendSubProcessResult(
+                    pipettor.Aspirate(new AspirateParameters()
+                    {
+                        Volume = 50,
+                        Position = i,
+                    }));
 
-                pipettor.Dispense(new DispenseParameters(){
-                    Volume = 50,
-                    Position = i,
-                });
+                result.AppendSubProcessResult(
+                    pipettor.Dispense(new DispenseParameters()
+                    {
+                        Volume = 50,
+                        Position = i,
+                    }));
 
-                pipettor.DropTips(new TipDropParameters());
+                result.AppendSubProcessResult(pipettor.DropTips(new TipDropParameters()));
             }
+
+            return result;
         }
     }
 }

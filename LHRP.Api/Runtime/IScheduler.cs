@@ -1,6 +1,6 @@
 namespace LHRP.Api.Runtime
 {
-    public interface ISchedulingEngine : IRuntimeEngine
+    public interface IScheduler
     {
          Schedule GetSchedule();
     }

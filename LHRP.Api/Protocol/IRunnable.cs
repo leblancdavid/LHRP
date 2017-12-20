@@ -5,6 +5,6 @@ namespace LHRP.Api.Protocol
 {
     public interface IRunnable
     {
-         void Run(IInstrument instrument);
+         ProcessResult Run(IInstrument instrument);
     }
 }

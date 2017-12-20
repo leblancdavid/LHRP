@@ -13,9 +13,9 @@ namespace LHRP.Instrument.NimbusLite.Runtime
         }
         public IInstrument Instrument { get; private set; }
 
-        public void Run(IRunnable run)
+        public ProcessResult Run(IRunnable run)
         {
-            run.Run(Instrument);
+            return run.Run(Instrument);
         }
     }
 }

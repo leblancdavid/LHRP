@@ -6,6 +6,6 @@ namespace LHRP.Api.Runtime
     public interface IRuntimeEngine
     {
         IInstrument Instrument { get; }
-        void Run(IRunnable run);
+        ProcessResult Run(IRunnable run);
     }
 }
