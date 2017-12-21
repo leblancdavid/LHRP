@@ -21,7 +21,7 @@ namespace LHRP.Api.Protocol
                 result.AppendSubProcessResult(
                     pipettor.PickupTips(new TipPickupParameters()
                     {
-                        ChannelPattern = "11",
+                        ChannelPattern = "1",
                         Position = new Position()
                     }));
 

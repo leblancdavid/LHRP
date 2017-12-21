@@ -40,8 +40,10 @@ namespace LHRP.Instrument.NimbusLite.Runtime
             return run.Run(Instrument);
         }
 
-        public Schedule Schedule()
+        public Schedule Schedule(IRunnable run)
         {
+            SimulationSpeedFactor = 0;
+            var process = run.Run(Instrument);
             return new Schedule();
         }
     }

@@ -16,8 +16,10 @@ namespace LHRP.TestConsole
             protocol.AddStep(transferSampleStep);
 
             var nimbusLiteSimulation = new NimbusLiteSimulationEngine();
+            //var schedule = nimbusLiteSimulation.Schedule(protocol);
+            nimbusLiteSimulation.SimulationSpeedFactor = 5;
             nimbusLiteSimulation.Run(protocol);
-            
+
             //can also schedule or run an individual step
             //nimbusLiteSimulation.Run(transferSampleStep);
         }
