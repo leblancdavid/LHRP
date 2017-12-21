@@ -40,7 +40,7 @@ namespace LHRP.Instrument.NimbusLite.Runtime
             return run.Run(Instrument);
         }
 
-        public Schedule GetSchedule()
+        public Schedule Schedule()
         {
             return new Schedule();
         }

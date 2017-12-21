@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Devices.Pipettor
@@ -8,5 +9,8 @@ namespace LHRP.Api.Devices.Pipettor
         ProcessResult Dispense(DispenseParameters parameters);
         ProcessResult PickupTips(TipPickupParameters parameters);
         ProcessResult DropTips(TipDropParameters parameters);
+
+        int NumberChannels { get; }
+        IEnumerable<ChannelStatus> ChannelStatus { get; }
     }
 }
