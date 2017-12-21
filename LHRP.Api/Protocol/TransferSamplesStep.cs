@@ -1,3 +1,4 @@
+using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
@@ -21,24 +22,28 @@ namespace LHRP.Api.Protocol
                     pipettor.PickupTips(new TipPickupParameters()
                     {
                         ChannelPattern = "11",
-                        Position = i
+                        Position = new Position()
                     }));
 
                 result.AppendSubProcessResult(
                     pipettor.Aspirate(new AspirateParameters()
                     {
                         Volume = 50,
-                        Position = i,
+                        Position = new Position(),
                     }));
 
                 result.AppendSubProcessResult(
                     pipettor.Dispense(new DispenseParameters()
                     {
                         Volume = 50,
-                        Position = i,
+                        Position = new Position(),
                     }));
 
-                result.AppendSubProcessResult(pipettor.DropTips(new TipDropParameters()));
+                result.AppendSubProcessResult(
+                    pipettor.DropTips(new TipDropParameters()
+                    {
+                        Position = new Position()
+                    }));
             }
 
             return result;

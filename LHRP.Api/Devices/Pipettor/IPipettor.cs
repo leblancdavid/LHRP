@@ -11,6 +11,5 @@ namespace LHRP.Api.Devices.Pipettor
         ProcessResult DropTips(TipDropParameters parameters);
 
         int NumberChannels { get; }
-        IEnumerable<ChannelStatus> ChannelStatus { get; }
     }
 }

@@ -5,8 +5,8 @@ namespace LHRP.Api.Devices
     public interface IDevice
     {
         bool IsInitialized { get; }
-        void Initialize();
-        void Deinitialize();
+        ProcessResult Initialize();
+        ProcessResult Deinitialize();
 
         IDeviceStatus DeviceStatus { get; }
     }

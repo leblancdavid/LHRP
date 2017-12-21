@@ -2,6 +2,7 @@ namespace LHRP.Api.Runtime
 {
     public interface ISimulation
     {
-        SimulationSpeedMode SpeedMode { get; set; }
+        uint SimulationSpeedFactor { get; set; }
+        double FailureRate { get; set; }
     }
 }

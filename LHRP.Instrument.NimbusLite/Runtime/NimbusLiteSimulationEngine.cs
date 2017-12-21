@@ -8,10 +8,24 @@ namespace LHRP.Instrument.NimbusLite.Runtime
     public class NimbusLiteSimulationEngine : IRuntimeEngine, ISimulation, IScheduler
     {
         NimbusLiteSimulatedInstrument _instrument;
+        
+        private uint _simulationSpeedFactor;
+        public uint SimulationSpeedFactor 
+        { 
+            get
+            {
+                return _simulationSpeedFactor;
+            }
+            set
+            {
+                _simulationSpeedFactor = value;
+                _instrument.SimulationSpeedFactor = value;
+            }
+        }
+        public double FailureRate { get; set; }
         public NimbusLiteSimulationEngine()
         {
             _instrument = new NimbusLiteSimulatedInstrument();
-            SpeedMode = SimulationSpeedMode.RealTime;
         }
         public IInstrument Instrument 
         { 
@@ -21,20 +35,6 @@ namespace LHRP.Instrument.NimbusLite.Runtime
             }
         }
         
-        private SimulationSpeedMode _speedMode;
-        public SimulationSpeedMode SpeedMode 
-        { 
-            get
-            {
-                return _speedMode;
-            }
-            set
-            {
-                _speedMode = value;
-                _instrument.SpeedMode = _speedMode;
-            }
-        }
-
         public ProcessResult Run(IRunnable run)
         {
             return run.Run(Instrument);

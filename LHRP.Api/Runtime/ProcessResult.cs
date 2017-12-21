@@ -13,6 +13,30 @@ namespace LHRP.Api.Runtime
         public bool IsSuccess { get; private set; }
         public string ErrorMessage { get; private set; }
 
+        public ProcessResult()
+        {
+            Duration = new TimeSpan(0);
+            EstimatedDuration = new TimeSpan(0);
+            IsSuccess = true;
+            ErrorMessage = "";
+        }
+
+        public ProcessResult(TimeSpan estimate, TimeSpan duration)
+        {
+            Duration = duration;
+            EstimatedDuration = estimate;
+            IsSuccess = true;
+            ErrorMessage = "";
+        }
+
+        public ProcessResult(TimeSpan estimate, TimeSpan duration, bool success, string errorMessage)
+        {
+            Duration = duration;
+            EstimatedDuration = estimate;
+            IsSuccess = success;
+            ErrorMessage = errorMessage;
+        }
+
         public void AppendSubProcessResult(ProcessResult subProcess)
         {
             Duration += subProcess.Duration;

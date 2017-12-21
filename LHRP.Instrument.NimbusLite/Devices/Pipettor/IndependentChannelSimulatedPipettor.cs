@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
@@ -8,52 +9,113 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 {
     public class IndependentChannelSimulatedPipettor: IPipettor, ISimulation
     {
-        public SimulationSpeedMode SpeedMode { get; set; }
-        public int NumberChannels => throw new NotImplementedException();
-        public IEnumerable<ChannelStatus> ChannelStatus => throw new NotImplementedException();
-        public IDeviceStatus DeviceStatus { get; }
+        private const double _motorSpeed = 100.0; //mm/s
+        public uint SimulationSpeedFactor { get; set; }
+        public double FailureRate { get; set; }
+        public int NumberChannels { get; private set; }
+        private PipettorStatus _pipettorStatus;
+        public IDeviceStatus DeviceStatus 
+        { 
+            get { return _pipettorStatus; } 
+        }
 
         public IndependentChannelSimulatedPipettor()
         {
-
+            NumberChannels = 1;
+            _pipettorStatus = new PipettorStatus(NumberChannels);
+            SimulationSpeedFactor = 1;
+            FailureRate = 0;
         }
 
         public ProcessResult Aspirate(AspirateParameters parameters)
         {
-            Console.WriteLine("Sim: " + parameters);
-            return new ProcessResult();
+            Console.WriteLine("Aspirating " + parameters.Volume + "uL from position: (" + 
+                parameters.Position.X + ", " +
+                parameters.Position.Y + ", " + 
+                parameters.Position.Z + ")");
+
+            var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 1);
+            SimulateRuntimeWait(estimatedTime);
+
+            _pipettorStatus.CurrentPosition = parameters.Position;
+
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
         public ProcessResult Dispense(DispenseParameters parameters)
         {
-            Console.WriteLine("Sim: " + parameters);
-            return new ProcessResult();
+            Console.WriteLine("Dispensing " + parameters.Volume + "uL to position: (" + 
+                parameters.Position.X + ", " +
+                parameters.Position.Y + ", " + 
+                parameters.Position.Z + ")");
+
+            var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 1);
+            SimulateRuntimeWait(estimatedTime);
+
+            _pipettorStatus.CurrentPosition = parameters.Position;
+
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
         public ProcessResult PickupTips(TipPickupParameters parameters)
         {
-            Console.WriteLine("Sim: " + parameters);
-            return new ProcessResult();
+            Console.WriteLine("Picking-up tips from position: (" + 
+                parameters.Position.X + ", " +
+                parameters.Position.Y + ", " + 
+                parameters.Position.Z + ")");
+
+            //takes 3 seconds to pickup tips
+            var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 3); 
+            SimulateRuntimeWait(estimatedTime);
+
+            _pipettorStatus.CurrentPosition = parameters.Position;
+
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
         public ProcessResult DropTips(TipDropParameters parameters)
         {
-            Console.WriteLine("Sim: " + parameters);
-            return new ProcessResult();
+            Console.WriteLine("Dropping tips into position: (" + 
+                parameters.Position.X + ", " +
+                parameters.Position.Y + ", " + 
+                parameters.Position.Z + ")");
+
+            //takes 3 seconds to drop tips
+            var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 3); 
+            SimulateRuntimeWait(estimatedTime);
+
+            _pipettorStatus.CurrentPosition = parameters.Position;
+
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
         
         public bool IsInitialized => throw new NotImplementedException();
-        public void Initialize()
+        public ProcessResult Initialize()
         {
-        throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void Deinitialize()
+        public ProcessResult Deinitialize()
         {
-        throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        
-  }
+        private TimeSpan GetTravelTimeToPosition(Position position)
+        {
+            double distance = Math.Sqrt((_pipettorStatus.CurrentPosition.X - position.X)*(_pipettorStatus.CurrentPosition.X - position.X) + 
+                (_pipettorStatus.CurrentPosition.Y - position.Y)*(_pipettorStatus.CurrentPosition.Y - position.Y) +
+                (_pipettorStatus.CurrentPosition.Z - position.Z)*(_pipettorStatus.CurrentPosition.Z - position.Z));
+
+            return new TimeSpan(0, 0, 0, 0, (int)(distance/_motorSpeed * 1000.0));
+        }
+        private void SimulateRuntimeWait(TimeSpan estimatedDuration)
+        {
+            if(SimulationSpeedFactor == 0)
+                return;
+            
+            Thread.Sleep((int)estimatedDuration.TotalMilliseconds / (int)SimulationSpeedFactor);
+        }
+
+    }
 }

@@ -9,29 +9,29 @@ namespace LHRP.Instrument.NimbusLite.Instrument
     public class NimbusLiteSimulatedInstrument : IInstrument, ISimulation
     {
         IndependentChannelSimulatedPipettor _pipettor;
-        public NimbusLiteSimulatedInstrument()
-        {
-            _pipettor = new IndependentChannelSimulatedPipettor();
-            SpeedMode = SimulationSpeedMode.RealTime;
-        }
-
-        private SimulationSpeedMode _speedMode;
-        public SimulationSpeedMode SpeedMode 
+        
+        private uint _simulationSpeedFactor;
+        public uint SimulationSpeedFactor 
         { 
             get
             {
-                return _speedMode;
+                return _simulationSpeedFactor;
             }
             set
             {
-                _speedMode = value;
-                _pipettor.SpeedMode = _speedMode;
+                _simulationSpeedFactor = value;
+                _pipettor.SimulationSpeedFactor = value;
             }
+        }
+        public double FailureRate { get; set; }
+        public NimbusLiteSimulatedInstrument()
+        {
+            _pipettor = new IndependentChannelSimulatedPipettor();
         }
 
         public IDevice GetDevice(int id)
         {
-        throw new System.NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         public IPipettor GetPipettor()
