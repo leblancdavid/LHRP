@@ -1,3 +1,4 @@
+using LHRP.Api.Common;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol;
 
@@ -6,6 +7,6 @@ namespace LHRP.Api.Runtime
     public interface IRuntimeEngine
     {
         IInstrument Instrument { get; }
-        ProcessResult Run(IRunnable run);
+        Result<Process> Run(IRunnable run);
     }
 }

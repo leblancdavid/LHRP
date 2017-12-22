@@ -1,3 +1,4 @@
+using LHRP.Api.Common;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
@@ -12,41 +13,41 @@ namespace LHRP.Api.Protocol
 
         }
 
-        public ProcessResult Run(IInstrument instrument)
+        public Result<Process> Run(IInstrument instrument)
         {
-            var result = new ProcessResult();
+            var process = new Process();
             var pipettor = instrument.GetPipettor();
             for(int i = 0; i < 8; ++i)
             {
-                result.AppendSubProcessResult(
-                    pipettor.PickupTips(new TipPickupParameters()
+                var tipPickupResult = pipettor.PickupTips(new TipPickupParameters()
                     {
                         ChannelPattern = "1",
                         Position = new Position()
-                    }));
-
-                result.AppendSubProcessResult(
-                    pipettor.Aspirate(new AspirateParameters()
+                    });
+                process.AppendSubProcess(tipPickupResult.Value);
+                
+                var aspirateResult = pipettor.Aspirate(new AspirateParameters()
                     {
                         Volume = 50,
                         Position = new Position(),
-                    }));
+                    });
+                process.AppendSubProcess(aspirateResult.Value);
 
-                result.AppendSubProcessResult(
-                    pipettor.Dispense(new DispenseParameters()
+                var dispenseResult = pipettor.Dispense(new DispenseParameters()
                     {
                         Volume = 50,
                         Position = new Position(),
-                    }));
+                    });
+                process.AppendSubProcess(dispenseResult.Value);
 
-                result.AppendSubProcessResult(
-                    pipettor.DropTips(new TipDropParameters()
+                var dropTipsResult = pipettor.DropTips(new TipDropParameters()
                     {
                         Position = new Position()
-                    }));
+                    });
+                process.AppendSubProcess(dropTipsResult.Value);
             }
 
-            return result;
+            return Result<Process>.Ok(process);
         }
     }
 }

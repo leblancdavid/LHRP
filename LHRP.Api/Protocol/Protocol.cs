@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LHRP.Api.Common;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 
@@ -13,15 +14,20 @@ namespace LHRP.Api.Protocol
             _steps.Add(step);
         }
 
-        public ProcessResult Run(IInstrument instrument)
+        public Result<Process> Run(IInstrument instrument)
         {
-            var result = new ProcessResult();
+            var process = new Process();
             foreach(var step in _steps)
             {
-                result.AppendSubProcessResult(step.Run(instrument));
+                var stepProcessResult = step.Run(instrument);
+                if(stepProcessResult.IsFailure)
+                {
+                    //TODO handle errors
+                }
+                process.AppendSubProcess(stepProcessResult.Value);
             }
 
-            return result;
+            return Result<Process>.Ok(process);
         }
     }
 }

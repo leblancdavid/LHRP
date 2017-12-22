@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LHRP.Api.Common;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
@@ -17,36 +18,36 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             
         }
 
-        public ProcessResult Aspirate(AspirateParameters parameters)
+        public Result<Process> Aspirate(AspirateParameters parameters)
         {
             Console.WriteLine(parameters);
-            return new ProcessResult(new TimeSpan(), new TimeSpan());
+            return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
-        public ProcessResult Dispense(DispenseParameters parameters)
+        public Result<Process> Dispense(DispenseParameters parameters)
         {
             Console.WriteLine(parameters);
-            return new ProcessResult(new TimeSpan(), new TimeSpan());
+            return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
-        public ProcessResult PickupTips(TipPickupParameters parameters)
+        public Result<Process> PickupTips(TipPickupParameters parameters)
         {
             Console.WriteLine(parameters);
-            return new ProcessResult(new TimeSpan(), new TimeSpan());
+            return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
-        public ProcessResult DropTips(TipDropParameters parameters)
+        public Result<Process> DropTips(TipDropParameters parameters)
         {
             Console.WriteLine(parameters);
-            return new ProcessResult(new TimeSpan(), new TimeSpan());
+            return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
-        public ProcessResult Initialize()
+        public Result<Process> Initialize()
         {
         throw new NotImplementedException();
         }
 
-        public ProcessResult Deinitialize()
+        public Result<Process> Deinitialize()
         {
         throw new NotImplementedException();
         }

@@ -1,3 +1,4 @@
+using LHRP.Api.Common;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol;
 using LHRP.Api.Runtime;
@@ -13,7 +14,7 @@ namespace LHRP.Instrument.NimbusLite.Runtime
         }
         public IInstrument Instrument { get; private set; }
 
-        public ProcessResult Run(IRunnable run)
+        public Result<Process> Run(IRunnable run)
         {
             return run.Run(Instrument);
         }

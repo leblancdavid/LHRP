@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using LHRP.Api.Common;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
@@ -27,7 +28,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             FailureRate = 0;
         }
 
-        public ProcessResult Aspirate(AspirateParameters parameters)
+        public Result<Process> Aspirate(AspirateParameters parameters)
         {
             Console.WriteLine("Aspirating " + parameters.Volume + "uL from position: (" + 
                 parameters.Position.X + ", " +
@@ -39,10 +40,10 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return new ProcessResult(estimatedTime, estimatedTime);
+            return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }
 
-        public ProcessResult Dispense(DispenseParameters parameters)
+        public Result<Process> Dispense(DispenseParameters parameters)
         {
             Console.WriteLine("Dispensing " + parameters.Volume + "uL to position: (" + 
                 parameters.Position.X + ", " +
@@ -54,10 +55,10 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return new ProcessResult(estimatedTime, estimatedTime);
+            return  Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }
 
-        public ProcessResult PickupTips(TipPickupParameters parameters)
+        public Result<Process> PickupTips(TipPickupParameters parameters)
         {
             Console.WriteLine("Picking-up tips from position: (" + 
                 parameters.Position.X + ", " +
@@ -70,10 +71,10 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return new ProcessResult(estimatedTime, estimatedTime);
+            return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }
 
-        public ProcessResult DropTips(TipDropParameters parameters)
+        public Result<Process> DropTips(TipDropParameters parameters)
         {
             Console.WriteLine("Dropping tips into position: (" + 
                 parameters.Position.X + ", " +
@@ -86,17 +87,17 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return new ProcessResult(estimatedTime, estimatedTime);
+            return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }
 
         
         public bool IsInitialized => throw new NotImplementedException();
-        public ProcessResult Initialize()
+        public Result<Process> Initialize()
         {
             throw new NotImplementedException();
         }
 
-        public ProcessResult Deinitialize()
+        public Result<Process> Deinitialize()
         {
             throw new NotImplementedException();
         }
