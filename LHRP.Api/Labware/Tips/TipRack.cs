@@ -70,5 +70,28 @@ namespace LHRP.Api.Labware.Tips
             return Result.Ok();
         }
 
+        public Result<LabwareAddress> GetNextAvailableTip()
+        {
+            if(RemainingTips == 0)
+            {
+                return Result<LabwareAddress>.Fail("Tip-rack is empty.");
+            }
+
+            var nextAddress = new LabwareAddress(int.MaxValue, int.MaxValue);
+            foreach(var address in _tips.Keys)
+            {
+                if(address.Column < nextAddress.Column)
+                {
+                    nextAddress = address;
+                }
+                else if(address.Column == nextAddress.Column && address.Row < nextAddress.Row)
+                {
+                    nextAddress = address;
+                }
+            }
+
+            return Result<LabwareAddress>.Ok(nextAddress);
+        }
+
     }
 }
