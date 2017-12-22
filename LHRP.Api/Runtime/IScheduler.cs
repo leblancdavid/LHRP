@@ -1,9 +1,10 @@
+using LHRP.Api.Common;
 using LHRP.Api.Protocol;
 
 namespace LHRP.Api.Runtime
 {
     public interface IScheduler
     {
-         Schedule Schedule(IRunnable run);
+         Result<Process> Schedule(IRunnable run);
     }
 }

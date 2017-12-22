@@ -41,11 +41,15 @@ namespace LHRP.Instrument.NimbusLite.Runtime
             return run.Run(Instrument);
         }
 
-        public Schedule Schedule(IRunnable run)
+        public Result<Process> Schedule(IRunnable run)
         {
+            var previousSpeedFactor = _simulationSpeedFactor;
             SimulationSpeedFactor = 0;
             var process = run.Run(Instrument);
-            return new Schedule();
+            //reset the speed
+            SimulationSpeedFactor = previousSpeedFactor;
+
+            return process;
         }
     }
 }
