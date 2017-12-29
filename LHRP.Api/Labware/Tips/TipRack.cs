@@ -4,13 +4,13 @@ using LHRP.Api.Devices;
 
 namespace LHRP.Api.Labware.Tips
 {
-    public class TipRack
+    public class TipRack : Labware
     {
         public int TotalTipCount 
         { 
             get
             {
-                return Rows * Columns;
+                return Definition.Rows * Definition.Columns;
             }
         }
         public int RemainingTips 
@@ -20,42 +20,38 @@ namespace LHRP.Api.Labware.Tips
                 return _tips.Count;
             } 
         }
-        public double TipVolume { get; private set; }
-        public bool AreFilteredTips { get; private set; }
-        public int Rows { get; private set; }
-        public int Columns { get; private set; }
-        public Position Offset { get; private set; }
-        public double Spacing { get; private set; }
-
+        
+        public TipRackDefinition Definition { get; private set; }
+        public Position AbsolutePosition { get; private set; }
         private Dictionary<LabwareAddress, Tip> _tips = new Dictionary<LabwareAddress, Tip>();
 
-        public TipRack(int rows, int columns, double tipVolume, bool filtered,
-            Position offset, double spacing)
+        public TipRack(TipRackDefinition definition, Position position)
         {
-            Rows =  rows;
-            Columns = columns;
-            TipVolume = tipVolume;
-            AreFilteredTips = filtered;
-            Offset = offset;
-            Spacing = spacing;
+            Definition = definition;
+            AssignToPosition(position);
+        }
+
+        public void AssignToPosition(Position position)
+        {
+            AbsolutePosition = position;
             Refill();
         }
 
         public void Refill()
         {
             _tips.Clear();
-            for(int i = 0; i < Rows; ++i)
+            for(int i = 0; i < Definition.Rows; ++i)
             {
-                for(int j = 0; j < Columns; ++j)
+                for(int j = 0; j < Definition.Columns; ++j)
                 {
                     var labwareAddress = new LabwareAddress(i + 1, j + 1);
-                    var relativePosition = new Position()
+                    var absolutePosition = new Position()
                     {
-                        X = Offset.X + Spacing * j,
-                        Y = Offset.Y + Spacing * i,
-                        Z = Offset.Z
+                        X = AbsolutePosition.X + Definition.Offset.X + Definition.Spacing * j,
+                        Y = AbsolutePosition.Y + Definition.Offset.Y + Definition.Spacing * i,
+                        Z = AbsolutePosition.Z + Definition.Offset.Z
                     };
-                    _tips.Add(labwareAddress, new Tip(labwareAddress, relativePosition, TipVolume, AreFilteredTips));
+                    _tips.Add(labwareAddress, new Tip(labwareAddress, absolutePosition, Definition.TipVolume, Definition.AreFilteredTips));
                 }
             }
         }

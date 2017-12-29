@@ -7,6 +7,7 @@ namespace LHRP.Api.Instrument
 {
     public interface IInstrument
     {
+        IDeck Deck { get; }
         IPipettor GetPipettor();
         IDevice GetDevice(int id);
 
