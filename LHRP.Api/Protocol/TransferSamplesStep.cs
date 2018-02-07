@@ -19,28 +19,28 @@ namespace LHRP.Api.Protocol
             var pipettor = instrument.GetPipettor();
             for(int i = 0; i < 8; ++i)
             {
-                var tipPickupResult = pipettor.PickupTips(new TipPickupParameters()
+                var tipPickupResult = pipettor.PickupTips(new TipPickupCommand()
                     {
                         ChannelPattern = "1",
                         Position = new Position()
                     });
                 process.AppendSubProcess(tipPickupResult.Value);
                 
-                var aspirateResult = pipettor.Aspirate(new AspirateParameters()
+                var aspirateResult = pipettor.Aspirate(new AspirateCommand()
                     {
                         Volume = 50,
                         Position = new Position(),
                     });
                 process.AppendSubProcess(aspirateResult.Value);
 
-                var dispenseResult = pipettor.Dispense(new DispenseParameters()
+                var dispenseResult = pipettor.Dispense(new DispenseCommand()
                     {
                         Volume = 50,
                         Position = new Position(),
                     });
                 process.AppendSubProcess(dispenseResult.Value);
 
-                var dropTipsResult = pipettor.DropTips(new TipDropParameters()
+                var dropTipsResult = pipettor.DropTips(new TipDropCommand()
                     {
                         Position = new Position()
                     });

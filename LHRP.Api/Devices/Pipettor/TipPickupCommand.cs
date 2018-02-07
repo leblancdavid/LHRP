@@ -1,8 +1,8 @@
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class DispenseParameters
+    public class TipPickupCommand
     {
-        public double Volume { get; set; }
+        public string ChannelPattern { get; set; }
         public Position Position { get; set; }
     }
 }

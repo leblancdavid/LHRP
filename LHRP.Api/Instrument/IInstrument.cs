@@ -1,3 +1,4 @@
+using System;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Protocol;
@@ -9,7 +10,7 @@ namespace LHRP.Api.Instrument
     {
         IDeck Deck { get; }
         IPipettor GetPipettor();
-        IDevice GetDevice(int id);
+        IDevice GetDevice(Guid id);
 
     }
 }

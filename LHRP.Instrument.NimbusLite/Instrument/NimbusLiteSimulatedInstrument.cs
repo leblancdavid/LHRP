@@ -1,3 +1,4 @@
+using System;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
@@ -32,7 +33,7 @@ namespace LHRP.Instrument.NimbusLite.Instrument
             _pipettor = new IndependentChannelSimulatedPipettor();
         }
 
-        public IDevice GetDevice(int id)
+        public IDevice GetDevice(Guid id)
         {
             throw new System.NotImplementedException();
         }

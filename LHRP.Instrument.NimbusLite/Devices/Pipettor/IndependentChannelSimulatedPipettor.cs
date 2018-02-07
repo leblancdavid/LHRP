@@ -20,6 +20,8 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             get { return _pipettorStatus; } 
         }
 
+        public Guid DeviceId { get; private set; }
+
         public IndependentChannelSimulatedPipettor()
         {
             NumberChannels = 1;
@@ -28,7 +30,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             FailureRate = 0;
         }
 
-        public Result<Process> Aspirate(AspirateParameters parameters)
+        public Result<Process> Aspirate(AspirateCommand parameters)
         {
             Console.WriteLine("Aspirating " + parameters.Volume + "uL from position: (" + 
                 parameters.Position.X + ", " +
@@ -43,7 +45,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }
 
-        public Result<Process> Dispense(DispenseParameters parameters)
+        public Result<Process> Dispense(DispenseCommand parameters)
         {
             Console.WriteLine("Dispensing " + parameters.Volume + "uL to position: (" + 
                 parameters.Position.X + ", " +
@@ -58,7 +60,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             return  Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }
 
-        public Result<Process> PickupTips(TipPickupParameters parameters)
+        public Result<Process> PickupTips(TipPickupCommand parameters)
         {
             Console.WriteLine("Picking-up tips from position: (" + 
                 parameters.Position.X + ", " +
@@ -74,7 +76,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }
 
-        public Result<Process> DropTips(TipDropParameters parameters)
+        public Result<Process> DropTips(TipDropCommand parameters)
         {
             Console.WriteLine("Dropping tips into position: (" + 
                 parameters.Position.X + ", " +
