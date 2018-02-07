@@ -12,6 +12,9 @@ namespace LHRP.Instrument.NimbusLite.Instrument
         {
             _pipettor = new IndependentChannelPipettor();
         }
+
+        public IDeck Deck { get; }
+
         public IDevice GetDevice(int id)
         {
         throw new System.NotImplementedException();

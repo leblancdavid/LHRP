@@ -11,8 +11,9 @@ namespace LHRP.Domain.Tests.Labware.Tips
         [Fact]
         public void ConsumeTips()
         {
-            var tipRack = new TipRack(8, 12, 300, true, 
-                new Position(), 9.0);
+            var tipRack = new TipRack(
+                new TipRackDefinition("", 300, true, 8, 12, new Position(), 0.0),
+                new Position());
             
             tipRack.TotalTipCount.Should().Be(96);
             tipRack.RemainingTips.Should().Be(96);
@@ -26,8 +27,9 @@ namespace LHRP.Domain.Tests.Labware.Tips
         [Fact]
         public void GetNextAvailableTip()
         {
-            var tipRack = new TipRack(8, 12, 300, true, 
-                new Position(), 9.0);
+            var tipRack = new TipRack(
+                new TipRackDefinition("", 300, true, 8, 12, new Position(), 0.0),
+                new Position());
 
             var nextTipResult = tipRack.GetNextAvailableTip();
 
@@ -39,8 +41,9 @@ namespace LHRP.Domain.Tests.Labware.Tips
         [Fact]
         public void Refill()
         {
-            var tipRack = new TipRack(8, 12, 300, true, 
-                new Position(), 9.0);
+            var tipRack = new TipRack(
+                new TipRackDefinition("", 300, true, 8, 12, new Position(), 0.0),
+                new Position());
             
             tipRack.TotalTipCount.Should().Be(96);
             tipRack.RemainingTips.Should().Be(96);
@@ -56,8 +59,9 @@ namespace LHRP.Domain.Tests.Labware.Tips
         [Fact]
         public void FailToConsumeAnInvalidLabwareAddress()
         {
-            var tipRack = new TipRack(8, 12, 300, true, 
-                new Position(), 9.0);
+            var tipRack = new TipRack(
+                new TipRackDefinition("", 300, true, 8, 12, new Position(), 0.0),
+                new Position());
             var result = tipRack.Consume(new LabwareAddress(9999, 9999));
             result.IsFailure.Should().BeTrue();
         }
@@ -65,8 +69,9 @@ namespace LHRP.Domain.Tests.Labware.Tips
         [Fact]
         public void FailToGetTheNextTip_WhenTipRackIsEmpty()
         {
-             var tipRack = new TipRack(1, 1, 300, true, 
-                new Position(), 9.0);
+            var tipRack = new TipRack(
+                new TipRackDefinition("", 300, true, 1, 1, new Position(), 0.0),
+                new Position());
 
             var result = tipRack.Consume(new LabwareAddress(1, 1));
             result.IsSuccess.Should().BeTrue();

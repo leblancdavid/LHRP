@@ -23,6 +23,9 @@ namespace LHRP.Instrument.NimbusLite.Instrument
                 _pipettor.SimulationSpeedFactor = value;
             }
         }
+
+        public IDeck Deck { get; }
+
         public double FailureRate { get; set; }
         public NimbusLiteSimulatedInstrument()
         {
