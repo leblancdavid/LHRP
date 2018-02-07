@@ -6,5 +6,7 @@ namespace LHRP.Api.Labware
         public double Width { get; protected set; }
         public double Height { get; protected set; }
         public double Depth { get; protected set; }
+
+        public int PositionId { get; protected set; }
     }
 }

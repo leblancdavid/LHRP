@@ -13,12 +13,12 @@ namespace LHRP.Domain.Tests.Labware.Tips
         {
             var tipRack = new TipRack(
                 new TipRackDefinition("", 300, true, 8, 12, new Position(), 0.0),
-                new Position());
+                new Position(), 1);
             
             tipRack.TotalTipCount.Should().Be(96);
             tipRack.RemainingTips.Should().Be(96);
 
-            var result = tipRack.Consume(new LabwareAddress(1, 1));
+            var result = tipRack.Consume(new LabwareAddress(1, 1, 1, new Position()));
             result.IsSuccess.Should().BeTrue();
 
             tipRack.RemainingTips.Should().Be(95);
@@ -29,7 +29,7 @@ namespace LHRP.Domain.Tests.Labware.Tips
         {
             var tipRack = new TipRack(
                 new TipRackDefinition("", 300, true, 8, 12, new Position(), 0.0),
-                new Position());
+                new Position(), 1);
 
             var nextTipResult = tipRack.GetNextAvailableTip();
 
@@ -43,12 +43,12 @@ namespace LHRP.Domain.Tests.Labware.Tips
         {
             var tipRack = new TipRack(
                 new TipRackDefinition("", 300, true, 8, 12, new Position(), 0.0),
-                new Position());
+                new Position(), 1);
             
             tipRack.TotalTipCount.Should().Be(96);
             tipRack.RemainingTips.Should().Be(96);
 
-            var result = tipRack.Consume(new LabwareAddress(1, 1));
+            var result = tipRack.Consume(new LabwareAddress(1, 1, 1, new Position()));
             result.IsSuccess.Should().BeTrue();
             tipRack.RemainingTips.Should().Be(95);
 
@@ -61,8 +61,8 @@ namespace LHRP.Domain.Tests.Labware.Tips
         {
             var tipRack = new TipRack(
                 new TipRackDefinition("", 300, true, 8, 12, new Position(), 0.0),
-                new Position());
-            var result = tipRack.Consume(new LabwareAddress(9999, 9999));
+                new Position(), 1);
+            var result = tipRack.Consume(new LabwareAddress(9999, 9999, 1, new Position()));
             result.IsFailure.Should().BeTrue();
         }
 
@@ -71,9 +71,9 @@ namespace LHRP.Domain.Tests.Labware.Tips
         {
             var tipRack = new TipRack(
                 new TipRackDefinition("", 300, true, 1, 1, new Position(), 0.0),
-                new Position());
+                new Position(), 1);
 
-            var result = tipRack.Consume(new LabwareAddress(1, 1));
+            var result = tipRack.Consume(new LabwareAddress(1, 1, 1, new Position()));
             result.IsSuccess.Should().BeTrue();
             tipRack.RemainingTips.Should().Be(0);
 

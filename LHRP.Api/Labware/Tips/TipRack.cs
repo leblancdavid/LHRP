@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using LHRP.Api.Common;
 using LHRP.Api.Devices;
 
@@ -23,17 +24,19 @@ namespace LHRP.Api.Labware.Tips
         
         public TipRackDefinition Definition { get; private set; }
         public Position AbsolutePosition { get; private set; }
+
         private Dictionary<LabwareAddress, Tip> _tips = new Dictionary<LabwareAddress, Tip>();
 
-        public TipRack(TipRackDefinition definition, Position position)
+        public TipRack(TipRackDefinition definition, Position position, int positionId)
         {
             Definition = definition;
-            AssignToPosition(position);
+            AssignToPosition(position, PositionId);
         }
 
-        public void AssignToPosition(Position position)
+        public void AssignToPosition(Position position, int positionId)
         {
             AbsolutePosition = position;
+            PositionId = positionId;
             Refill();
         }
 
@@ -44,13 +47,15 @@ namespace LHRP.Api.Labware.Tips
             {
                 for(int j = 0; j < Definition.Columns; ++j)
                 {
-                    var labwareAddress = new LabwareAddress(i + 1, j + 1);
                     var absolutePosition = new Position()
                     {
                         X = AbsolutePosition.X + Definition.Offset.X + Definition.Spacing * j,
                         Y = AbsolutePosition.Y + Definition.Offset.Y + Definition.Spacing * i,
                         Z = AbsolutePosition.Z + Definition.Offset.Z
                     };
+
+                    var labwareAddress = new LabwareAddress(i + 1, j + 1, PositionId, absolutePosition);
+                    
                     _tips.Add(labwareAddress, new Tip(labwareAddress, absolutePosition, Definition.TipVolume, Definition.AreFilteredTips));
                 }
             }
@@ -73,7 +78,7 @@ namespace LHRP.Api.Labware.Tips
                 return Result<LabwareAddress>.Fail("Tip-rack is empty.");
             }
 
-            var nextAddress = new LabwareAddress(int.MaxValue, int.MaxValue);
+            LabwareAddress nextAddress = _tips.Keys.FirstOrDefault();
             foreach(var address in _tips.Keys)
             {
                 if(address.Column < nextAddress.Column)
