@@ -23,17 +23,17 @@ namespace LHRP.Api.Labware.Tips
         }
         
         public TipRackDefinition Definition { get; private set; }
-        public Position AbsolutePosition { get; private set; }
+        public Coordinates AbsolutePosition { get; private set; }
 
         private Dictionary<LabwareAddress, Tip> _tips = new Dictionary<LabwareAddress, Tip>();
 
-        public TipRack(TipRackDefinition definition, Position position, int positionId)
+        public TipRack(TipRackDefinition definition, Coordinates position, int positionId)
         {
             Definition = definition;
             AssignToPosition(position, PositionId);
         }
 
-        public void AssignToPosition(Position position, int positionId)
+        public void AssignToPosition(Coordinates position, int positionId)
         {
             AbsolutePosition = position;
             PositionId = positionId;
@@ -47,7 +47,7 @@ namespace LHRP.Api.Labware.Tips
             {
                 for(int j = 0; j < Definition.Columns; ++j)
                 {
-                    var absolutePosition = new Position()
+                    var absolutePosition = new Coordinates()
                     {
                         X = AbsolutePosition.X + Definition.Offset.X + Definition.Spacing * j,
                         Y = AbsolutePosition.Y + Definition.Offset.Y + Definition.Spacing * i,

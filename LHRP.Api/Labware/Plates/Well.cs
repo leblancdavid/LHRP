@@ -10,7 +10,7 @@ namespace LHRP.Api.Labware.Plates
         public double CurrentVolume { get; private set; }
 
         public LabwareAddress Address { get; private set; }
-        public Position RelativePosition { get; private set; }
+        public Coordinates RelativePosition { get; private set; }
 
         public Result Aspirate(double volume)
         {

@@ -104,7 +104,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             throw new NotImplementedException();
         }
 
-        private TimeSpan GetTravelTimeToPosition(Position position)
+        private TimeSpan GetTravelTimeToPosition(Coordinates position)
         {
             double distance = Math.Sqrt((_pipettorStatus.CurrentPosition.X - position.X)*(_pipettorStatus.CurrentPosition.X - position.X) + 
                 (_pipettorStatus.CurrentPosition.Y - position.Y)*(_pipettorStatus.CurrentPosition.Y - position.Y) +

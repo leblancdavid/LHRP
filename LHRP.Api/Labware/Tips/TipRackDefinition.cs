@@ -10,11 +10,11 @@ namespace LHRP.Api.Labware.Tips
         public bool AreFilteredTips { get; private set; }
         public int Rows { get; private set; }
         public int Columns { get; private set; }
-        public Position Offset { get; private set; }
+        public Coordinates Offset { get; private set; }
         public double Spacing { get; private set; }
 
         public TipRackDefinition(string displayName, double tipVolume,
-            bool areFilteredTips, int rows, int columns, Position offset, double spacing)
+            bool areFilteredTips, int rows, int columns, Coordinates offset, double spacing)
         {
             Id = 0;
             DisplayName = displayName;

@@ -6,7 +6,7 @@ namespace LHRP.Api.Devices.Pipettor
     {
         public bool HasError { get; set; }
         public string ErrorMessage { get; set; }
-        public Position CurrentPosition { get; set; }
+        public Coordinates CurrentPosition { get; set; }
         
         private List<ChannelStatus> _channelStatus;
         public IEnumerable<ChannelStatus> ChannelStatus => _channelStatus;
@@ -18,7 +18,7 @@ namespace LHRP.Api.Devices.Pipettor
             {
                 _channelStatus.Add(new ChannelStatus());
             }
-            CurrentPosition = new Position();
+            CurrentPosition = new Coordinates();
             HasError = false;
             ErrorMessage = string.Empty;
         }

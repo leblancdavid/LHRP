@@ -4,6 +4,6 @@ namespace LHRP.Api.Devices
     {
         bool HasError { get; set; }
         string ErrorMessage { get; set; }
-        Position CurrentPosition { get; set; }
+        Coordinates CurrentPosition { get; set; }
     }
 }

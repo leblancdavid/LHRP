@@ -8,6 +8,6 @@ namespace LHRP.Api.Devices.Pipettor
 
         public bool HasError { get; set; }
         public string ErrorMessage { get; set; }
-        public Position CurrentPosition { get; set; }
+        public Coordinates CurrentPosition { get; set; }
     }
 }

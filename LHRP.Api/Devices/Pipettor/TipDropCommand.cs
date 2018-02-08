@@ -2,6 +2,6 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public class TipDropCommand
     {
-        public Position Position { get; set; }
+        public Coordinates Position { get; set; }
     }
 }
