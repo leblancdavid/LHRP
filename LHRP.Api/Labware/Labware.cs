@@ -1,6 +1,9 @@
+using LHRP.Api.Common;
+using LHRP.Api.Devices;
+
 namespace LHRP.Api.Labware
 {
-    public class Labware
+    public abstract class Labware
     {
         public string Name { get; protected set; }
         public double Width { get; protected set; }
@@ -8,5 +11,7 @@ namespace LHRP.Api.Labware
         public double Depth { get; protected set; }
 
         public int PositionId { get; protected set; }
+
+        public abstract Result<Coordinates> GetRealCoordinates(LabwareAddress address);
     }
 }

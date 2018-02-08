@@ -94,5 +94,15 @@ namespace LHRP.Api.Labware.Tips
             return Result<LabwareAddress>.Ok(nextAddress);
         }
 
+        public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
+        {
+            if(!_tips.ContainsKey(address))
+            {
+                return Result<Coordinates>.Fail("Invalid labware address");
+            }
+
+            return Result<Coordinates>.Ok(_tips[address].AbsolutePosition);
+        }
+
     }
 }
