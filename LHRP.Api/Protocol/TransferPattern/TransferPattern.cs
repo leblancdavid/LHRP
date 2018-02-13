@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.TransferPattern
 {
@@ -22,6 +23,12 @@ namespace LHRP.Api.Protocol.TransferPattern
             _transfers.Add(tranfer);
         }
         
+        public IEnumerable<TransferGroup> GetTransferGroups(IInstrument instrument)
+        {
+            var transferGroups = new List<TransferGroup>();
+
+            return transferGroups;
+        }
 
     }
 }
