@@ -22,27 +22,27 @@ namespace LHRP.Api.Protocol
                 var tipPickupResult = pipettor.PickupTips(new TipPickupCommand()
                     {
                         ChannelPattern = "1",
-                        Position = new Coordinates()
+                        Position = new Coordinates(0, 0, 0)
                     });
                 process.AppendSubProcess(tipPickupResult.Value);
                 
                 var aspirateResult = pipettor.Aspirate(new AspirateCommand()
                     {
                         Volume = 50,
-                        Position = new Coordinates(),
+                        Position = new Coordinates(0, 0, 0),
                     });
                 process.AppendSubProcess(aspirateResult.Value);
 
                 var dispenseResult = pipettor.Dispense(new DispenseCommand()
                     {
                         Volume = 50,
-                        Position = new Coordinates(),
+                        Position = new Coordinates(0, 0, 0),
                     });
                 process.AppendSubProcess(dispenseResult.Value);
 
                 var dropTipsResult = pipettor.DropTips(new TipDropCommand()
                     {
-                        Position = new Coordinates()
+                        Position = new Coordinates(0, 0, 0)
                     });
                 process.AppendSubProcess(dropTipsResult.Value);
             }
