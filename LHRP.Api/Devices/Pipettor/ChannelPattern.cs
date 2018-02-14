@@ -18,12 +18,12 @@ namespace LHRP.Api.Devices.Pipettor
       set { _activeChannels[i] = value; }
     }
 
-    public static ChannelPattern AllInactive(int numChannels)
+    public static ChannelPattern Inactive(int numChannels)
     {
         return new ChannelPattern(numChannels);
     }
 
-    public static ChannelPattern AllActive(int numChannels)
+    public static ChannelPattern Active(int numChannels)
     {
         var cp = new ChannelPattern(numChannels);
         for(int i = 0; i < numChannels; ++i)
