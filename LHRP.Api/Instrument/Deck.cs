@@ -51,18 +51,7 @@ namespace LHRP.Api.Instrument
             }
             return Result<Labware.Labware>.Ok(_deckPositions[positionId].AssignedLabware);
         }
-        public Result<TipRack> GetTipRack(int positionId)
-        {
-            if(!_deckPositions.ContainsKey(positionId))
-            {
-                return Result<TipRack>.Fail("Invalid deck position ID");
-            }
-            if(!_deckPositions[positionId].ContainsTipRack)
-            {
-                return Result<TipRack>.Fail($"Position {positionId} does not contain a tip-rack");
-            }
-            return Result<TipRack>.Ok((TipRack)_deckPositions[positionId].AssignedLabware);
-        }
+
         public Result<Coordinates> GetCoordinates(int positionId, LabwareAddress address)
         {
              if(!_deckPositions.ContainsKey(positionId))
