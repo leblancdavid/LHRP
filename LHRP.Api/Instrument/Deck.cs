@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using LHRP.Api.Common;
 using LHRP.Api.Devices;
 using LHRP.Api.Labware;
@@ -9,6 +10,7 @@ namespace LHRP.Api.Instrument
     public class Deck : IDeck
     {
         private Dictionary<int, DeckPosition> _deckPositions = new Dictionary<int, DeckPosition>();
+        public IEnumerable<DeckPosition> Positions => _deckPositions.Values.ToList();
 
         public Deck(List<DeckPosition> deckPositions)
         {
@@ -17,6 +19,16 @@ namespace LHRP.Api.Instrument
                 _deckPositions[position.PositionId] = position;
             }
         }
+
+        public Result<DeckPosition> GetDeckPosition(int positionId)
+        {
+            if(!_deckPositions.ContainsKey(positionId))
+            {
+                return Result<DeckPosition>.Fail($"Invalid deck position {positionId}");
+            }
+            return Result<DeckPosition>.Ok(_deckPositions[positionId]);
+        }
+
         public Result AssignLabware(int positionId, Labware.Labware labware)
         {
             if(!_deckPositions.ContainsKey(positionId))

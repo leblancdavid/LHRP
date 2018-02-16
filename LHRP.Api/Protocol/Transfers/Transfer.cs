@@ -1,4 +1,4 @@
-namespace LHRP.Api.Protocol.TransferPattern
+namespace LHRP.Api.Protocol.Transfers
 {
     public class Transfer
     {

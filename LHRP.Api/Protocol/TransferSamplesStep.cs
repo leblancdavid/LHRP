@@ -2,26 +2,29 @@ using LHRP.Api.Common;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
+using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Protocol
 {
     public class TransferSamplesStep : IRunnable
     {
-        public TransferSamplesStep()
+        private TransferPattern _pattern;
+        public TransferSamplesStep(TransferPattern pattern)
         {
-
+            _pattern = pattern;
         }
 
         public Result<Process> Run(IInstrument instrument)
         {
             var process = new Process();
             var pipettor = instrument.GetPipettor();
-            for(int i = 0; i < 8; ++i)
+            var tranfers = _pattern.GetTransferGroups(instrument);
+            foreach(var t in tranfers)
             {
                 var tipPickupResult = pipettor.PickupTips(new TipPickupCommand()
                     {
-                        ChannelPattern = "1",
+                        ChannelPattern = t.ChannelPattern,
                         Position = new Coordinates(0, 0, 0)
                     });
                 process.AppendSubProcess(tipPickupResult.Value);
@@ -46,7 +49,7 @@ namespace LHRP.Api.Protocol
                     });
                 process.AppendSubProcess(dropTipsResult.Value);
             }
-
+            
             return Result<Process>.Ok(process);
         }
     }

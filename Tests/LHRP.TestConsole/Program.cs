@@ -1,6 +1,7 @@
 ﻿using System;
 using LHRP.Api;
 using LHRP.Api.Protocol;
+using LHRP.Api.Protocol.Transfers;
 using LHRP.Instrument.NimbusLite.Instrument;
 using LHRP.Instrument.NimbusLite.Runtime;
 
@@ -12,7 +13,7 @@ namespace LHRP.TestConsole
         {
             //Setup protocol and steps
             var protocol = new Protocol();
-            var transferSampleStep = new TransferSamplesStep();
+            var transferSampleStep = new TransferSamplesStep(new TransferPattern());
             protocol.AddStep(transferSampleStep);
 
             var nimbusLiteSimulation = new NimbusLiteSimulationEngine();
