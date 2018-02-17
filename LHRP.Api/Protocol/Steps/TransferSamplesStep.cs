@@ -2,32 +2,29 @@ using LHRP.Api.Common;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
+using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
 
-namespace LHRP.Api.Protocol
+namespace LHRP.Api.Protocol.Steps
 {
     public class TransferSamplesStep : IRunnable
     {
-        private TransferPattern _pattern;
-        public TransferSamplesStep(TransferPattern pattern)
+        private TransferSamplesStepData _stepData;
+        public TransferSamplesStep(TransferSamplesStepData stepData)
         {
-            _pattern = pattern;
+            _stepData = stepData;
         }
 
         public Result<Process> Run(IInstrument instrument)
         {
             var process = new Process();
             var pipettor = instrument.GetPipettor();
-            var tranfers = _pattern.GetTransferGroups(instrument);
+            var tranfers = _stepData.Pattern.GetTransferGroups(instrument);
             foreach(var t in tranfers)
             {
-                var tipPickupResult = pipettor.PickupTips(new TipPickupCommand()
-                    {
-                        ChannelPattern = t.ChannelPattern,
-                        Position = new Coordinates(0, 0, 0)
-                    });
-                process.AppendSubProcess(tipPickupResult.Value);
+                var tipPickupCommand = new PickupTips(new PickupTipsOptions(t.ChannelPattern, _stepData.DesiredTipSize));
+                process.AppendSubProcess(tipPickupCommand.Run(instrument).Value);
                 
                 var aspirateResult = pipettor.Aspirate(new AspirateCommand()
                     {

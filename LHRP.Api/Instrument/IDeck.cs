@@ -8,6 +8,7 @@ namespace LHRP.Api.Instrument
 {
     public interface IDeck
     {
+        ITipManager TipManager { get; }
         IEnumerable<DeckPosition> Positions { get; }
         Result AssignLabware(int positionId, Labware.Labware labware);
         Result<DeckPosition> GetDeckPosition(int positionId);
