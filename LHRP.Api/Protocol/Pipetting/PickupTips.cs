@@ -9,13 +9,16 @@ namespace LHRP.Api.Protocol.Pipetting
         private PickupTipsOptions _options;
         public PickupTips(PickupTipsOptions options)
         {
-
+            _options = options;
         }
 
         public Result<Process> Run(IInstrument instrument)
         {
             var process = new Process();
-            
+            var tipManager = instrument.Deck.TipManager;
+            var pipettor = instrument.GetPipettor();
+            var tips = tipManager.RequestTips(_options.Pattern, _options.DesiredTipSize);
+
 
             return Result<Process>.Ok(process);
         }

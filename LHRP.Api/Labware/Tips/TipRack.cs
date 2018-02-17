@@ -84,11 +84,11 @@ namespace LHRP.Api.Labware.Tips
             return Result.Ok();
         }
 
-        public Result<LabwareAddress> GetNextAvailableTip()
+        public Result<Tip> GetNextAvailableTip()
         {
             if(RemainingTips == 0)
             {
-                return Result<LabwareAddress>.Fail("Tip-rack is empty.");
+                return Result<Tip>.Fail("Tip-rack is empty.");
             }
 
             LabwareAddress nextAddress = _tips.Keys.FirstOrDefault();
@@ -104,7 +104,7 @@ namespace LHRP.Api.Labware.Tips
                 }
             }
 
-            return Result<LabwareAddress>.Ok(nextAddress);
+            return Result<Tip>.Ok(_tips[nextAddress]);
         }
 
         public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)

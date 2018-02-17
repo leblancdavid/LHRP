@@ -34,8 +34,9 @@ namespace LHRP.Domain.Tests.Labware.Tips
             var nextTipResult = tipRack.GetNextAvailableTip();
 
             nextTipResult.IsSuccess.Should().BeTrue();
-            nextTipResult.Value.Row.Should().Be(1);
-            nextTipResult.Value.Column.Should().Be(1);
+            nextTipResult.Value.Address
+            .Row.Should().Be(1);
+            nextTipResult.Value.Address.Column.Should().Be(1);
         }
 
         [Fact]

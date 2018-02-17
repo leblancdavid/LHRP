@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LHRP.Api.Common;
 using LHRP.Api.Devices;
+using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Labware;
 using LHRP.Api.Labware.Tips;
 
