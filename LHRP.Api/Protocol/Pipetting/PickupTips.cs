@@ -19,7 +19,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettor = instrument.GetPipettor();
             var tips = tipManager.RequestTips(_options.Pattern, _options.DesiredTipSize);
 
-
+            
             return Result<Process>.Ok(process);
         }
     }

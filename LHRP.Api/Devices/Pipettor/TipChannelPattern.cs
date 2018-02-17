@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Labware.Tips;
 
-namespace LHRP.Api.Instrument.TipManagement
+namespace LHRP.Api.Devices.Pipettor
 {
     public class TipChannelPattern : ChannelPattern
     {
