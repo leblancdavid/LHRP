@@ -1,6 +1,6 @@
 using LHRP.Api.Labware;
 
-namespace LHRP.Api.Protocol.TransferPattern
+namespace LHRP.Api.Protocol.Transfers
 {
     public class TransferTarget
     {

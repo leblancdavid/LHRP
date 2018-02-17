@@ -27,17 +27,10 @@ namespace LHRP.Api.Instrument
             }
         }
 
-        public bool ContainsTipRack
-        {
-            get
-            {
-                return AssignedLabware != null && AssignedLabware is TipRack;
-            }
-        }
-
         public Result Assign(Labware.Labware labware)
         {
             AssignedLabware = labware;
+            AssignedLabware.UpdatePosition(Position, PositionId);
             return Result.Ok();
         }
 
