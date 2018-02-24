@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using LHRP.Api.Common;
 using LHRP.Api.Devices;
@@ -60,18 +61,33 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             return  Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }
 
-        public Result<Process> PickupTips(TipPickupCommand parameters)
+        public Result<Process> PickupTips(TipPickupParameters parameters)
         {
-            Console.WriteLine("Picking-up tips from position: (" + 
-                parameters.Position.X + ", " +
-                parameters.Position.Y + ", " + 
-                parameters.Position.Z + ")");
+            var sb = new StringBuilder();
+            sb.Append("Picking-up tips with channels ");
+            sb.Append(parameters.Pattern.GetChannelString());
+            sb.Append(" from positions: ");
+
+            Coordinates position = new Coordinates();
+            for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
+            {
+                if(parameters.Pattern[i])
+                {
+                    var tip = parameters.Pattern.GetTip(i);
+                    position = tip.AbsolutePosition;
+                    sb.Append($"({tip.AbsolutePosition.X},{tip.AbsolutePosition.Y},{tip.AbsolutePosition.Z});");
+                }
+                else
+                {
+                    sb.Append($"(*,*,*);");
+                }
+            }
 
             //takes 3 seconds to pickup tips
-            var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 3); 
+            var estimatedTime = GetTravelTimeToPosition(position) + new TimeSpan(0, 0, 3); 
             SimulateRuntimeWait(estimatedTime);
 
-            _pipettorStatus.CurrentPosition = parameters.Position;
+            _pipettorStatus.CurrentPosition = position;
 
             return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
         }

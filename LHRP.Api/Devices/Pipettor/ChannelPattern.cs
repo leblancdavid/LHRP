@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace LHRP.Api.Devices.Pipettor
 {
@@ -25,6 +26,25 @@ namespace LHRP.Api.Devices.Pipettor
                     .Select(a => a)
                     .Count();
     }
+
+    public string GetChannelString()
+    {
+      StringBuilder sb = new StringBuilder();
+      foreach(var channelActive in _activeChannels)
+      {
+        if(channelActive)
+        {
+          sb.Append("1");
+        }
+        else
+        {
+          sb.Append("0");
+        }
+      }
+
+      return sb.ToString();
+    }
+
     public static ChannelPattern Empty(int numChannels)
     {
         return new ChannelPattern(numChannels);

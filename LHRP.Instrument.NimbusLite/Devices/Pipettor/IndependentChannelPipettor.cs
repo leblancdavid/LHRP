@@ -31,7 +31,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
-        public Result<Process> PickupTips(TipPickupCommand parameters)
+        public Result<Process> PickupTips(TipPickupParameters parameters)
         {
             Console.WriteLine(parameters);
             return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
