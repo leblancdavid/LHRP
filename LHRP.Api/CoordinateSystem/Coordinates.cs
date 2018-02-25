@@ -1,4 +1,4 @@
-namespace LHRP.Api.Devices
+namespace LHRP.Api.CoordinateSystem
 {
     public class Coordinates
     {

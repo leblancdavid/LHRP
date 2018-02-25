@@ -1,3 +1,5 @@
+using LHRP.Api.CoordinateSystem;
+
 namespace LHRP.Api.Devices.Pipettor
 {
     public class AspirateCommand

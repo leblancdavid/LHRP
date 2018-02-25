@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LHRP.Api.Common;
+using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 
 namespace LHRP.Api.Labware.Tips
@@ -44,10 +45,9 @@ namespace LHRP.Api.Labware.Tips
 
         private Dictionary<LabwareAddress, Tip> _tips = new Dictionary<LabwareAddress, Tip>();
 
-        public TipRack(TipRackDefinition definition, Coordinates position, int positionId)
+        public TipRack(TipRackDefinition definition)
         {
             Definition = definition;
-            UpdatePosition(position, PositionId);
             
             Refill();
         }

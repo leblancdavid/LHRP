@@ -1,3 +1,4 @@
+using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 
 namespace LHRP.Api.Labware.Tips
@@ -13,8 +14,11 @@ namespace LHRP.Api.Labware.Tips
         public Coordinates Offset { get; private set; }
         public double Spacing { get; private set; }
 
-        public TipRackDefinition(string displayName, double tipVolume,
-            bool areFilteredTips, int rows, int columns, Coordinates offset, double spacing)
+        public TipRackDefinition(string displayName, 
+            Dimensions dimensions,
+            double tipVolume,
+            bool areFilteredTips, int rows, int columns, 
+            Coordinates offset, double spacing)
         {
             Id = 0;
             DisplayName = displayName;

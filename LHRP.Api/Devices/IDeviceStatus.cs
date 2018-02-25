@@ -1,3 +1,5 @@
+using LHRP.Api.CoordinateSystem;
+
 namespace LHRP.Api.Devices
 {
     public interface IDeviceStatus

@@ -1,4 +1,5 @@
 using LHRP.Api.Common;
+using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
@@ -23,7 +24,8 @@ namespace LHRP.Api.Protocol.Steps
             var tranfers = _stepData.Pattern.GetTransferGroups(instrument);
             foreach(var t in tranfers)
             {
-                var tipPickupCommand = new PickupTips(new PickupTipsOptions(t.ChannelPattern, _stepData.DesiredTipSize));
+                var tipPickupCommand = new PickupTips(
+                    new PickupTipsOptions(t.ChannelPattern, _stepData.DesiredTipSize));
                 process.AppendSubProcess(tipPickupCommand.Run(instrument).Value);
                 
                 var aspirateResult = pipettor.Aspirate(new AspirateCommand()

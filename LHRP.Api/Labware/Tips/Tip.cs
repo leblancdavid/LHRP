@@ -1,3 +1,4 @@
+using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 
 namespace LHRP.Api.Labware.Tips

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Labware;
 using LHRP.Api.Labware.Tips;
@@ -12,8 +13,8 @@ namespace LHRP.Domain.Tests.Labware.Tips
         public void ConsumeTips()
         {
             var tipRack = new TipRack(
-                new TipRackDefinition("", 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0),
-                new Coordinates(0, 0, 0), 1);
+                new TipRackDefinition("", 
+                    new Dimensions(0,0,0), 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0));
             
             tipRack.TotalTipCount.Should().Be(96);
             tipRack.RemainingTips.Should().Be(96);
@@ -28,8 +29,8 @@ namespace LHRP.Domain.Tests.Labware.Tips
         public void GetNextAvailableTip()
         {
             var tipRack = new TipRack(
-                new TipRackDefinition("", 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0),
-                new Coordinates(0, 0, 0), 1);
+                new TipRackDefinition("", 
+                    new Dimensions(0,0,0), 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0));
 
             var nextTipResult = tipRack.GetNextAvailableTip();
 
@@ -43,8 +44,8 @@ namespace LHRP.Domain.Tests.Labware.Tips
         public void Refill()
         {
             var tipRack = new TipRack(
-                new TipRackDefinition("", 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0),
-                new Coordinates(0, 0, 0), 1);
+                new TipRackDefinition("", 
+                    new Dimensions(0,0,0), 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0));
             
             tipRack.TotalTipCount.Should().Be(96);
             tipRack.RemainingTips.Should().Be(96);
@@ -61,8 +62,9 @@ namespace LHRP.Domain.Tests.Labware.Tips
         public void FailToConsumeAnInvalidLabwareAddress()
         {
             var tipRack = new TipRack(
-                new TipRackDefinition("", 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0),
-                new Coordinates(0, 0, 0), 1);
+                new TipRackDefinition("", 
+                    new Dimensions(0,0,0),
+                    300, true, 8, 12, new Coordinates(0, 0, 0), 0.0));
             var result = tipRack.Consume(new LabwareAddress(9999, 9999));
             result.IsFailure.Should().BeTrue();
         }
@@ -71,8 +73,8 @@ namespace LHRP.Domain.Tests.Labware.Tips
         public void FailToGetTheNextTip_WhenTipRackIsEmpty()
         {
             var tipRack = new TipRack(
-                new TipRackDefinition("", 300, true, 1, 1, new Coordinates(0, 0, 0), 0.0),
-                new Coordinates(0, 0, 0), 1);
+                new TipRackDefinition("", 
+                    new Dimensions(0,0,0), 300, true, 1, 1, new Coordinates(0, 0, 0), 0.0));
 
             var result = tipRack.Consume(new LabwareAddress(1, 1));
             result.IsSuccess.Should().BeTrue();
