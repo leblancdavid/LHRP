@@ -1,8 +1,17 @@
+using LHRP.Api.CoordinateSystem;
+
 namespace LHRP.Api.Devices.Pipettor
 {
     public class ChannelSpecification
     {
-        public double MinX { get; private set; }
-        public double MaxX { get; private set; }
+        public Coordinates LowerReachLimit { get; private set; }
+        public Coordinates UpperReachLimit { get; private set; }
+
+        public ChannelSpecification(Coordinates lowerReach,
+            Coordinates upperReach)
+        {
+            LowerReachLimit = lowerReach;
+            UpperReachLimit = upperReach;
+        }
     }
 }

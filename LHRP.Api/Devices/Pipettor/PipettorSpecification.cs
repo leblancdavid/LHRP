@@ -1,10 +1,38 @@
+using System.Collections.Generic;
+using LHRP.Api.CoordinateSystem;
+
 namespace LHRP.Api.Devices.Pipettor
 {
     public class PipettorSpecification
     {
-        public double ChannelSpacingX { get; private set; }
-        public double ChannelSpacingY { get; private set; }
-        public bool IsIndependentChannel { get; private set; }
+        public Coordinates ChannelSpacing { get; private set; } 
+        public bool AreIndependentChannels { get; private set; }
+
+        private List<ChannelSpecification> _channels;
+        public IEnumerable<ChannelSpecification> Channels { get; private set; }
+
+        public int NumChannels 
+        {
+            get 
+            {
+                return _channels.Count;
+            }
+        }
+
+        public ChannelSpecification this[int i]
+        {
+            get { return _channels[i]; }
+            private set { _channels[i] = value; }
+        }
+
+        public PipettorSpecification(List<ChannelSpecification> channels, 
+            Coordinates channelSpacing,
+            bool independent)
+        {
+            _channels = channels;
+            ChannelSpacing = channelSpacing;
+            AreIndependentChannels = independent;
+        }
 
         
     }

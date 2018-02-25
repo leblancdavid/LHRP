@@ -24,12 +24,30 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
         public Guid DeviceId { get; private set; }
 
+        public PipettorSpecification Specification { get; private set; }
+
+
         public IndependentChannelSimulatedPipettor()
         {
             NumberChannels = 1;
             _pipettorStatus = new PipettorStatus(NumberChannels);
             SimulationSpeedFactor = 1;
             FailureRate = 0;
+
+            var channelSpecification = new List<ChannelSpecification>();
+            //Add two channels that can reach anywhere on the deck for now.
+            channelSpecification.Add(new ChannelSpecification(
+                new Coordinates(double.MinValue, double.MinValue, double.MinValue),
+                new Coordinates(double.MaxValue, double.MaxValue, double.MaxValue)
+            )); 
+            channelSpecification.Add(new ChannelSpecification(
+                new Coordinates(double.MinValue, double.MinValue, double.MinValue),
+                new Coordinates(double.MaxValue, double.MaxValue, double.MaxValue)
+            ));
+
+            Specification = new PipettorSpecification(channelSpecification,
+                new Coordinates(0.0, 9.0, 0.0),
+                true); 
         }
 
         public Result<Process> Aspirate(AspirateCommand parameters)

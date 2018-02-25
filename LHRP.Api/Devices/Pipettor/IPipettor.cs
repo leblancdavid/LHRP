@@ -11,6 +11,6 @@ namespace LHRP.Api.Devices.Pipettor
         Result<Process> PickupTips(TipPickupParameters parameters);
         Result<Process> DropTips(TipDropCommand parameters);
 
-        int NumberChannels { get; }
+        PipettorSpecification Specification { get; }
     }
 }
