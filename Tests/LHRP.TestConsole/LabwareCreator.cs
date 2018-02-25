@@ -4,7 +4,7 @@ using LHRP.Api.Labware.Tips;
 
 namespace LHRP.TestConsole
 {
-    public static class TestLabwareFactory
+    public static class LabwareCreator
     {
         public static TipRack GetTipRack()
         {

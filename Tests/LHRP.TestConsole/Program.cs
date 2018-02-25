@@ -20,7 +20,7 @@ namespace LHRP.TestConsole
 
             var nimbusLiteSimulation = new NimbusLiteSimulationEngine();
 
-            nimbusLiteSimulation.Instrument.Deck.AssignLabware(1, TestLabwareFactory.GetTipRack());
+            nimbusLiteSimulation.Instrument.Deck.AssignLabware(1, LabwareCreator.GetTipRack());
             //var schedule = nimbusLiteSimulation.Schedule(protocol);
             nimbusLiteSimulation.SimulationSpeedFactor = 5;
             nimbusLiteSimulation.Run(protocol);
