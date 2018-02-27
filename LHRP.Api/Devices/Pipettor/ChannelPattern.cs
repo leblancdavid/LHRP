@@ -27,6 +27,21 @@ namespace LHRP.Api.Devices.Pipettor
                     .Count();
     }
 
+    public bool IsFull()
+    {
+      if(GetNumberActiveChannels() == NumChannels)
+        return true;
+      return false;
+    }
+
+    public bool IsEmpty()
+    {
+      if(GetNumberActiveChannels() == 0)
+        return true;
+
+      return false;
+    }
+
     public string GetChannelString()
     {
       StringBuilder sb = new StringBuilder();

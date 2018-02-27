@@ -10,9 +10,29 @@ namespace LHRP.Api.Protocol.Transfers
         private List<Transfer> _transfers;
         public IEnumerable<Transfer> Transfers => _transfers;
 
-        public TransferGroup(ChannelPattern pattern)
+        public Transfer this[int i]
         {
-            ChannelPattern = pattern;
+            get 
+            { 
+                return _transfers[i]; 
+            }
+            set 
+            {
+                if(value == null)
+                {
+                    ChannelPattern[i] = false;
+                }
+                else
+                {
+                    ChannelPattern[i] = true;
+                }
+                _transfers[i] = value; 
+            }
+        }
+        public TransferGroup(int numChannels)
+        {
+            ChannelPattern = ChannelPattern.Empty(numChannels);
+            _transfers = new List<Transfer>(numChannels);
         }
     }
 }

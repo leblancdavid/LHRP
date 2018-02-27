@@ -13,5 +13,14 @@ namespace LHRP.Api.Devices.Pipettor
             LowerReachLimit = lowerReach;
             UpperReachLimit = upperReach;
         }
+
+        public bool CanReach(Coordinates coordinates)
+        {
+            if(coordinates.X >= LowerReachLimit.X && coordinates.X <= UpperReachLimit.X &&
+                coordinates.Y >= LowerReachLimit.Y && coordinates.Y <= UpperReachLimit.Y &&
+                coordinates.Z >= LowerReachLimit.Z && coordinates.Z <= UpperReachLimit.Z)
+                return true;
+            return false;
+        }
     }
 }
