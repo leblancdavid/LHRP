@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 
@@ -32,13 +32,13 @@ namespace LHRP.Api.Protocol.Transfers
                     var newGroup = new TransferGroup(pipettor.Specification.NumChannels);
                     if(!TryAssignTransferToGroup(transfer, newGroup, instrument))
                     {
-                        return Result<IEnumerable<TransferGroup>>.Fail("Unable to assign a transfer to a transfer group");
+                        return Result.Fail<IEnumerable<TransferGroup>>("Unable to assign a transfer to a transfer group");
                     }
                     transferGroups.Add(newGroup);
                 }
             }
 
-            return Result<IEnumerable<TransferGroup>>.Ok(transferGroups);
+            return Result.Ok<IEnumerable<TransferGroup>>(transferGroups);
         }
 
         private bool TryAssignTransferToGroup(Transfer transfer, TransferGroup group, IInstrument instrument)

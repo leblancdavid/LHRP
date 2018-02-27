@@ -1,5 +1,5 @@
 using System;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Devices

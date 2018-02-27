@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Devices.Pipettor

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
@@ -38,25 +38,25 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
         public Result<Process> Aspirate(AspirateCommand parameters)
         {
             Console.WriteLine(parameters);
-            return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
+            return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
         public Result<Process> Dispense(DispenseCommand parameters)
         {
             Console.WriteLine(parameters);
-            return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
+            return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
         public Result<Process> PickupTips(TipPickupParameters parameters)
         {
             Console.WriteLine(parameters);
-            return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
+            return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
         public Result<Process> DropTips(TipDropCommand parameters)
         {
             Console.WriteLine(parameters);
-            return Result<Process>.Ok(new Process(new TimeSpan(), new TimeSpan()));
+            return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
         public Result<Process> Initialize()

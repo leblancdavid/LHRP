@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Instrument.TipManagement;
@@ -33,9 +33,9 @@ namespace LHRP.Api.Instrument
         {
             if(!_deckPositions.ContainsKey(positionId))
             {
-                return Result<DeckPosition>.Fail($"Invalid deck position {positionId}");
+                return Result.Fail<DeckPosition>($"Invalid deck position {positionId}");
             }
-            return Result<DeckPosition>.Ok(_deckPositions[positionId]);
+            return Result.Ok(_deckPositions[positionId]);
         }
 
         public Result AssignLabware(int positionId, Labware.Labware labware)
@@ -52,24 +52,24 @@ namespace LHRP.Api.Instrument
         {
             if(!_deckPositions.ContainsKey(positionId))
             {
-                return Result<Labware.Labware>.Fail("Invalid deck position ID");
+                return Result.Fail<Labware.Labware>("Invalid deck position ID");
             }
             if(!_deckPositions[positionId].IsOccupied)
             {
-                return Result<Labware.Labware>.Fail($"No labware found in position {positionId}");
+                return Result.Fail<Labware.Labware>($"No labware found in position {positionId}");
             }
-            return Result<Labware.Labware>.Ok(_deckPositions[positionId].AssignedLabware);
+            return Result.Ok(_deckPositions[positionId].AssignedLabware);
         }
 
         public Result<Coordinates> GetCoordinates(int positionId, LabwareAddress address)
         {
              if(!_deckPositions.ContainsKey(positionId))
             {
-                return Result<Coordinates>.Fail("Invalid deck position ID");
+                return Result.Fail<Coordinates>("Invalid deck position ID");
             }
             if(!_deckPositions[positionId].IsOccupied)
             {
-               return Result<Coordinates>.Fail($"No labware found in position {positionId}");
+               return Result.Fail<Coordinates>($"No labware found in position {positionId}");
             }
 
             return _deckPositions[positionId].AssignedLabware.GetRealCoordinates(address);

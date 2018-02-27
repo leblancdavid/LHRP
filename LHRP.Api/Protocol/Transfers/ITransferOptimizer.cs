@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers

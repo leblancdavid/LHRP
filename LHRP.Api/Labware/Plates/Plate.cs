@@ -1,4 +1,4 @@
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 
@@ -12,7 +12,7 @@ namespace LHRP.Api.Labware.Plates
         
         public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
         {
-            return Result<Coordinates>.Fail("NOT IMPLEMENTED!!!");
+            return Result.Fail<Coordinates>("NOT IMPLEMENTED!!!");
         }
 
     }

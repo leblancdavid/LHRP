@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Labware.Tips;
 
@@ -36,7 +36,7 @@ namespace LHRP.Api.Instrument.TipManagement
 
             if(availableTipRack == null)
             {
-                return Result<TipChannelPattern>.Fail($"Insufficient number of tips of size {tipSize} for channel pattern {pattern.ToString()}");
+                return Result.Fail<TipChannelPattern>($"Insufficient number of tips of size {tipSize} for channel pattern {pattern.ToString()}");
             }
 
             var tipChannelPattern = new TipChannelPattern(pattern.NumChannels);
@@ -48,13 +48,13 @@ namespace LHRP.Api.Instrument.TipManagement
                     //this should never happen
                     if(nextTip.IsFailure)
                     {
-                        return Result<TipChannelPattern>.Fail($"Unable to retrieve next available tip on tip-rack position {availableTipRack.PositionId}");
+                        return Result.Fail<TipChannelPattern>($"Unable to retrieve next available tip on tip-rack position {availableTipRack.PositionId}");
                     }
                     tipChannelPattern.SetTip(i, nextTip.Value);
                 }
             }
 
-            return Result<TipChannelPattern>.Ok(tipChannelPattern);
+            return Result.Ok<TipChannelPattern>(tipChannelPattern);
         }
     }
 }

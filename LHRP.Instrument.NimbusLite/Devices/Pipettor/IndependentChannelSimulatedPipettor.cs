@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
@@ -62,7 +62,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
+            return Result.Ok(new Process(estimatedTime, estimatedTime));
         }
 
         public Result<Process> Dispense(DispenseCommand parameters)
@@ -77,7 +77,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return  Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
+            return  Result.Ok(new Process(estimatedTime, estimatedTime));
         }
 
         public Result<Process> PickupTips(TipPickupParameters parameters)
@@ -108,7 +108,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = position;
 
-            return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
+            return Result.Ok(new Process(estimatedTime, estimatedTime));
         }
 
         public Result<Process> DropTips(TipDropCommand parameters)
@@ -124,7 +124,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return Result<Process>.Ok(new Process(estimatedTime, estimatedTime));
+            return Result.Ok(new Process(estimatedTime, estimatedTime));
         }
 
         

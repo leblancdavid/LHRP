@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 
@@ -27,7 +27,7 @@ namespace LHRP.Api.Protocol
                 process.AppendSubProcess(stepProcessResult.Value);
             }
 
-            return Result<Process>.Ok(process);
+            return Result.Ok(process);
         }
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 
@@ -88,7 +88,7 @@ namespace LHRP.Api.Labware.Tips
         {
             if(RemainingTips == 0)
             {
-                return Result<Tip>.Fail("Tip-rack is empty.");
+                return Result.Fail<Tip>("Tip-rack is empty.");
             }
 
             LabwareAddress nextAddress = _tips.Keys.FirstOrDefault();
@@ -104,17 +104,17 @@ namespace LHRP.Api.Labware.Tips
                 }
             }
 
-            return Result<Tip>.Ok(_tips[nextAddress]);
+            return Result.Ok(_tips[nextAddress]);
         }
 
         public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
         {
             if(!_tips.ContainsKey(address))
             {
-                return Result<Coordinates>.Fail("Invalid labware address");
+                return Result.Fail<Coordinates>("Invalid labware address");
             }
 
-            return Result<Coordinates>.Ok(_tips[address].AbsolutePosition);
+            return Result.Ok(_tips[address].AbsolutePosition);
         }
 
     }

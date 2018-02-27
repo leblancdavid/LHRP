@@ -1,4 +1,4 @@
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
@@ -49,7 +49,7 @@ namespace LHRP.Api.Protocol.Steps
                 process.AppendSubProcess(dropTipsResult.Value);
             }
             
-            return Result<Process>.Ok(process);
+            return Result.Ok(process);
         }
     }
 }

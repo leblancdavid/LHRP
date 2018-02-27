@@ -1,4 +1,4 @@
-using LHRP.Api.Common;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 
@@ -20,7 +20,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var tips = tipManager.RequestTips(_options.Pattern, _options.DesiredTipSize);
 
             
-            return Result<Process>.Ok(process);
+            return Result.Ok<Process>(process);
         }
     }
 }
