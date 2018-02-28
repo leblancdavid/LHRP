@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers
@@ -23,10 +24,10 @@ namespace LHRP.Api.Protocol.Transfers
             _transfers.Add(tranfer);
         }
         
-        public IEnumerable<TransferGroup> GetTransferGroups(IInstrument instrument)
+        public Result<IEnumerable<TransferGroup>> GetTransferGroups(IInstrument instrument)
         {
-            var transferGroups = new List<TransferGroup>();
-
+            var optimizer = new DefaultTransferOptimizer();
+            var transferGroups = optimizer.OptimizeTransfers(_transfers, instrument);
             return transferGroups;
         }
 

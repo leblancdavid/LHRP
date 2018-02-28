@@ -21,8 +21,13 @@ namespace LHRP.Api.Protocol.Steps
         {
             var process = new Process();
             var pipettor = instrument.GetPipettor();
-            var tranfers = _stepData.Pattern.GetTransferGroups(instrument);
-            foreach(var t in tranfers)
+            var tranfersResult = _stepData.Pattern.GetTransferGroups(instrument);
+            if(tranfersResult.IsFailure)
+            {
+                return Result.Fail<Process>(tranfersResult.Error);
+            }
+
+            foreach(var t in tranfersResult.Value)
             {
                 var tipPickupCommand = new PickupTips(
                     new PickupTipsOptions(t.ChannelPattern, _stepData.DesiredTipSize));
