@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 
@@ -6,10 +7,14 @@ namespace LHRP.Api.Protocol.Pipetting
 {
     public class PickupTips : IRunnable
     {
-        private PickupTipsOptions _options;
-        public PickupTips(PickupTipsOptions options)
+        private ChannelPattern _pattern;
+        private double _desiredTipSize;
+        public TipChannelPattern TipChannelPattern { get; private set; }
+        public PickupTips(ChannelPattern pattern, 
+            double desireTipSize)
         {
-            _options = options;
+            _pattern = pattern;
+            _desiredTipSize = desireTipSize;
         }
 
         public Result<Process> Run(IInstrument instrument)
@@ -17,9 +22,21 @@ namespace LHRP.Api.Protocol.Pipetting
             var process = new Process();
             var tipManager = instrument.Deck.TipManager;
             var pipettor = instrument.GetPipettor();
-            var tips = tipManager.RequestTips(_options.Pattern, _options.DesiredTipSize);
+            var tipsResult = tipManager.RequestTips(_pattern, _desiredTipSize);
 
-            
+            if(tipsResult.IsFailure)
+            {
+                return Result.Fail<Process>(tipsResult.Error);
+            }
+
+            TipChannelPattern = tipsResult.Value;
+            var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value));
+            if(commandResult.IsFailure)
+            {
+                
+            }
+            process.AppendSubProcess(commandResult.Value);
+
             return Result.Ok<Process>(process);
         }
     }

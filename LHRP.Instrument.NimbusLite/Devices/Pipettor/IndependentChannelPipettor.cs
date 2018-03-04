@@ -53,7 +53,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
         }
 
-        public Result<Process> DropTips(TipDropCommand parameters)
+        public Result<Process> DropTips(TipDropParameters parameters)
         {
             Console.WriteLine(parameters);
             return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));

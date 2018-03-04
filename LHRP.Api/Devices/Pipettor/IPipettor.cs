@@ -9,7 +9,7 @@ namespace LHRP.Api.Devices.Pipettor
         Result<Process> Aspirate(AspirateCommand parameters);
         Result<Process> Dispense(DispenseCommand parameters);
         Result<Process> PickupTips(TipPickupParameters parameters);
-        Result<Process> DropTips(TipDropCommand parameters);
+        Result<Process> DropTips(TipDropParameters parameters);
 
         PipettorSpecification Specification { get; }
     }

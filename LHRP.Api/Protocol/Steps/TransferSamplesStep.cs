@@ -29,8 +29,8 @@ namespace LHRP.Api.Protocol.Steps
 
             foreach(var t in tranfersResult.Value)
             {
-                var tipPickupCommand = new PickupTips(
-                    new PickupTipsOptions(t.ChannelPattern, _stepData.DesiredTipSize));
+                var tipPickupCommand = new PickupTips(t.ChannelPattern, _stepData.DesiredTipSize);
+
                 process.AppendSubProcess(tipPickupCommand.Run(instrument).Value);
                 
                 var aspirateResult = pipettor.Aspirate(new AspirateCommand()
@@ -47,11 +47,11 @@ namespace LHRP.Api.Protocol.Steps
                     });
                 process.AppendSubProcess(dispenseResult.Value);
 
-                var dropTipsResult = pipettor.DropTips(new TipDropCommand()
-                    {
-                        Position = new Coordinates(0, 0, 0)
-                    });
-                process.AppendSubProcess(dropTipsResult.Value);
+                //var dropTipsResult = pipettor.DropTips(new TipDropCommand()
+                //    {
+                //        Position = new Coordinates(0, 0, 0)
+                //    });
+                //process.AppendSubProcess(dropTipsResult.Value);
             }
             
             return Result.Ok(process);

@@ -2,7 +2,7 @@ using LHRP.Api.CoordinateSystem;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class TipDropCommand
+    public class TipDropParameters
     {
         public Coordinates Position { get; set; }
     }

@@ -111,7 +111,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
             return Result.Ok(new Process(estimatedTime, estimatedTime));
         }
 
-        public Result<Process> DropTips(TipDropCommand parameters)
+        public Result<Process> DropTips(TipDropParameters parameters)
         {
             Console.WriteLine("Dropping tips into position: (" + 
                 parameters.Position.X + ", " +

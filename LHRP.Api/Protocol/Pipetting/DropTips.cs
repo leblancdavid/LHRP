@@ -1,14 +1,16 @@
 using CSharpFunctionalExtensions;
+using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
-using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class Aspirate : IRunnable
+    public class DropTips : IRunnable
     {
-        public Aspirate()
+        private TipChannelPattern _tipPattern;
+        public DropTips(TipChannelPattern tipPattern)
         {
+            
         }
 
         public Result<Process> Run(IInstrument instrument)
