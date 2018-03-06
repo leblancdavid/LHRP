@@ -27,7 +27,7 @@ namespace LHRP.Api.Devices.Pipettor
         public IEnumerable<string> ErrorMessages => _errorMessages;
         public Coordinates CurrentPosition { get; set; }
 
-        public void AspiratedVolume(double volume)
+        public void OnAspiratedVolume(double volume)
         {
             if(!HasTip)
             {
@@ -42,7 +42,7 @@ namespace LHRP.Api.Devices.Pipettor
             }
         }
 
-        public void DispensedVolume(double volume)
+        public void OnDispensedVolume(double volume)
         {
             if(!HasTip)
             {
@@ -57,7 +57,7 @@ namespace LHRP.Api.Devices.Pipettor
             }
         }
 
-        public void PickedUpTip(Tip tip)
+        public void OnPickedUpTip(Tip tip)
         {
             if(HasTip)
             {
@@ -68,7 +68,7 @@ namespace LHRP.Api.Devices.Pipettor
             CurrentTip = tip;
         }
 
-        public void DroppedTip()
+        public void OnDroppedTip()
         {
             CurrentTip = null;
             CurrentVolume = 0.0;
