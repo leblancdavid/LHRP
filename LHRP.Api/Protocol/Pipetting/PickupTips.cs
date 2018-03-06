@@ -9,7 +9,6 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         private ChannelPattern _pattern;
         private double _desiredTipSize;
-        public TipChannelPattern TipChannelPattern { get; private set; }
         public PickupTips(ChannelPattern pattern, 
             double desireTipSize)
         {
@@ -29,7 +28,6 @@ namespace LHRP.Api.Protocol.Pipetting
                 return Result.Fail<Process>(tipsResult.Error);
             }
 
-            TipChannelPattern = tipsResult.Value;
             var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value));
             if(commandResult.IsFailure)
             {

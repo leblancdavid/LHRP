@@ -1,11 +1,12 @@
+using System.Collections.Generic;
 using LHRP.Api.CoordinateSystem;
 
 namespace LHRP.Api.Devices
 {
     public interface IDeviceStatus
     {
-        bool HasError { get; set; }
-        string ErrorMessage { get; set; }
+        bool HasErrors { get; }
+        IEnumerable<string> ErrorMessages { get; }
         Coordinates CurrentPosition { get; set; }
     }
 }
