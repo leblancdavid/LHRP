@@ -68,6 +68,54 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
             channelStatus.HasErrors.Should().BeTrue();
         }
 
+        [Fact]
+        public void HaveErrorsWhenAspiratingWhenNoTipIsPresent()
+        {
+            var channelStatus = new ChannelStatus();
+            channelStatus.OnAspiratedVolume(999);
+            channelStatus.HasErrors.Should().BeTrue();
+        }
+
+        [Fact]
+        public void UpdateVolumeWhenAspiratingAndDispensing()
+        {
+            var channelStatus = new ChannelStatus();
+            channelStatus.OnPickedUpTip(new Tip(
+                new LabwareAddress(1,1), 
+                new Coordinates(1,1,1),
+                50, false));
+
+            channelStatus.OnAspiratedVolume(50);
+            channelStatus.OnDispensedVolume(25);
+
+            channelStatus.CurrentVolume.Should().Be(25);
+            channelStatus.HasErrors.Should().BeFalse();
+        }
+
+        [Fact]
+        public void HaveErrorsWhenDispensingWhenNoTipIsPresent()
+        {
+            var channelStatus = new ChannelStatus();
+            channelStatus.OnDispensedVolume(999);
+            channelStatus.HasErrors.Should().BeTrue();
+        }
+
+        [Fact]
+        public void NotHaveTipsAfterDroppingTips()
+        {
+            var channelStatus = new ChannelStatus();
+            channelStatus.OnPickedUpTip(new Tip(
+                new LabwareAddress(1,1), 
+                new Coordinates(1,1,1),
+                50, false));
+
+            channelStatus.OnDroppedTip();
+
+            channelStatus.HasTip.Should().BeFalse();
+            channelStatus.HasErrors.Should().BeFalse();
+        }
+
+
         
     }
 }
