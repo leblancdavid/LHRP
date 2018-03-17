@@ -35,6 +35,14 @@ namespace LHRP.Instrument.NimbusLite.Instrument
             return _deck;
         }
     }
+    private Coordinates _wastePosition = new Coordinates(0.0, 0.0, 0.0);
+    public Coordinates WastePosition
+    {
+        get
+        {
+            return _wastePosition;
+        }
+    }
 
     public double FailureRate { get; set; }
     public NimbusLiteSimulatedInstrument()

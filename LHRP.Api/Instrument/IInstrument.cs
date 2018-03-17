@@ -1,4 +1,5 @@
 using System;
+using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Protocol;
@@ -12,5 +13,6 @@ namespace LHRP.Api.Instrument
         IPipettor GetPipettor();
         IDevice GetDevice(Guid id);
 
+        Coordinates WastePosition { get; }
     }
 }

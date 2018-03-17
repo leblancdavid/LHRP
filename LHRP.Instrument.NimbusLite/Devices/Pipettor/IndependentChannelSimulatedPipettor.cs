@@ -95,6 +95,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip.AbsolutePosition;
                     sb.Append($"({tip.AbsolutePosition.X},{tip.AbsolutePosition.Y},{tip.AbsolutePosition.Z});");
+                    _pipettorStatus[i].OnPickedUpTip(tip);
                 }
                 else
                 {
@@ -108,21 +109,23 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = position;
 
+            Console.WriteLine(sb.ToString());
+
             return Result.Ok(new Process(estimatedTime, estimatedTime));
         }
 
         public Result<Process> DropTips(TipDropParameters parameters)
         {
             Console.WriteLine("Dropping tips into position: (" + 
-                parameters.Position.X + ", " +
-                parameters.Position.Y + ", " + 
-                parameters.Position.Z + ")");
+                parameters.WastePosition.X + ", " +
+                parameters.WastePosition.Y + ", " + 
+                parameters.WastePosition.Z + ")");
 
             //takes 3 seconds to drop tips
-            var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 3); 
+            var estimatedTime = GetTravelTimeToPosition(parameters.WastePosition) + new TimeSpan(0, 0, 3); 
             SimulateRuntimeWait(estimatedTime);
 
-            _pipettorStatus.CurrentPosition = parameters.Position;
+            _pipettorStatus.CurrentPosition = parameters.WastePosition;
 
             return Result.Ok(new Process(estimatedTime, estimatedTime));
         }

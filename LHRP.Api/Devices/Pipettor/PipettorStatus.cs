@@ -32,6 +32,14 @@ namespace LHRP.Api.Devices.Pipettor
         private List<ChannelStatus> _channelStatus;
         public IEnumerable<ChannelStatus> ChannelStatus => _channelStatus;
 
+        public ChannelStatus this[int i]
+        {
+            get
+            {
+                return _channelStatus[i];
+            }
+        }
+
         public PipettorStatus(int numChannels)
         {
             _channelStatus = new List<ChannelStatus>();

@@ -38,9 +38,18 @@ namespace LHRP.Instrument.NimbusLite.Instrument
             }
         }
 
+        private Coordinates _wastePosition = new Coordinates(0.0, 0.0, 0.0);
+        public Coordinates WastePosition
+        {
+            get
+            {
+                return _wastePosition;
+            }
+        }
+
         public IDevice GetDevice(Guid id)
         {
-        throw new System.NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         public IPipettor GetPipettor()

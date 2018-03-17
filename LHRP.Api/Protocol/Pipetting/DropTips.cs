@@ -7,15 +7,42 @@ namespace LHRP.Api.Protocol.Pipetting
 {
     public class DropTips : IRunnable
     {
-        private TipChannelPattern _tipPattern;
-        public DropTips(TipChannelPattern tipPattern)
+        private bool _returnToSource;
+        public DropTips(bool returnToSource=false)
         {
-            
+            _returnToSource = returnToSource;
         }
 
         public Result<Process> Run(IInstrument instrument)
         {
-            throw new System.NotImplementedException();
+            var process = new Process();
+            var pipettor = instrument.GetPipettor();
+            
+            TipDropParameters parameters;
+            if(_returnToSource)
+            {
+                var tipPattern = new TipChannelPattern(pipettor.Specification.NumChannels);
+                var pipettorStatus = (PipettorStatus)pipettor.DeviceStatus;
+                for(int i = 0; i < pipettor.Specification.NumChannels; ++i)
+                {
+                    if(pipettorStatus[i].HasTip)
+                    {
+                        tipPattern.SetTip(i, pipettorStatus[i].CurrentTip);
+                    }
+                    else
+                    {
+                        tipPattern[i] = false;
+                    }
+                }
+
+                parameters = new TipDropParameters(tipPattern);
+            } 
+            else
+            {
+                parameters = new TipDropParameters(instrument.WastePosition);
+            }
+
+            return pipettor.DropTips(parameters);
         }
     }
 }
