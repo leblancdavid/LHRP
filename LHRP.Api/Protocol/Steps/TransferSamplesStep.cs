@@ -30,7 +30,12 @@ namespace LHRP.Api.Protocol.Steps
             foreach(var t in tranfersResult.Value)
             {
                 var tipPickupCommand = new PickupTips(t.ChannelPattern, _stepData.DesiredTipSize);
-
+                var dropTips = new DropTips(_stepData.ReturnTipsToSource);
+                var tipPickupResult = tipPickupCommand.Run(instrument);
+                if(tipPickupResult.IsFailure)
+                {
+                    //process.AppendSubProcess(dropTips.Run(instrument));
+                }
                 process.AppendSubProcess(tipPickupCommand.Run(instrument).Value);
                 
                 var aspirateResult = pipettor.Aspirate(new AspirateCommand()
