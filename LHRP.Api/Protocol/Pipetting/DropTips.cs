@@ -13,7 +13,7 @@ namespace LHRP.Api.Protocol.Pipetting
             _returnToSource = returnToSource;
         }
 
-        public Result<Process> Run(IInstrument instrument)
+        public Process Run(IInstrument instrument)
         {
             var process = new Process();
             var pipettor = instrument.GetPipettor();

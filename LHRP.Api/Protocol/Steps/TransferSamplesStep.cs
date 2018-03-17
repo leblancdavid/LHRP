@@ -17,14 +17,15 @@ namespace LHRP.Api.Protocol.Steps
             _stepData = stepData;
         }
 
-        public Result<Process> Run(IInstrument instrument)
+        public Process Run(IInstrument instrument)
         {
             var process = new Process();
             var pipettor = instrument.GetPipettor();
             var tranfersResult = _stepData.Pattern.GetTransferGroups(instrument);
             if(tranfersResult.IsFailure)
             {
-                return Result.Fail<Process>(tranfersResult.Error);
+                process.AddError(tranfersResult.Error);
+                return process;
             }
 
             foreach(var t in tranfersResult.Value)
@@ -32,25 +33,25 @@ namespace LHRP.Api.Protocol.Steps
                 var tipPickupCommand = new PickupTips(t.ChannelPattern, _stepData.DesiredTipSize);
                 var dropTips = new DropTips(_stepData.ReturnTipsToSource);
                 var tipPickupResult = tipPickupCommand.Run(instrument);
-                if(tipPickupResult.IsFailure)
+                if(tipPickupResult.ContainsErrors)
                 {
                     //process.AppendSubProcess(dropTips.Run(instrument));
                 }
-                process.AppendSubProcess(tipPickupCommand.Run(instrument).Value);
+                process.AppendSubProcess(tipPickupCommand.Run(instrument));
                 
                 var aspirateResult = pipettor.Aspirate(new AspirateCommand()
                     {
                         Volume = 50,
                         Position = new Coordinates(0, 0, 0),
                     });
-                process.AppendSubProcess(aspirateResult.Value);
+                process.AppendSubProcess(aspirateResult);
 
                 var dispenseResult = pipettor.Dispense(new DispenseCommand()
                     {
                         Volume = 50,
                         Position = new Coordinates(0, 0, 0),
                     });
-                process.AppendSubProcess(dispenseResult.Value);
+                process.AppendSubProcess(dispenseResult);
 
                 //var dropTipsResult = pipettor.DropTips(new TipDropCommand()
                 //    {
@@ -59,7 +60,7 @@ namespace LHRP.Api.Protocol.Steps
                 //process.AppendSubProcess(dropTipsResult.Value);
             }
             
-            return Result.Ok(process);
+            return process;
         }
     }
 }

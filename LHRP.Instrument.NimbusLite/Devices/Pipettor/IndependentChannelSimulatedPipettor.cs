@@ -50,7 +50,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
                 true); 
         }
 
-        public Result<Process> Aspirate(AspirateCommand parameters)
+        public Process Aspirate(AspirateCommand parameters)
         {
             Console.WriteLine("Aspirating " + parameters.Volume + "uL from position: (" + 
                 parameters.Position.X + ", " +
@@ -62,10 +62,10 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return Result.Ok(new Process(estimatedTime, estimatedTime));
+            return new Process(estimatedTime, estimatedTime);
         }
 
-        public Result<Process> Dispense(DispenseCommand parameters)
+        public Process Dispense(DispenseCommand parameters)
         {
             Console.WriteLine("Dispensing " + parameters.Volume + "uL to position: (" + 
                 parameters.Position.X + ", " +
@@ -77,10 +77,10 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return  Result.Ok(new Process(estimatedTime, estimatedTime));
+            return  new Process(estimatedTime, estimatedTime);
         }
 
-        public Result<Process> PickupTips(TipPickupParameters parameters)
+        public Process PickupTips(TipPickupParameters parameters)
         {
             var sb = new StringBuilder();
             sb.Append("Picking-up tips with channels ");
@@ -111,10 +111,10 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
-            return Result.Ok(new Process(estimatedTime, estimatedTime));
+            return new Process(estimatedTime, estimatedTime);
         }
 
-        public Result<Process> DropTips(TipDropParameters parameters)
+        public Process DropTips(TipDropParameters parameters)
         {
             Console.WriteLine("Dropping tips into position: (" + 
                 parameters.WastePosition.X + ", " +
@@ -127,17 +127,17 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
 
             _pipettorStatus.CurrentPosition = parameters.WastePosition;
 
-            return Result.Ok(new Process(estimatedTime, estimatedTime));
+            return new Process(estimatedTime, estimatedTime);
         }
 
         
         public bool IsInitialized => throw new NotImplementedException();
-        public Result<Process> Initialize()
+        public Process Initialize()
         {
             throw new NotImplementedException();
         }
 
-        public Result<Process> Deinitialize()
+        public Process Deinitialize()
         {
             throw new NotImplementedException();
         }

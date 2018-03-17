@@ -5,6 +5,6 @@ namespace LHRP.Api.Runtime
 {
     public interface IScheduler
     {
-         Result<Process> Schedule(IRunnable run);
+         Process Schedule(IRunnable run);
     }
 }

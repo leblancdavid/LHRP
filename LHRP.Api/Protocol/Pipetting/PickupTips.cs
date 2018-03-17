@@ -16,7 +16,7 @@ namespace LHRP.Api.Protocol.Pipetting
             _desiredTipSize = desireTipSize;
         }
 
-        public Result<Process> Run(IInstrument instrument)
+        public Process Run(IInstrument instrument)
         {
             var process = new Process();
             var tipManager = instrument.Deck.TipManager;
@@ -25,17 +25,12 @@ namespace LHRP.Api.Protocol.Pipetting
 
             if(tipsResult.IsFailure)
             {
-                return Result.Fail<Process>(tipsResult.Error);
+                process.AddError(tipsResult.Error);
+                return process;
             }
 
             var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value));
-            if(commandResult.IsFailure)
-            {
-                
-            }
-            process.AppendSubProcess(commandResult.Value);
-
-            return Result.Ok<Process>(process);
+            return commandResult;
         }
     }
 }

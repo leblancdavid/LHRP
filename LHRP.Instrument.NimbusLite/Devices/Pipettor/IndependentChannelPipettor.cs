@@ -35,36 +35,36 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
                 true); 
         }
 
-        public Result<Process> Aspirate(AspirateCommand parameters)
+        public Process Aspirate(AspirateCommand parameters)
         {
             Console.WriteLine(parameters);
-            return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
+            return new Process(new TimeSpan(), new TimeSpan());
         }
 
-        public Result<Process> Dispense(DispenseCommand parameters)
+        public Process Dispense(DispenseCommand parameters)
         {
             Console.WriteLine(parameters);
-            return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
+            return new Process(new TimeSpan(), new TimeSpan());
         }
 
-        public Result<Process> PickupTips(TipPickupParameters parameters)
+        public Process PickupTips(TipPickupParameters parameters)
         {
             Console.WriteLine(parameters);
-            return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
+            return new Process(new TimeSpan(), new TimeSpan());
         }
 
-        public Result<Process> DropTips(TipDropParameters parameters)
+        public Process DropTips(TipDropParameters parameters)
         {
             Console.WriteLine(parameters);
-            return Result.Ok(new Process(new TimeSpan(), new TimeSpan()));
+            return new Process(new TimeSpan(), new TimeSpan());
         }
 
-        public Result<Process> Initialize()
+        public Process Initialize()
         {
         throw new NotImplementedException();
         }
 
-        public Result<Process> Deinitialize()
+        public Process Deinitialize()
         {
         throw new NotImplementedException();
         }

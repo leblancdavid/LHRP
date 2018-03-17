@@ -14,20 +14,20 @@ namespace LHRP.Api.Protocol
             _steps.Add(step);
         }
 
-        public Result<Process> Run(IInstrument instrument)
+        public Process Run(IInstrument instrument)
         {
             var process = new Process();
             foreach(var step in _steps)
             {
-                var stepProcessResult = step.Run(instrument);
-                if(stepProcessResult.IsFailure)
+                var stepProcess = step.Run(instrument);
+                if(stepProcess.ContainsErrors)
                 {
                     //TODO handle errors
                 }
-                process.AppendSubProcess(stepProcessResult.Value);
+                process.AppendSubProcess(stepProcess);
             }
 
-            return Result.Ok(process);
+            return process;
         }
     }
 }

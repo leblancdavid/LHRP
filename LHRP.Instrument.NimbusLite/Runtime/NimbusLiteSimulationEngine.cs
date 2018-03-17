@@ -36,12 +36,12 @@ namespace LHRP.Instrument.NimbusLite.Runtime
             }
         }
         
-        public Result<Process> Run(IRunnable run)
+        public Process Run(IRunnable run)
         {
             return run.Run(Instrument);
         }
 
-        public Result<Process> Schedule(IRunnable run)
+        public Process Schedule(IRunnable run)
         {
             var previousSpeedFactor = _simulationSpeedFactor;
             SimulationSpeedFactor = 0;

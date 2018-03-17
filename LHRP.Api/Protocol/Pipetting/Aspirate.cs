@@ -11,7 +11,7 @@ namespace LHRP.Api.Protocol.Pipetting
         {
         }
 
-        public Result<Process> Run(IInstrument instrument)
+        public Process Run(IInstrument instrument)
         {
             throw new System.NotImplementedException();
         }
