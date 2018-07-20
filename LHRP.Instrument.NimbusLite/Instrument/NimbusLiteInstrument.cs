@@ -52,9 +52,9 @@ namespace LHRP.Instrument.NimbusLite.Instrument
             throw new System.NotImplementedException();
         }
 
-        public IPipettor GetPipettor()
+        public IPipettor Pipettor 
         {
-            return _pipettor;
+            get { return _pipettor; }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace LHRP.Api.Protocol.Transfers
             IEnumerable<Transfer> transfers, 
             IInstrument instrument)
         {
-            var pipettor = instrument.GetPipettor();
+            var pipettor = instrument.Pipettor;
             var transferGroups = new List<TransferGroup>();
             var currentTransferGroup = new TransferGroup(pipettor.Specification.NumChannels);
 
@@ -43,7 +43,7 @@ namespace LHRP.Api.Protocol.Transfers
 
         private bool TryAssignTransferToGroup(Transfer transfer, TransferGroup group, IInstrument instrument)
         {
-            var pipettor = instrument.GetPipettor();
+            var pipettor = instrument.Pipettor;
             var sourceCoordinates = instrument.Deck.GetCoordinates(transfer.Source.PositionId, transfer.Source.Address);
             var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Destination.PositionId, transfer.Destination.Address);
             

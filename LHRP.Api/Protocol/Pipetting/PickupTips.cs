@@ -20,7 +20,7 @@ namespace LHRP.Api.Protocol.Pipetting
         {
             var process = new Process();
             var tipManager = instrument.Deck.TipManager;
-            var pipettor = instrument.GetPipettor();
+            var pipettor = instrument.Pipettor;
             var tipsResult = tipManager.RequestTips(_pattern, _desiredTipSize);
 
             if(tipsResult.IsFailure)

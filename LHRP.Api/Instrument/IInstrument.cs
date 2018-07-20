@@ -10,7 +10,7 @@ namespace LHRP.Api.Instrument
     public interface IInstrument
     {
         IDeck Deck { get; }
-        IPipettor GetPipettor();
+        IPipettor Pipettor { get; }
         IDevice GetDevice(Guid id);
 
         Coordinates WastePosition { get; }

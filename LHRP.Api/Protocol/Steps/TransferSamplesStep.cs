@@ -20,7 +20,7 @@ namespace LHRP.Api.Protocol.Steps
         public Process Run(IInstrument instrument)
         {
             var process = new Process();
-            var pipettor = instrument.GetPipettor();
+            var pipettor = instrument.Pipettor;
             var tranfersResult = _stepData.Pattern.GetTransferGroups(instrument);
             if(tranfersResult.IsFailure)
             {
