@@ -28,30 +28,32 @@ namespace LHRP.Api.Protocol.Steps
                 return process;
             }
 
-            foreach(var t in tranfersResult.Value)
+            foreach(var transfer in tranfersResult.Value)
             {
-                var tipPickupCommand = new PickupTips(t.ChannelPattern, _stepData.DesiredTipSize);
+                var tipPickupCommand = new PickupTips(transfer.ChannelPattern, _stepData.DesiredTipSize);
                 var dropTips = new DropTips(_stepData.ReturnTipsToSource);
                 var tipPickupResult = tipPickupCommand.Run(instrument);
                 if(tipPickupResult.ContainsErrors)
                 {
-                    //process.AppendSubProcess(dropTips.Run(instrument));
+                    process.AppendSubProcess(dropTips.Run(instrument));
                 }
                 process.AppendSubProcess(tipPickupCommand.Run(instrument));
-                
-                var aspirateResult = pipettor.Aspirate(new AspirateCommand()
-                    {
-                        Volume = 50,
-                        Position = new Coordinates(0, 0, 0),
-                    });
-                process.AppendSubProcess(aspirateResult);
 
-                var dispenseResult = pipettor.Dispense(new DispenseCommand()
-                    {
-                        Volume = 50,
-                        Position = new Coordinates(0, 0, 0),
-                    });
-                process.AppendSubProcess(dispenseResult);
+                var aspirateCommand = new Aspirate(new AspirateParameters(transfer, _stepData.Volume));
+                
+                // var aspirateResult = pipettor.Aspirate(new AspirateCommand()
+                //     {
+                //         Volume = 50,
+                //         Position = new Coordinates(0, 0, 0),
+                //     });
+                // process.AppendSubProcess(aspirateResult);
+
+                // var dispenseResult = pipettor.Dispense(new DispenseCommand()
+                //     {
+                //         Volume = 50,
+                //         Position = new Coordinates(0, 0, 0),
+                //     });
+                // process.AppendSubProcess(dispenseResult);
 
                 //var dropTipsResult = pipettor.DropTips(new TipDropCommand()
                 //    {

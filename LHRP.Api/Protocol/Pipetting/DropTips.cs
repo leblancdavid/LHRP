@@ -16,7 +16,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Process Run(IInstrument instrument)
         {
             var process = new Process();
-            var pipettor = instrument.GetPipettor();
+            var pipettor = instrument.Pipettor;
             
             TipDropParameters parameters;
             if(_returnToSource)

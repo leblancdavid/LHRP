@@ -50,19 +50,20 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
                 true); 
         }
 
-        public Process Aspirate(AspirateCommand parameters)
+        public Process Aspirate(AspirateParameters parameters)
         {
-            Console.WriteLine("Aspirating " + parameters.Volume + "uL from position: (" + 
-                parameters.Position.X + ", " +
-                parameters.Position.Y + ", " + 
-                parameters.Position.Z + ")");
+            // Console.WriteLine("Aspirating " + parameters.Volume + "uL from position: (" + 
+            //     parameters.Position.X + ", " +
+            //     parameters.Position.Y + ", " + 
+            //     parameters.Position.Z + ")");
 
-            var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 1);
-            SimulateRuntimeWait(estimatedTime);
+            // var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 1);
+            // SimulateRuntimeWait(estimatedTime);
 
-            _pipettorStatus.CurrentPosition = parameters.Position;
+            // _pipettorStatus.CurrentPosition = parameters.Position;
 
-            return new Process(estimatedTime, estimatedTime);
+            // return new Process(estimatedTime, estimatedTime);
+            return new Process();
         }
 
         public Process Dispense(DispenseCommand parameters)

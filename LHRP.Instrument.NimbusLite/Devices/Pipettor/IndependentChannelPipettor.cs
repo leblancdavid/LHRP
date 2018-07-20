@@ -35,7 +35,7 @@ namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
                 true); 
         }
 
-        public Process Aspirate(AspirateCommand parameters)
+        public Process Aspirate(AspirateParameters parameters)
         {
             Console.WriteLine(parameters);
             return new Process(new TimeSpan(), new TimeSpan());
