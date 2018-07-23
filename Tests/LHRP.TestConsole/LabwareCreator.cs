@@ -10,7 +10,6 @@ namespace LHRP.TestConsole
         {
             var tipRack = new TipRack(
                 new TipRackDefinition("300uL Tips",
-                    new Dimensions(128,87,60),
                     300.0,
                     false,
                     8, 12,

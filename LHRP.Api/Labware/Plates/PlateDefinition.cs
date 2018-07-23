@@ -1,33 +1,29 @@
 using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
 
-namespace LHRP.Api.Labware.Tips
+namespace LHRP.Api.Labware.Plates
 {
-    public class TipRackDefinition
+    public class PlateDefinition
     {
         public int Id { get; private set; }
         public string DisplayName { get; private set; }
-        public double TipVolume { get; private set; }
-        public bool AreFilteredTips { get; private set; }
+        public WellDefinition WellDefinition { get; private set; }
         public int Rows { get; private set; }
         public int Columns { get; private set; }
         public Coordinates Offset { get; private set; }
         public double Spacing { get; private set; }
 
-        public TipRackDefinition(string displayName,
-            double tipVolume,
-            bool areFilteredTips, int rows, int columns, 
+        public PlateDefinition(string displayName,
+            WellDefinition wellDefinition,
+            int rows, int columns, 
             Coordinates offset, double spacing)
         {
             Id = 0;
             DisplayName = displayName;
-            TipVolume = tipVolume;
-            AreFilteredTips = areFilteredTips;
+            WellDefinition = wellDefinition;
             Rows = rows;
             Columns = columns;
             Offset = offset;
             Spacing = spacing;
         }
-
     }
 }
