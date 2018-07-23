@@ -5,27 +5,23 @@ namespace LHRP.Api.Liquid
     public class Liquid
     {
         public Guid UniqueId { get; private set; }
-        public double Volume { get; private set; }
         private string _assignedId;
-        public string AssignedId { get; private set; }
-        public LiquidDefinition LiquidDefinition { get; private set; }
+        public string AssignedId 
+        { 
+            get
+            {
+                if(string.IsNullOrEmpty(_assignedId))
+                    return UniqueId.ToString();
+                return _assignedId;
+            }
+        }
+        public LiquidType LiquidType { get; private set; }
 
-        public Liquid(LiquidDefinition definition, double initialVolume)
+        public Liquid(LiquidType type)
         {
-            LiquidDefinition = definition;
-            Volume = initialVolume;
+            LiquidType = type;
             _assignedId = "";
             UniqueId = Guid.NewGuid();
-        }
-
-        public void AddVolume(double volume)
-        {
-            Volume += volume;
-        }
-
-        public void RemoveVolume(double volume)
-        {
-            Volume -= volume;
         }
     }
 }
