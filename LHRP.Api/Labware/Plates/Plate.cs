@@ -40,6 +40,7 @@ namespace LHRP.Api.Labware.Plates
         public Plate(PlateDefinition definition)
         {
             Definition = definition;
+            InitializeWells(definition);
         }
         
         public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
@@ -50,6 +51,27 @@ namespace LHRP.Api.Labware.Plates
             }
 
             return Result.Ok(_wells[address].AbsolutePosition);
+        }
+
+        private void InitializeWells(PlateDefinition definition)
+        {
+            _wells.Clear();
+            for(int i = 0; i < definition.Rows; ++i)
+            {
+                for(int j = 0; j < definition.Columns; ++j)
+                {
+                    var absolutePosition = new Coordinates()
+                    {
+                        X = AbsolutePosition.X + Definition.Offset.X + Definition.Spacing * j,
+                        Y = AbsolutePosition.Y + Definition.Offset.Y + Definition.Spacing * i,
+                        Z = AbsolutePosition.Z + Definition.Offset.Z
+                    };
+
+                    var labwareAddress = new LabwareAddress(i + 1, j + 1);
+                    
+                    _wells.Add(labwareAddress, new Well(definition.WellDefinition));
+                }
+            }
         }
 
     }
