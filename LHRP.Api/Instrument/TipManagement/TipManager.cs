@@ -14,12 +14,6 @@ namespace LHRP.Api.Instrument.TipManagement
             _deck = deck;
         }
 
-        public Result AssignTipRack(int positionId, TipRack tipRack)
-        {
-            
-            throw new System.NotImplementedException();
-        }
-
         public Result<TipChannelPattern> RequestTips(ChannelPattern pattern, double tipSize)
         {
             var tipRacks = _deck.GetTipRacks();
