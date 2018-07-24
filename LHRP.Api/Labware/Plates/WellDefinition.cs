@@ -4,6 +4,5 @@ namespace LHRP.Api.Labware.Plates
     {
         public double WellCapacity { get; private set; }
         public double DeadVolume { get;private set; }
-        public double CurrentVolume { get; private set; }
     }
 }
