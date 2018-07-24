@@ -8,10 +8,10 @@ namespace LHRP.Api.Instrument.TipManagement
 {
     public class TipManager : ITipManager
     {
-        private Dictionary<int, TipRack> _tipRacks = new Dictionary<int, TipRack>();
-        public TipManager()
+        private IDeck _deck;
+        public TipManager(IDeck deck)
         {
-
+            _deck = deck;
         }
 
         public Result AssignTipRack(int positionId, TipRack tipRack)
@@ -22,8 +22,9 @@ namespace LHRP.Api.Instrument.TipManagement
 
         public Result<TipChannelPattern> RequestTips(ChannelPattern pattern, double tipSize)
         {
+            var tipRacks = _deck.GetTipRacks();
             TipRack availableTipRack = null;
-            foreach(var tr in _tipRacks.Values)
+            foreach(var tr in tipRacks)
             {
                 //Probably will need more rules here
                 if(tr.Definition.TipVolume == tipSize && 

@@ -7,7 +7,6 @@ namespace LHRP.Api.Instrument.TipManagement
 {
     public interface ITipManager
     {
-         Result AssignTipRack(int positionId, TipRack tipRack);
          Result<TipChannelPattern> RequestTips(ChannelPattern pattern, double tipSize);
     }
 }

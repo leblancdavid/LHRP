@@ -67,5 +67,18 @@ namespace LHRP.Api.Instrument
 
             return _deckPositions[positionId].AssignedLabware.GetRealCoordinates(address);
         }
+
+        public IEnumerable<TipRack> GetTipRacks()
+        {
+            var tipRacks = new List<TipRack>();
+            foreach(var position in _deckPositions.Values)
+            {
+                if(position.IsOccupied && position.AssignedLabware is TipRack)
+                {
+                    tipRacks.Add(position.AssignedLabware as TipRack);
+                }
+            }
+            return tipRacks;
+        }
     }
 }
