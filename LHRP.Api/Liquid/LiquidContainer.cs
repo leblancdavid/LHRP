@@ -5,7 +5,13 @@ namespace LHRP.Api.Liquid
 {
     public class LiquidContainer
     {
-        public double Volume { get; private set; }
+        public double Volume 
+        { 
+            get
+            {
+                return _liquidVolumes.Values.Sum();
+            }
+        }
         private List<Liquid> _liquids = new List<Liquid>();
         public IEnumerable<Liquid> Liquids => _liquids;
         private Dictionary<string,double> _liquidVolumes = new Dictionary<string, double>();
@@ -19,6 +25,21 @@ namespace LHRP.Api.Liquid
             }
             _liquidVolumes[liquid.AssignedId] += volume;
 
+        }
+
+        public void Aspirate(double volume)
+        {
+            var totalVolume = Volume;
+            if(volume > totalVolume)
+            {
+                volume = totalVolume;
+            }
+            
+            var volumeFactor = 1.0 - volume/totalVolume;
+            foreach(var liquid in _liquidVolumes.Keys)
+            {
+                _liquidVolumes[liquid] *= volumeFactor;
+            }
         }
 
         public bool ContainsLiquid(Liquid liquid)
