@@ -14,15 +14,8 @@ namespace LHRP.Api.Instrument
         private Dictionary<int, DeckPosition> _deckPositions = new Dictionary<int, DeckPosition>();
         public IEnumerable<DeckPosition> Positions => _deckPositions.Values.ToList();
 
-        private TipManager _tipManager;
-        public ITipManager TipManager
-        {
-            get { return _tipManager; }
-        }
-
         public Deck(List<DeckPosition> deckPositions)
         {
-            _tipManager = new TipManager();
             foreach(var position in deckPositions)
             {
                 _deckPositions[position.PositionId] = position;

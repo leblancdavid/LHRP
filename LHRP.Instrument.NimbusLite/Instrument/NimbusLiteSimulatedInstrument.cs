@@ -4,6 +4,7 @@ using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
+using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Runtime;
 using LHRP.Instrument.NimbusLite.Devices.Pipettor;
 
@@ -27,21 +28,29 @@ namespace LHRP.Instrument.NimbusLite.Instrument
       }
     }
 
-   private IDeck _deck;
-    public IDeck Deck 
-    { 
-        get
-        {
-            return _deck;
-        }
+    private IDeck _deck;
+    public IDeck Deck
+    {
+      get
+      {
+        return _deck;
+      }
+    }
+    private TipManager _tipManager;
+    public ITipManager TipManager
+    {
+      get
+      {
+        return _tipManager;
+      }
     }
     private Coordinates _wastePosition = new Coordinates(0.0, 0.0, 0.0);
     public Coordinates WastePosition
     {
-        get
-        {
-            return _wastePosition;
-        }
+      get
+      {
+        return _wastePosition;
+      }
     }
 
     public double FailureRate { get; set; }
@@ -60,6 +69,7 @@ namespace LHRP.Instrument.NimbusLite.Instrument
       }
 
       _deck = new Deck(deckPositions);
+      _tipManager = new TipManager();
     }
 
     public IDevice GetDevice(Guid id)
@@ -67,9 +77,9 @@ namespace LHRP.Instrument.NimbusLite.Instrument
       throw new System.NotImplementedException();
     }
 
-    public IPipettor Pipettor 
+    public IPipettor Pipettor
     {
-        get { return _pipettor; }
+      get { return _pipettor; }
     }
   }
 }

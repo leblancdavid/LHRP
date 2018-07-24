@@ -19,7 +19,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Process Run(IInstrument instrument)
         {
             var process = new Process();
-            var tipManager = instrument.Deck.TipManager;
+            var tipManager = instrument.TipManager;
             var pipettor = instrument.Pipettor;
             var tipsResult = tipManager.RequestTips(_pattern, _desiredTipSize);
 

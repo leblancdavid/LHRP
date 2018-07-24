@@ -16,7 +16,15 @@ namespace LHRP.Api.Liquids
         public IEnumerable<Liquid> Liquids => _liquids;
         private Dictionary<string,double> _liquidVolumes = new Dictionary<string, double>();
 
-        public void DispenseLiquid(Liquid liquid, double volume)
+        public bool IsPure
+        {
+            get
+            {
+                return _liquids.Count <= 1;
+            }
+        }
+
+        public void AddLiquid(Liquid liquid, double volume)
         {
             if(!ContainsLiquid(liquid))
             {
@@ -27,7 +35,7 @@ namespace LHRP.Api.Liquids
 
         }
 
-        public void Aspirate(double volume)
+        public void Remove(double volume)
         {
             var totalVolume = Volume;
             if(volume > totalVolume)
