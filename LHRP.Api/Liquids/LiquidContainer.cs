@@ -24,6 +24,14 @@ namespace LHRP.Api.Liquids
             }
         }
 
+        public bool IsEmpty
+        {
+            get
+            {
+                return _liquids.Count == 0;
+            }
+        }
+
         public void AddLiquid(Liquid liquid, double volume)
         {
             if(!ContainsLiquid(liquid))
@@ -53,6 +61,12 @@ namespace LHRP.Api.Liquids
         public bool ContainsLiquid(Liquid liquid)
         {
             return _liquids.Any(l => l.AssignedId == liquid.AssignedId);
+        }
+
+        public void Clear()
+        {
+            _liquids.Clear();
+            _liquidVolumes.Clear();
         }
 
 
