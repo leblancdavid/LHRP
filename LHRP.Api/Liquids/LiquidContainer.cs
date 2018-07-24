@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LHRP.Api.Liquid
+namespace LHRP.Api.Liquids
 {
     public class LiquidContainer
     {

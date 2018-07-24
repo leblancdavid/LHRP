@@ -1,6 +1,6 @@
 using System;
 
-namespace LHRP.Api.Liquid
+namespace LHRP.Api.Liquids
 {
     public class Liquid
     {

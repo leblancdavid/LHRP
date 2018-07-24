@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
+using LHRP.Api.Liquids;
 
 namespace LHRP.Api.Labware.Plates
 {
@@ -53,6 +55,11 @@ namespace LHRP.Api.Labware.Plates
             return Result.Ok(_wells[address].AbsolutePosition);
         }
 
+        public IEnumerable<Well> GetWellsWithLiquid(Liquids.Liquid liquid)
+        {
+            return _wells.Values.Where(w => w.ContainsLiquid(liquid));
+        }
+
         private void InitializeWells(PlateDefinition definition)
         {
             _wells.Clear();
@@ -69,7 +76,7 @@ namespace LHRP.Api.Labware.Plates
 
                     var labwareAddress = new LabwareAddress(i + 1, j + 1);
                     
-                    _wells.Add(labwareAddress, new Well(definition.WellDefinition));
+                    _wells.Add(labwareAddress, new Well(labwareAddress, absolutePosition, definition.WellDefinition));
                 }
             }
         }

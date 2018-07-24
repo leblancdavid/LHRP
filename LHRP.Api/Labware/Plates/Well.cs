@@ -2,38 +2,21 @@
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
+using LHRP.Api.Liquids;
 
 namespace LHRP.Api.Labware.Plates
 {
-    public class Well
+    public class Well : LiquidContainer
     {
         public WellDefinition Definition { get; private set; }
         public LabwareAddress Address { get; private set; }
         public Coordinates AbsolutePosition { get; private set; }
 
-        public Well(WellDefinition definition)
+        public Well(LabwareAddress address, Coordinates absolutePosition, WellDefinition definition)
         {
+            Address = address;
+            AbsolutePosition = absolutePosition;
             Definition = definition;
         }
-
-        // public Result Aspirate(double volume)
-        // {
-        //     if(volume > CurrentVolume)
-        //     {
-        //         return Result.Fail("Insufficient volume in well '" + Address.ToString() + "'.");
-        //     }
-        //     CurrentVolume -= volume;
-        //     return Result.Ok();
-        // }
-
-        // public Result Dispense(double volume)
-        // {
-        //     if(volume + CurrentVolume > WellCapacity)
-        //     {
-        //         return Result.Fail("Dispensing " + volume + "uL into well '" + Address.ToString() + "' would exceed well capacity.");
-        //     }
-        //     CurrentVolume += volume;
-        //     return Result.Ok();
-        // }
     }
 }
