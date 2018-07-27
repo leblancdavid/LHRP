@@ -55,6 +55,17 @@ namespace LHRP.Api.Labware.Plates
             return Result.Ok(_wells[address].AbsolutePosition);
         }
 
+        public Result<Well> GetWell(LabwareAddress address)
+        {
+            if(!_wells.ContainsKey(address))
+            {
+                // return Result.Fail<Well>("Sorry! Hope you feel better soon!!!");
+                return Result.Fail<Well>("Invalid plate address");
+            }
+
+            return Result.Ok(_wells[address]);
+        }
+
         public IEnumerable<Well> GetWellsWithLiquid(Liquids.Liquid liquid)
         {
             return _wells.Values.Where(w => w.ContainsLiquid(liquid));
