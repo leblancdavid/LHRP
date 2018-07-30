@@ -12,16 +12,22 @@ namespace LHRP.Api.Protocol.Steps
     public class TransferSamplesStep : IRunnable
     {
         private TransferSamplesStepData _stepData;
-        public TransferSamplesStep(TransferSamplesStepData stepData)
+        private ITransferOptimizer<Transfer> _transferOptimizer;
+        public TransferSamplesStep(TransferSamplesStepData stepData, ITransferOptimizer<Transfer> optimizer = null)
         {
             _stepData = stepData;
+            if(optimizer == null)
+            {
+                optimizer = new DefaultTransferOptimizer<Transfer>();
+            }
+            _transferOptimizer = optimizer;
         }
 
         public Process Run(IInstrument instrument)
         {
             var process = new Process();
             var pipettor = instrument.Pipettor;
-            var tranfersResult = _stepData.Pattern.GetTransferGroups(instrument);
+            var tranfersResult = _stepData.Pattern.GetTransferGroups(instrument, _transferOptimizer);
             if(tranfersResult.IsFailure)
             {
                 process.AddError(tranfersResult.Error);

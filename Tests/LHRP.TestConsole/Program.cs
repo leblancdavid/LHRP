@@ -15,7 +15,8 @@ namespace LHRP.TestConsole
             //Setup protocol and steps
             var protocol = new Protocol();
             var transferSampleStep = new TransferSamplesStep(
-                new TransferSamplesStepData(new TransferPattern<Transfer>(), 300.0, false));
+                new TransferSamplesStepData(new TransferPattern<Transfer>(), 300.0, false),
+                new DefaultTransferOptimizer<Transfer>());
             protocol.AddStep(transferSampleStep);
 
             var nimbusLiteSimulation = new NimbusLiteSimulationEngine();
