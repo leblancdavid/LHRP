@@ -66,7 +66,7 @@ namespace LHRP.Api.Labware.Plates
             return Result.Ok(_wells[address]);
         }
 
-        public IEnumerable<Well> GetWellsWithLiquid(Liquids.Liquid liquid)
+        public IEnumerable<Well> GetWellsWithLiquid(Liquid liquid)
         {
             return _wells.Values.Where(w => w.ContainsLiquid(liquid));
         }
