@@ -49,6 +49,8 @@ namespace LHRP.Api.Protocol.Steps
 
                 var aspirateCommand = new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), 
                     transfer.ChannelPattern));
+
+                process.AppendSubProcess(aspirateCommand.Run(instrument));
                 
                 // var aspirateResult = pipettor.Aspirate(new AspirateCommand()
                 //     {

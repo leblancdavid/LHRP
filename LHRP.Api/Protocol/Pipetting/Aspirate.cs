@@ -16,7 +16,6 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public Process Run(IInstrument instrument)
         {
-
             return instrument.Pipettor.Aspirate(_parameters);
         }
     }
