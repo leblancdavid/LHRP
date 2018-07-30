@@ -55,6 +55,7 @@ namespace LHRP.Domain.Tests.Liquids
             _liquidContainer.ContainsLiquid(new Liquid(LiquidType.Water)).Should().BeFalse();
         }
 
+        [Fact]
         public void SuccessfullyRemoveVolumeOfLiquid()
         {
             var liquid = new Liquid(LiquidType.Water);
