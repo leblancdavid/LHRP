@@ -6,7 +6,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
 {
     public interface ILiquidManager
     {
-        Result<TransferTarget> GetTargetLiquid(Liquid liquid);
+        Result<TransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume);
         Result AspirateLiquidFrom(TransferTarget target);
         Result DispenseLiquidTo(TransferTarget target);
     }
