@@ -1,3 +1,4 @@
+using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
@@ -5,6 +6,7 @@ using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
+using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Protocol.Steps
@@ -12,13 +14,13 @@ namespace LHRP.Api.Protocol.Steps
     public class TransferSamplesStep : IRunnable
     {
         private TransferSamplesStepData _stepData;
-        private ITransferOptimizer<Transfer> _transferOptimizer;
-        public TransferSamplesStep(TransferSamplesStepData stepData, ITransferOptimizer<Transfer> optimizer = null)
+        private ITransferOptimizer<OneToOneTransfer> _transferOptimizer;
+        public TransferSamplesStep(TransferSamplesStepData stepData, ITransferOptimizer<OneToOneTransfer> optimizer = null)
         {
             _stepData = stepData;
             if(optimizer == null)
             {
-                optimizer = new DefaultTransferOptimizer<Transfer>();
+                optimizer = new DefaultOneToOneTransferOptimizer();
             }
             _transferOptimizer = optimizer;
         }
@@ -45,7 +47,8 @@ namespace LHRP.Api.Protocol.Steps
                 }
                 process.AppendSubProcess(tipPickupCommand.Run(instrument));
 
-                var aspirateCommand = new Aspirate(new AspirateParameters(transfer));
+                var aspirateCommand = new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), 
+                    transfer.ChannelPattern));
                 
                 // var aspirateResult = pipettor.Aspirate(new AspirateCommand()
                 //     {

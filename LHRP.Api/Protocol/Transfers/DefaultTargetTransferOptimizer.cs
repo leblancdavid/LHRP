@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
@@ -6,9 +6,9 @@ using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class DefaultTransferOptimizer<T> : ITransferOptimizer<T> where T : Transfer
+    public class DefaultTargetTransferOptimizer<T> : ITransferOptimizer<T> where T : Transfer
     {
-        public DefaultTransferOptimizer()
+        public DefaultTargetTransferOptimizer()
         {
 
         }
@@ -44,19 +44,19 @@ namespace LHRP.Api.Protocol.Transfers
         private bool TryAssignTransferToGroup(T transfer, TransferGroup<T> group, IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
-            var sourceCoordinates = instrument.Deck.GetCoordinates(transfer.Source.PositionId, transfer.Source.Address);
-            var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Destination.PositionId, transfer.Destination.Address);
+            var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.PositionId, transfer.Target.Address);
             
 
             if(group.ChannelPattern.IsFull())
             {
                 return false;
             }
+
             int channelIndex = 0;
+
             for(channelIndex = 0; channelIndex < pipettor.Specification.NumChannels; ++channelIndex)
             {
-                if(pipettor.Specification[channelIndex].CanReach(sourceCoordinates.Value) &&
-                    pipettor.Specification[channelIndex].CanReach(destinationCoordinates.Value))
+                if(pipettor.Specification[channelIndex].CanReach(destinationCoordinates.Value))
                 {
                     group[channelIndex] = transfer;
                     channelIndex++;

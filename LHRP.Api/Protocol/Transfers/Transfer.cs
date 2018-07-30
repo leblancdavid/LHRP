@@ -2,13 +2,11 @@ namespace LHRP.Api.Protocol.Transfers
 {
     public class Transfer
     {
-        public Transfer(TransferTarget source, TransferTarget destination)
+        public Transfer(TransferTarget target)
         {
-            Source = source;
-            Destination = destination;
+            Target = target;
         }
 
-        public TransferTarget Source { get; private set; }
-        public TransferTarget Destination { get; private set; }   
+        public TransferTarget Target { get; private set; }   
     }
 }

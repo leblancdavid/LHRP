@@ -1,13 +1,17 @@
+using System.Collections.Generic;
 using LHRP.Api.Protocol.Transfers;
 
 namespace LHRP.Api.Devices.Pipettor
 {
     public class AspirateParameters
     {
-        public TransferGroup<Transfer> TransferGroup { get; private set; }
-        public  AspirateParameters(TransferGroup<Transfer> transferGroup)
+        private List<TransferTarget> _targets;
+        public IEnumerable<TransferTarget> Targets => _targets;
+        public ChannelPattern Pattern { get; private set; }
+        public  AspirateParameters(List<TransferTarget> targets, ChannelPattern pattern)
         {
-            TransferGroup = transferGroup;
+            _targets = targets;
+            Pattern = pattern;
         }
 
     }

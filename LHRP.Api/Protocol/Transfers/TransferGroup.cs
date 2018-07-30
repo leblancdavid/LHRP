@@ -29,6 +29,7 @@ namespace LHRP.Api.Protocol.Transfers
                 _transfers[i] = value; 
             }
         }
+
         public TransferGroup(int numChannels)
         {
             ChannelPattern = ChannelPattern.Empty(numChannels);
