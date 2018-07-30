@@ -3,14 +3,14 @@ using LHRP.Api.Devices.Pipettor;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class TransferGroup
+    public class TransferGroup<T> where T : Transfer
     {
         public ChannelPattern ChannelPattern { get; private set; }
 
-        private List<Transfer> _transfers;
-        public IEnumerable<Transfer> Transfers => _transfers;
+        private List<T> _transfers;
+        public IEnumerable<T> Transfers => _transfers;
 
-        public Transfer this[int i]
+        public T this[int i]
         {
             get 
             { 
@@ -32,7 +32,7 @@ namespace LHRP.Api.Protocol.Transfers
         public TransferGroup(int numChannels)
         {
             ChannelPattern = ChannelPattern.Empty(numChannels);
-            _transfers = new List<Transfer>(numChannels);
+            _transfers = new List<T>(numChannels);
         }
     }
 }

@@ -4,8 +4,8 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public class AspirateParameters
     {
-        public TransferGroup TransferGroup { get; private set; }
-        public  AspirateParameters(TransferGroup transferGroup)
+        public TransferGroup<Transfer> TransferGroup { get; private set; }
+        public  AspirateParameters(TransferGroup<Transfer> transferGroup)
         {
             TransferGroup = transferGroup;
         }

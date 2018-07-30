@@ -4,31 +4,31 @@ using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class TransferPattern
+    public class TransferPattern<T> where T : Transfer
     {
-        private List<Transfer> _transfers = new List<Transfer>();
-        public IEnumerable<Transfer> Transfers => _transfers;
+        private List<T> _transfers = new List<T>();
+        public IEnumerable<T> Transfers => _transfers;
 
         public TransferPattern()
         {
-            _transfers = new List<Transfer>();
+            _transfers = new List<T>();
         }
 
-        public TransferPattern(List<Transfer> transfers)
+        public TransferPattern(List<T> transfers)
         {
             _transfers = transfers;
         }
 
-        public void AddTransfer(Transfer tranfer)
+        public void AddTransfer(T tranfer)
         {
             _transfers.Add(tranfer);
         }
         
-        public Result<IEnumerable<TransferGroup>> GetTransferGroups(IInstrument instrument, ITransferOptimizer optimizer = null)
+        public Result<IEnumerable<TransferGroup<T>>> GetTransferGroups(IInstrument instrument, ITransferOptimizer<T> optimizer = null)
         {
             if(optimizer == null)
             {
-                optimizer = new DefaultTransferOptimizer();
+                optimizer = new DefaultTransferOptimizer<T>();
             }
             var transferGroups = optimizer.OptimizeTransfers(_transfers, instrument);
             return transferGroups;

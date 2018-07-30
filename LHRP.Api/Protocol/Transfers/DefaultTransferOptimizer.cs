@@ -6,19 +6,19 @@ using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class DefaultTransferOptimizer : ITransferOptimizer
+    public class DefaultTransferOptimizer<T> : ITransferOptimizer<T> where T : Transfer
     {
         public DefaultTransferOptimizer()
         {
 
         }
-        public Result<IEnumerable<TransferGroup>> OptimizeTransfers(
-            IEnumerable<Transfer> transfers, 
+        public Result<IEnumerable<TransferGroup<T>>> OptimizeTransfers(
+            IEnumerable<T> transfers, 
             IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
-            var transferGroups = new List<TransferGroup>();
-            var currentTransferGroup = new TransferGroup(pipettor.Specification.NumChannels);
+            var transferGroups = new List<TransferGroup<T>>();
+            var currentTransferGroup = new TransferGroup<T>(pipettor.Specification.NumChannels);
 
             foreach(var transfer in transfers)
             {
@@ -29,19 +29,19 @@ namespace LHRP.Api.Protocol.Transfers
                 }
                 if(!assigned)
                 {
-                    var newGroup = new TransferGroup(pipettor.Specification.NumChannels);
+                    var newGroup = new TransferGroup<T>(pipettor.Specification.NumChannels);
                     if(!TryAssignTransferToGroup(transfer, newGroup, instrument))
                     {
-                        return Result.Fail<IEnumerable<TransferGroup>>("Unable to assign a transfer to a transfer group");
+                        return Result.Fail<IEnumerable<TransferGroup<T>>>("Unable to assign a transfer to a transfer group");
                     }
                     transferGroups.Add(newGroup);
                 }
             }
 
-            return Result.Ok<IEnumerable<TransferGroup>>(transferGroups);
+            return Result.Ok<IEnumerable<TransferGroup<T>>>(transferGroups);
         }
 
-        private bool TryAssignTransferToGroup(Transfer transfer, TransferGroup group, IInstrument instrument)
+        private bool TryAssignTransferToGroup(T transfer, TransferGroup<T> group, IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
             var sourceCoordinates = instrument.Deck.GetCoordinates(transfer.Source.PositionId, transfer.Source.Address);
