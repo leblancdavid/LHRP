@@ -12,7 +12,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
         {
             _deck = deck;
         }
-        public Result AspirateLiquidFrom(TransferTarget target)
+        public Result AspirateLiquidFrom(LiquidTransferTarget target)
         {
             var plates = _deck.GetPlates();
             var targetPlate = plates.FirstOrDefault(x => x.PositionId == target.PositionId);
@@ -42,7 +42,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
             return Result.Ok();
         }
 
-        public Result DispenseLiquidTo(TransferTarget target)
+        public Result DispenseLiquidTo(LiquidTransferTarget target)
         {
             var plates = _deck.GetPlates();
             var targetPlate = plates.FirstOrDefault(x => x.PositionId == target.PositionId);
@@ -62,7 +62,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
             return Result.Ok();
         }
 
-        public Result<TransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume)
+        public Result<LiquidTransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume)
         {
             throw new System.NotImplementedException();
         }
