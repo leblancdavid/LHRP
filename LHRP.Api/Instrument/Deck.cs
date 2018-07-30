@@ -5,6 +5,7 @@ using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Labware;
+using LHRP.Api.Labware.Plates;
 using LHRP.Api.Labware.Tips;
 
 namespace LHRP.Api.Instrument
@@ -80,5 +81,18 @@ namespace LHRP.Api.Instrument
             }
             return tipRacks;
         }
-    }
+
+        public IEnumerable<Plate> GetPlates()
+        {
+            var plates = new List<Plate>();
+            foreach(var position in _deckPositions.Values)
+            {
+                if(position.IsOccupied && position.AssignedLabware is Plate)
+                {
+                    plates.Add(position.AssignedLabware as Plate);
+                }
+            }
+            return plates;
+        }
+  }
 }

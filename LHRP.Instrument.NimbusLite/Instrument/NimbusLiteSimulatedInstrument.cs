@@ -68,7 +68,7 @@ namespace LHRP.Instrument.NimbusLite.Instrument
 
       _deck = new Deck(deckPositions);
       _tipManager = new TipManager(_deck);
-      _liquidManager = new LiquidManager();
+      _liquidManager = new LiquidManager(_deck);
     }
 
     public IDevice GetDevice(Guid id)
