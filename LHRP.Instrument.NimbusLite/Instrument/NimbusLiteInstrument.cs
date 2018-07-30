@@ -30,7 +30,7 @@ namespace LHRP.Instrument.NimbusLite.Instrument
             
             _deck = new Deck(deckPositions);
             _tipManager = new TipManager(_deck);
-            _liquidManager = new LiquidManager(_deck);
+            _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
         }
 
         private IDeck _deck;
