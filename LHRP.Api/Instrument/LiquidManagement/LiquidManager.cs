@@ -8,11 +8,13 @@ namespace LHRP.Api.Instrument.LiquidManagement
     public class LiquidManager : ILiquidManager
     {
         private IDeck _deck;
-        public LiquidManager(IDeck deck)
+        private LiquidManagerConfiguration _configuration;
+        public LiquidManager(LiquidManagerConfiguration configuration, IDeck deck)
         {
             _deck = deck;
+            _configuration = configuration;
         }
-        public Result AspirateLiquidFrom(LiquidTransferTarget target)
+        public Result AspirateLiquidFrom(TransferTarget target)
         {
             var plates = _deck.GetPlates();
             var targetPlate = plates.FirstOrDefault(x => x.PositionId == target.PositionId);
@@ -29,20 +31,25 @@ namespace LHRP.Api.Instrument.LiquidManagement
 
             if(well.Value.ContainsLiquid(target.Liquid))
             {
-                return Result.Fail($"Liquid {target.Liquid.AssignedId} not found in well({well.Value.Address.Row},{well.Value.Address.Column})");
+                if(!_configuration.AutoLiquidAssignment)
+                {
+                    return Result.Fail($"Liquid {target.Liquid.AssignedId} not found in well({well.Value.Address.Row},{well.Value.Address.Column})");
+                }
+                
+                well.Value.AddLiquid(target.Liquid, target.Volume);
             }
 
             if(well.Value.Volume < target.Volume)
             {
                 return Result.Fail($"Insufficient liquid {target.Liquid.AssignedId} found in well({well.Value.Address.Row},{well.Value.Address.Column})");
             }
-
+            
             well.Value.Remove(target.Volume);
 
             return Result.Ok();
         }
 
-        public Result DispenseLiquidTo(LiquidTransferTarget target)
+        public Result DispenseLiquidTo(TransferTarget target)
         {
             var plates = _deck.GetPlates();
             var targetPlate = plates.FirstOrDefault(x => x.PositionId == target.PositionId);
@@ -62,7 +69,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
             return Result.Ok();
         }
 
-        public Result<LiquidTransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume)
+        public Result<TransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume)
         {
             throw new System.NotImplementedException();
         }

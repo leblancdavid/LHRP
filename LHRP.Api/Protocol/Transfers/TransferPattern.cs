@@ -24,9 +24,12 @@ namespace LHRP.Api.Protocol.Transfers
             _transfers.Add(tranfer);
         }
         
-        public Result<IEnumerable<TransferGroup>> GetTransferGroups(IInstrument instrument)
+        public Result<IEnumerable<TransferGroup>> GetTransferGroups(IInstrument instrument, ITransferOptimizer optimizer = null)
         {
-            var optimizer = new DefaultTransferOptimizer();
+            if(optimizer == null)
+            {
+                optimizer = new DefaultTransferOptimizer();
+            }
             var transferGroups = optimizer.OptimizeTransfers(_transfers, instrument);
             return transferGroups;
         }

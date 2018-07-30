@@ -5,12 +5,9 @@ namespace LHRP.Api.Devices.Pipettor
     public class AspirateParameters
     {
         public TransferGroup TransferGroup { get; private set; }
-        public double Volume { get; private set; }
-        public  AspirateParameters(TransferGroup transferGroup,
-            double volume)
+        public  AspirateParameters(TransferGroup transferGroup)
         {
             TransferGroup = transferGroup;
-            Volume = volume;
         }
 
     }

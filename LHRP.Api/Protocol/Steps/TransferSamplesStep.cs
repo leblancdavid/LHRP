@@ -39,7 +39,7 @@ namespace LHRP.Api.Protocol.Steps
                 }
                 process.AppendSubProcess(tipPickupCommand.Run(instrument));
 
-                var aspirateCommand = new Aspirate(new AspirateParameters(transfer, _stepData.Volume));
+                var aspirateCommand = new Aspirate(new AspirateParameters(transfer));
                 
                 // var aspirateResult = pipettor.Aspirate(new AspirateCommand()
                 //     {
