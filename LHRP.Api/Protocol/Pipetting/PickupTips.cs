@@ -5,7 +5,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class PickupTips : IRunnable
+    public class PickupTips : IRunnableCommand
     {
         private ChannelPattern _pattern;
         private double _desiredTipSize;

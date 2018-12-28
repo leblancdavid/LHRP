@@ -7,6 +7,10 @@ namespace LHRP.Api.Runtime
     public interface IRuntimeEngine
     {
         IInstrument Instrument { get; }
-        Process Run(IRunnable run);
+        IRuntimeCommandQueue Commands { get; }
+
+        void Pause();
+        void Resume();
+        void Start();
     }
 }

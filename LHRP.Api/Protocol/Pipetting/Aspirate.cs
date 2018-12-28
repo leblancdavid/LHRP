@@ -6,7 +6,7 @@ using LHRP.Api.Devices.Pipettor;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class Aspirate : IRunnable
+    public class Aspirate : IRunnableCommand
     {
         private AspirateParameters _parameters;
         public Aspirate(AspirateParameters parameters)

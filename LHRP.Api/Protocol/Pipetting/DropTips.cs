@@ -5,7 +5,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class DropTips : IRunnable
+    public class DropTips : IRunnableCommand
     {
         private bool _returnToSource;
         public DropTips(bool returnToSource=false)

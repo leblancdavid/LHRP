@@ -36,6 +36,8 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
             }
         }
         
+        public IRuntimeCommandQueue Commands { get; private set; }
+
         public Process Run(IRunnable run)
         {
             return run.Run(this);
@@ -50,6 +52,21 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
             SimulationSpeedFactor = previousSpeedFactor;
 
             return process;
+        }
+
+        public void Pause()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Resume()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Start()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
