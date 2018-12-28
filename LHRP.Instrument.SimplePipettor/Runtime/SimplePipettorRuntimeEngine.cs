@@ -16,22 +16,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
 
         public IRuntimeCommandQueue Commands { get; private set; }
 
-        public void Pause()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Resume()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Process Run(IRunnable run)
-        {
-            return run.Run(this);
-        }
-
-        public void Start()
+        public Process Run()
         {
             throw new System.NotImplementedException();
         }

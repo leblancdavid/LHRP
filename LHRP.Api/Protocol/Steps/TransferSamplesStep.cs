@@ -38,25 +38,15 @@ namespace LHRP.Api.Protocol.Steps
 
             foreach(var transfer in tranfersResult.Value)
             {
-                var tipPickupCommand = new PickupTips(transfer.ChannelPattern, _stepData.DesiredTipSize);
-                var dropTips = new DropTips(_stepData.ReturnTipsToSource);
-                var tipPickupResult = tipPickupCommand.Run(engine);
-                if(tipPickupResult.ContainsErrors)
-                {
-                    process.AppendSubProcess(dropTips.Run(engine));
-                }
-                process.AppendSubProcess(tipPickupCommand.Run(engine));
-
-                var aspirateCommand = new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), 
-                    transfer.ChannelPattern));
-                process.AppendSubProcess(aspirateCommand.Run(engine));
-
-                var dispenseCommand = new Dispense(new DispenseParameters(transfer.Transfers.Select(x => x.Target).ToList(),
-                    transfer.ChannelPattern));
-                process.AppendSubProcess(dispenseCommand.Run(engine));
+                engine.Commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.DesiredTipSize));
+                engine.Commands.Add(new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), 
+                    transfer.ChannelPattern)));
+                engine.Commands.Add(new Dispense(new DispenseParameters(transfer.Transfers.Select(x => x.Target).ToList(),
+                    transfer.ChannelPattern)));
+                engine.Commands.Add(new DropTips(_stepData.ReturnTipsToSource));
             }
             
-            return process;
+            return engine.Run();
         }
     }
 }

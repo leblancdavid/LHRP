@@ -54,17 +54,8 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
             return process;
         }
 
-        public void Pause()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Resume()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Start()
+    
+        public Process Run()
         {
             throw new System.NotImplementedException();
         }

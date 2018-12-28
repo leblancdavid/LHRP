@@ -9,8 +9,6 @@ namespace LHRP.Api.Runtime
         IInstrument Instrument { get; }
         IRuntimeCommandQueue Commands { get; }
 
-        void Pause();
-        void Resume();
-        void Start();
+        Process Run();
     }
 }
