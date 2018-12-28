@@ -24,7 +24,8 @@ namespace LHRP.TestConsole
             simplePipettorSimulation.Instrument.Deck.AssignLabware(1, LabwareCreator.GetTipRack());
             var schedule = simplePipettorSimulation.Schedule(protocol);
             simplePipettorSimulation.SimulationSpeedFactor = 5;
-            simplePipettorSimulation.Run(transferSampleStep);
+
+            var processResult = protocol.Run(simplePipettorSimulation);
 
             //can also schedule or run an individual step
             //nimbusLiteSimulation.Run(transferSampleStep);

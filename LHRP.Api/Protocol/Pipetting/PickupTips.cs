@@ -2,6 +2,7 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Errors;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -25,7 +26,7 @@ namespace LHRP.Api.Protocol.Pipetting
 
             if(tipsResult.IsFailure)
             {
-                process.AddError(tipsResult.Error);
+                process.AddError(new RuntimeError());
                 return process;
             }
 

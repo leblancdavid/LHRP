@@ -8,6 +8,7 @@ using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Errors;
 
 namespace LHRP.Api.Protocol.Steps
 {
@@ -32,7 +33,7 @@ namespace LHRP.Api.Protocol.Steps
             var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
             if(tranfersResult.IsFailure)
             {
-                process.AddError(tranfersResult.Error);
+                process.AddError(new RuntimeError());
                 return process;
             }
 
