@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using LHRP.Api.Devices.Pipettor;
 
 namespace LHRP.Api.Protocol.Transfers
@@ -7,18 +8,18 @@ namespace LHRP.Api.Protocol.Transfers
     {
         public ChannelPattern ChannelPattern { get; private set; }
 
-        private List<T> _transfers;
-        public IEnumerable<T> Transfers => _transfers;
-
+        private T[] _transfers;
+        public T[] Transfers => _transfers;
+    
         public T this[int i]
         {
-            get 
-            { 
-                return _transfers[i]; 
-            }
-            set 
+            get
             {
-                if(value == null)
+                return _transfers[i];
+            }
+            set
+            {
+                if (value == null)
                 {
                     ChannelPattern[i] = false;
                 }
@@ -26,14 +27,14 @@ namespace LHRP.Api.Protocol.Transfers
                 {
                     ChannelPattern[i] = true;
                 }
-                _transfers[i] = value; 
+                _transfers[i] = value;
             }
         }
 
         public TransferGroup(int numChannels)
         {
             ChannelPattern = ChannelPattern.Empty(numChannels);
-            _transfers = new List<T>(numChannels);
+            _transfers = new T[numChannels];
         }
     }
 }

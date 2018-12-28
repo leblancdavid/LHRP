@@ -1,5 +1,6 @@
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
+using LHRP.Api.Labware.Plates;
 using LHRP.Api.Labware.Tips;
 
 namespace LHRP.TestConsole
@@ -17,6 +18,11 @@ namespace LHRP.TestConsole
                     9.0)
             );
             return tipRack;
+        }
+
+        public static Plate GetPlate()
+        {
+            return new Plate(new PlateDefinition("Costar 96", new WellDefinition(), 8, 12, new Coordinates(86, 127, 14), 9.0));
         }
     }
 }

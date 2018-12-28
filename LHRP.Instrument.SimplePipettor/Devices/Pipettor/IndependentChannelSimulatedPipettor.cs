@@ -16,10 +16,10 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         public uint SimulationSpeedFactor { get; set; }
         public double FailureRate { get; set; }
         public int NumberChannels { get; private set; }
-        private PipettorStatus _pipettorStatus;
+        public PipettorStatus PipettorStatus { get; private set; }
         public IDeviceStatus DeviceStatus 
         { 
-            get { return _pipettorStatus; } 
+            get { return PipettorStatus; } 
         }
 
         public Guid DeviceId { get; private set; }
@@ -29,8 +29,8 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
         public IndependentChannelSimulatedPipettor()
         {
-            NumberChannels = 1;
-            _pipettorStatus = new PipettorStatus(NumberChannels);
+            NumberChannels = 2;
+            PipettorStatus = new PipettorStatus(NumberChannels);
             SimulationSpeedFactor = 1;
             FailureRate = 0;
 
@@ -85,9 +85,9 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         public Process PickupTips(TipPickupParameters parameters)
         {
             var sb = new StringBuilder();
-            sb.Append("Picking-up tips with channels ");
+            sb.Append("Picking-up tips with channels pattern '");
             sb.Append(parameters.Pattern.GetChannelString());
-            sb.Append(" from positions: ");
+            sb.Append("' from positions: ");
 
             Coordinates position = new Coordinates();
             for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
@@ -96,8 +96,8 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 {
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip.AbsolutePosition;
-                    sb.Append($"({tip.AbsolutePosition.X},{tip.AbsolutePosition.Y},{tip.AbsolutePosition.Z});");
-                    _pipettorStatus[i].OnPickedUpTip(tip);
+                    sb.Append($"({tip.Address.Row},{tip.Address.Column});");
+                    PipettorStatus[i].OnPickedUpTip(tip);
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             var estimatedTime = GetTravelTimeToPosition(position) + new TimeSpan(0, 0, 3); 
             SimulateRuntimeWait(estimatedTime);
 
-            _pipettorStatus.CurrentPosition = position;
+            PipettorStatus.CurrentPosition = position;
 
             Console.WriteLine(sb.ToString());
 
@@ -118,18 +118,56 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
         public Process DropTips(TipDropParameters parameters)
         {
-            Console.WriteLine("Dropping tips into position: (" + 
-                parameters.WastePosition.X + ", " +
-                parameters.WastePosition.Y + ", " + 
-                parameters.WastePosition.Z + ")");
+            if(parameters.Pattern != null)
+            {
+                var sb = new StringBuilder();
+                sb.Append("Dropping tips with channels pattern '");
+                sb.Append(parameters.Pattern.GetChannelString());
+                sb.Append("' from positions: ");
 
-            //takes 3 seconds to drop tips
-            var estimatedTime = GetTravelTimeToPosition(parameters.WastePosition) + new TimeSpan(0, 0, 3); 
-            SimulateRuntimeWait(estimatedTime);
+                Coordinates position = new Coordinates();
+                for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
+                {
+                    if(parameters.Pattern[i])
+                    {
+                        var tip = parameters.Pattern.GetTip(i);
+                        position = tip.AbsolutePosition;
+                        sb.Append($"({tip.Address.Row},{tip.Address.Column});");
+                        PipettorStatus[i].OnDroppedTip();
+                    }
+                    else
+                    {
+                        sb.Append($"(*,*,*);");
+                    }
+                }
 
-            _pipettorStatus.CurrentPosition = parameters.WastePosition;
+                //takes 3 seconds to pickup tips
+                var estimatedTime = GetTravelTimeToPosition(position) + new TimeSpan(0, 0, 3); 
+                SimulateRuntimeWait(estimatedTime);
 
-            return new Process(estimatedTime, estimatedTime);
+                PipettorStatus.CurrentPosition = position;
+
+                Console.WriteLine(sb.ToString());
+
+                return new Process(estimatedTime, estimatedTime);
+            }
+            else
+            {
+                 var sb = new StringBuilder();
+                sb.Append("Dropping tips to waste");
+
+                Coordinates position = new Coordinates();
+               
+                //takes 3 seconds to pickup tips
+                var estimatedTime = GetTravelTimeToPosition(position) + new TimeSpan(0, 0, 3); 
+                SimulateRuntimeWait(estimatedTime);
+
+                PipettorStatus.CurrentPosition = position;
+
+                Console.WriteLine(sb.ToString());
+
+                return new Process(estimatedTime, estimatedTime);
+            }
         }
 
         

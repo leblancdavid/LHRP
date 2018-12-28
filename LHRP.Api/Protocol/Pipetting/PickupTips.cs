@@ -1,3 +1,4 @@
+using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
@@ -31,6 +32,18 @@ namespace LHRP.Api.Protocol.Pipetting
             }
 
             var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value));
+            for(int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
+            {
+                if(tipsResult.Value[channel] && pipettor.PipettorStatus[channel].HasTip)
+                {
+                    //tipManager.ConsumeTip()
+                }
+            }
+
+            if(!commandResult.ContainsErrors)
+            {
+                
+            }
             return commandResult;
         }
     }

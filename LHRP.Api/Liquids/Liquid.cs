@@ -17,7 +17,7 @@ namespace LHRP.Api.Liquids
         }
         public LiquidType LiquidType { get; private set; }
 
-        public Liquid(LiquidType type)
+        public Liquid(LiquidType type = LiquidType.Default)
         {
             LiquidType = type;
             _assignedId = "";

@@ -12,5 +12,6 @@ namespace LHRP.Api.Devices.Pipettor
         Process DropTips(TipDropParameters parameters);
 
         PipettorSpecification Specification { get; }
+        PipettorStatus PipettorStatus { get; }
     }
 }

@@ -29,8 +29,8 @@ namespace LHRP.Api.Devices.Pipettor
         }
         public Coordinates CurrentPosition { get; set; }
         
-        private List<ChannelStatus> _channelStatus;
-        public IEnumerable<ChannelStatus> ChannelStatus => _channelStatus;
+        private ChannelStatus[] _channelStatus;
+        public IEnumerable<ChannelStatus> ChannelStatus => _channelStatus.ToList();
 
         public ChannelStatus this[int i]
         {
@@ -42,10 +42,10 @@ namespace LHRP.Api.Devices.Pipettor
 
         public PipettorStatus(int numChannels)
         {
-            _channelStatus = new List<ChannelStatus>();
+            _channelStatus = new ChannelStatus[numChannels];
             for(int i = 0; i < numChannels; ++i)
             {
-                _channelStatus.Add(new ChannelStatus());
+                _channelStatus[i] = new ChannelStatus();
             }
             CurrentPosition = new Coordinates();
         }

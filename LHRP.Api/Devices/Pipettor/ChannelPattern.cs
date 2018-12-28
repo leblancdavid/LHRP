@@ -9,11 +9,11 @@ namespace LHRP.Api.Devices.Pipettor
     public ChannelPattern(int numChannels)
     {
       this.NumChannels = numChannels;
-      this._activeChannels = new List<bool>(numChannels);
+      this._activeChannels = new bool[numChannels];
     }
     public int NumChannels { get; private set; }
 
-    protected List<bool> _activeChannels;
+    protected bool[] _activeChannels;
     public bool this[int i]
     {
       get { return _activeChannels[i]; }

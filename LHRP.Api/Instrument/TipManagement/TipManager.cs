@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Labware;
 using LHRP.Api.Labware.Tips;
 
 namespace LHRP.Api.Instrument.TipManagement 
@@ -14,6 +15,23 @@ namespace LHRP.Api.Instrument.TipManagement
             _deck = deck;
         }
 
+        public Result ConsumeTip(int positionId, LabwareAddress tip)
+        {
+            var position = _deck.GetDeckPosition(positionId);
+            if(position.IsFailure)
+            {
+                return position;
+            }
+
+            if(!position.Value.IsOccupied || !(position.Value.AssignedLabware is TipRack))
+            {
+                return Result.Fail($"Position Id {positionId} does not contain a tip rack");
+            }
+
+            var tipRack = position.Value.AssignedLabware as TipRack;
+            return tipRack.Consume(tip);
+        }
+
         public Result<TipChannelPattern> RequestTips(ChannelPattern pattern, double tipSize)
         {
             var tipRacks = _deck.GetTipRacks();
@@ -22,7 +40,7 @@ namespace LHRP.Api.Instrument.TipManagement
             {
                 //Probably will need more rules here
                 if(tr.Definition.TipVolume == tipSize && 
-                    tr.RemainingTips <= pattern.GetNumberActiveChannels())
+                    tr.RemainingTips >= pattern.GetNumberActiveChannels())
                 {
                     availableTipRack = tr;
                     break;

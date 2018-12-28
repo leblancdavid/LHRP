@@ -12,6 +12,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
     {
         public Guid DeviceId { get; private set; }
         public int NumberChannels { get; private set; }
+        public PipettorStatus PipettorStatus { get; private set; }
         public IDeviceStatus DeviceStatus { get; }
         public bool IsInitialized => throw new NotImplementedException();
 
