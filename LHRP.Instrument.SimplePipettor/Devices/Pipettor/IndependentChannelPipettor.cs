@@ -41,7 +41,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             return new Process(new TimeSpan(), new TimeSpan());
         }
 
-        public Process Dispense(DispenseCommand parameters)
+        public Process Dispense(DispenseParameters parameters)
         {
             Console.WriteLine(parameters);
             return new Process(new TimeSpan(), new TimeSpan());

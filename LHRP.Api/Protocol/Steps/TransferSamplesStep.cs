@@ -49,28 +49,11 @@ namespace LHRP.Api.Protocol.Steps
 
                 var aspirateCommand = new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), 
                     transfer.ChannelPattern));
-
                 process.AppendSubProcess(aspirateCommand.Run(instrument));
-                
-                // var aspirateResult = pipettor.Aspirate(new AspirateCommand()
-                //     {
-                //         Volume = 50,
-                //         Position = new Coordinates(0, 0, 0),
-                //     });
-                // process.AppendSubProcess(aspirateResult);
 
-                // var dispenseResult = pipettor.Dispense(new DispenseCommand()
-                //     {
-                //         Volume = 50,
-                //         Position = new Coordinates(0, 0, 0),
-                //     });
-                // process.AppendSubProcess(dispenseResult);
-
-                //var dropTipsResult = pipettor.DropTips(new TipDropCommand()
-                //    {
-                //        Position = new Coordinates(0, 0, 0)
-                //    });
-                //process.AppendSubProcess(dropTipsResult.Value);
+                var dispenseCommand = new Dispense(new DispenseParameters(transfer.Transfers.Select(x => x.Target).ToList(),
+                    transfer.ChannelPattern));
+                process.AppendSubProcess(dispenseCommand.Run(instrument));
             }
             
             return process;

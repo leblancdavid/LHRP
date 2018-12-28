@@ -7,7 +7,7 @@ namespace LHRP.Api.Devices.Pipettor
     public interface IPipettor : IDevice
     {
         Process Aspirate(AspirateParameters parameters);
-        Process Dispense(DispenseCommand parameters);
+        Process Dispense(DispenseParameters parameters);
         Process PickupTips(TipPickupParameters parameters);
         Process DropTips(TipDropParameters parameters);
 
