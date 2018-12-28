@@ -2,15 +2,15 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol;
 using LHRP.Api.Runtime;
-using LHRP.Instrument.NimbusLite.Instrument;
+using LHRP.Instrument.SimplePipettor.Instrument;
 
-namespace LHRP.Instrument.NimbusLite.Runtime
+namespace LHRP.Instrument.SimplePipettor.Runtime
 {
-    public class NimbusLiteRuntimeEngine : IRuntimeEngine
+    public class SimplePipettorRuntimeEngine : IRuntimeEngine
     {
-        public NimbusLiteRuntimeEngine()
+        public SimplePipettorRuntimeEngine()
         {
-            Instrument = new NimbusLiteInstrument();
+            Instrument = new SimplePipettorInstrument();
         }
         public IInstrument Instrument { get; private set; }
 

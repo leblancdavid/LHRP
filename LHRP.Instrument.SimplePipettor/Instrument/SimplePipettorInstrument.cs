@@ -6,15 +6,15 @@ using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Instrument.TipManagement;
-using LHRP.Instrument.NimbusLite.Devices.Pipettor;
+using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
-namespace LHRP.Instrument.NimbusLite.Instrument
+namespace LHRP.Instrument.SimplePipettor.Instrument
 {
-    public class NimbusLiteInstrument : IInstrument
+    public class SimplePipettorInstrument : IInstrument
     {
         private IPipettor _pipettor;
         
-        public NimbusLiteInstrument()
+        public SimplePipettorInstrument()
         {
             _pipettor = new IndependentChannelPipettor();
 

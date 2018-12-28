@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A57594B7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LHRP.TestConsole", "Tests\LHRP.TestConsole\LHRP.TestConsole.csproj", "{33F0B2D1-E9E3-448E-AE3A-04603DAAD14F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LHRP.Instrument.NimbusLite", "LHRP.Instrument.NimbusLite\LHRP.Instrument.NimbusLite.csproj", "{9ED9DFB6-FB40-4E91-837D-76A165AACD90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LHRP.Instrument.SimplePipettor", "LHRP.Instrument.SimplePipettor\LHRP.Instrument.SimplePipettor.csproj", "{9ED9DFB6-FB40-4E91-837D-76A165AACD90}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LHRP.Domain.Tests", "Tests\LHRP.Domain.Tests\LHRP.Domain.Tests.csproj", "{DE200601-4B83-4C0D-87A0-077E65840F76}"
 EndProject

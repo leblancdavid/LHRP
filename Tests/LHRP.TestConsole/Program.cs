@@ -4,8 +4,8 @@ using LHRP.Api.Protocol;
 using LHRP.Api.Protocol.Steps;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
-using LHRP.Instrument.NimbusLite.Instrument;
-using LHRP.Instrument.NimbusLite.Runtime;
+using LHRP.Instrument.SimplePipettor.Instrument;
+using LHRP.Instrument.SimplePipettor.Runtime;
 
 namespace LHRP.TestConsole
 {
@@ -19,12 +19,12 @@ namespace LHRP.TestConsole
                 new TransferSamplesStepData(new TransferPattern<OneToOneTransfer>(), 300.0, false));
             protocol.AddStep(transferSampleStep);
 
-            var nimbusLiteSimulation = new NimbusLiteSimulationEngine();
+            var simplePipettorSimulation = new SimplePipettorSimulationEngine();
 
-            nimbusLiteSimulation.Instrument.Deck.AssignLabware(1, LabwareCreator.GetTipRack());
-            var schedule = nimbusLiteSimulation.Schedule(protocol);
-            nimbusLiteSimulation.SimulationSpeedFactor = 5;
-            nimbusLiteSimulation.Run(transferSampleStep);
+            simplePipettorSimulation.Instrument.Deck.AssignLabware(1, LabwareCreator.GetTipRack());
+            var schedule = simplePipettorSimulation.Schedule(protocol);
+            simplePipettorSimulation.SimulationSpeedFactor = 5;
+            simplePipettorSimulation.Run(transferSampleStep);
 
             //can also schedule or run an individual step
             //nimbusLiteSimulation.Run(transferSampleStep);

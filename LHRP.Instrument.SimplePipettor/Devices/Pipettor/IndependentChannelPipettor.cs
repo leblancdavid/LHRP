@@ -6,7 +6,7 @@ using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
 
-namespace LHRP.Instrument.NimbusLite.Devices.Pipettor
+namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 {
     public class IndependentChannelPipettor : IPipettor
     {

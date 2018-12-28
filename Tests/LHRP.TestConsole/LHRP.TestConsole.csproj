@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\LHRP.Api\LHRP.Api.csproj" />
-    <ProjectReference Include="..\..\LHRP.Instrument.NimbusLite\LHRP.Instrument.NimbusLite.csproj" />
+    <ProjectReference Include="..\..\LHRP.Instrument.SimplePipettor\LHRP.Instrument.SimplePipettor.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

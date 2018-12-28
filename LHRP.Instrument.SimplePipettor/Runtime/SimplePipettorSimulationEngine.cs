@@ -2,13 +2,13 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol;
 using LHRP.Api.Runtime;
-using LHRP.Instrument.NimbusLite.Instrument;
+using LHRP.Instrument.SimplePipettor.Instrument;
 
-namespace LHRP.Instrument.NimbusLite.Runtime
+namespace LHRP.Instrument.SimplePipettor.Runtime
 {
-    public class NimbusLiteSimulationEngine : IRuntimeEngine, ISimulation, IScheduler
+    public class SimplePipettorSimulationEngine : IRuntimeEngine, ISimulation, IScheduler
     {
-        NimbusLiteSimulatedInstrument _instrument;
+        SimplePipettorSimulatedInstrument _instrument;
         
         private uint _simulationSpeedFactor;
         public uint SimulationSpeedFactor 
@@ -24,9 +24,9 @@ namespace LHRP.Instrument.NimbusLite.Runtime
             }
         }
         public double FailureRate { get; set; }
-        public NimbusLiteSimulationEngine()
+        public SimplePipettorSimulationEngine()
         {
-            _instrument = new NimbusLiteSimulatedInstrument();
+            _instrument = new SimplePipettorSimulatedInstrument();
         }
         public IInstrument Instrument 
         { 

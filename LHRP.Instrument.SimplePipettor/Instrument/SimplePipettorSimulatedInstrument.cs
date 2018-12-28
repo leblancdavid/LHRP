@@ -7,11 +7,11 @@ using LHRP.Api.Instrument;
 using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Runtime;
-using LHRP.Instrument.NimbusLite.Devices.Pipettor;
+using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
-namespace LHRP.Instrument.NimbusLite.Instrument
+namespace LHRP.Instrument.SimplePipettor.Instrument
 {
-  public class NimbusLiteSimulatedInstrument : IInstrument, ISimulation
+  public class SimplePipettorSimulatedInstrument : IInstrument, ISimulation
   {
     IndependentChannelSimulatedPipettor _pipettor;
 
@@ -52,7 +52,7 @@ namespace LHRP.Instrument.NimbusLite.Instrument
     }
 
     public double FailureRate { get; set; }
-    public NimbusLiteSimulatedInstrument()
+    public SimplePipettorSimulatedInstrument()
     {
       _pipettor = new IndependentChannelSimulatedPipettor();
 
