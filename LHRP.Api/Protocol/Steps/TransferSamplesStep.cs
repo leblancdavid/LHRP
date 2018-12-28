@@ -25,11 +25,11 @@ namespace LHRP.Api.Protocol.Steps
             _transferOptimizer = optimizer;
         }
 
-        public Process Run(IInstrument instrument)
+        public Process Run(IRuntimeEngine engine)
         {
             var process = new Process();
-            var pipettor = instrument.Pipettor;
-            var tranfersResult = _stepData.Pattern.GetTransferGroups(instrument, _transferOptimizer);
+            var pipettor = engine.Instrument.Pipettor;
+            var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
             if(tranfersResult.IsFailure)
             {
                 process.AddError(tranfersResult.Error);
@@ -40,20 +40,20 @@ namespace LHRP.Api.Protocol.Steps
             {
                 var tipPickupCommand = new PickupTips(transfer.ChannelPattern, _stepData.DesiredTipSize);
                 var dropTips = new DropTips(_stepData.ReturnTipsToSource);
-                var tipPickupResult = tipPickupCommand.Run(instrument);
+                var tipPickupResult = tipPickupCommand.Run(engine);
                 if(tipPickupResult.ContainsErrors)
                 {
-                    process.AppendSubProcess(dropTips.Run(instrument));
+                    process.AppendSubProcess(dropTips.Run(engine));
                 }
-                process.AppendSubProcess(tipPickupCommand.Run(instrument));
+                process.AppendSubProcess(tipPickupCommand.Run(engine));
 
                 var aspirateCommand = new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), 
                     transfer.ChannelPattern));
-                process.AppendSubProcess(aspirateCommand.Run(instrument));
+                process.AppendSubProcess(aspirateCommand.Run(engine));
 
                 var dispenseCommand = new Dispense(new DispenseParameters(transfer.Transfers.Select(x => x.Target).ToList(),
                     transfer.ChannelPattern));
-                process.AppendSubProcess(dispenseCommand.Run(instrument));
+                process.AppendSubProcess(dispenseCommand.Run(engine));
             }
             
             return process;

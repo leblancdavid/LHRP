@@ -16,11 +16,11 @@ namespace LHRP.Api.Protocol.Pipetting
             _desiredTipSize = desireTipSize;
         }
 
-        public Process Run(IInstrument instrument)
+        public Process Run(IRuntimeEngine engine)
         {
             var process = new Process();
-            var tipManager = instrument.TipManager;
-            var pipettor = instrument.Pipettor;
+            var tipManager = engine.Instrument.TipManager;
+            var pipettor = engine.Instrument.Pipettor;
             var tipsResult = tipManager.RequestTips(_pattern, _desiredTipSize);
 
             if(tipsResult.IsFailure)

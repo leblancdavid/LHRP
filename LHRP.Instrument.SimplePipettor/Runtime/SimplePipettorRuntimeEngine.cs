@@ -16,7 +16,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
 
         public Process Run(IRunnable run)
         {
-            return run.Run(Instrument);
+            return run.Run(this);
         }
     }
 }

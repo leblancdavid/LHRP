@@ -2,10 +2,10 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 
-namespace LHRP.Api.Protocol
+namespace LHRP.Api.Runtime
 {
     public interface IRunnable
     {
-         Process Run(IInstrument instrument);
+         Process Run(IRuntimeEngine enigne);
     }
 }

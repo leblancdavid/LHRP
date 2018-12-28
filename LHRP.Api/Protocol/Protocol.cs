@@ -14,12 +14,12 @@ namespace LHRP.Api.Protocol
             _steps.Add(step);
         }
 
-        public Process Run(IInstrument instrument)
+        public Process Run(IRuntimeEngine runtime)
         {
             var process = new Process();
             foreach(var step in _steps)
             {
-                var stepProcess = step.Run(instrument);
+                var stepProcess = step.Run(runtime);
                 if(stepProcess.ContainsErrors)
                 {
                     //TODO handle errors

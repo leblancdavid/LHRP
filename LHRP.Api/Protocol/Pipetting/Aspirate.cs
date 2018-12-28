@@ -14,9 +14,9 @@ namespace LHRP.Api.Protocol.Pipetting
             _parameters = parameters;
         }
 
-        public Process Run(IInstrument instrument)
+        public Process Run(IRuntimeEngine engine)
         {
-            return instrument.Pipettor.Aspirate(_parameters);
+            return engine.Instrument.Pipettor.Aspirate(_parameters);
         }
     }
 }

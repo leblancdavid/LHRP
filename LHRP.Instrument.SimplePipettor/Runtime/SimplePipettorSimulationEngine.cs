@@ -38,14 +38,14 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
         
         public Process Run(IRunnable run)
         {
-            return run.Run(Instrument);
+            return run.Run(this);
         }
 
         public Process Schedule(IRunnable run)
         {
             var previousSpeedFactor = _simulationSpeedFactor;
             SimulationSpeedFactor = 0;
-            var process = run.Run(Instrument);
+            var process = run.Run(this);
             //reset the speed
             SimulationSpeedFactor = previousSpeedFactor;
 

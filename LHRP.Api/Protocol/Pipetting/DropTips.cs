@@ -13,10 +13,10 @@ namespace LHRP.Api.Protocol.Pipetting
             _returnToSource = returnToSource;
         }
 
-        public Process Run(IInstrument instrument)
+        public Process Run(IRuntimeEngine engine)
         {
             var process = new Process();
-            var pipettor = instrument.Pipettor;
+            var pipettor = engine.Instrument.Pipettor;
             
             TipDropParameters parameters;
             if(_returnToSource)
@@ -39,7 +39,7 @@ namespace LHRP.Api.Protocol.Pipetting
             } 
             else
             {
-                parameters = new TipDropParameters(instrument.WastePosition);
+                parameters = new TipDropParameters(engine.Instrument.WastePosition);
             }
 
             return pipettor.DropTips(parameters);
