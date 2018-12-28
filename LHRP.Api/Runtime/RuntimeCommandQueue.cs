@@ -4,11 +4,16 @@ namespace LHRP.Api.Runtime
 {
     public class RuntimeCommandQueue : IRuntimeCommandQueue
     {
-        public IEnumerable<IRunnableCommand> Queue => throw new System.NotImplementedException();
+        private List<IRunnableCommand> _queue;
+        public IEnumerable<IRunnableCommand> Queue => _queue;
+        public int CurrentCommandIndex { get; private set; }
+        public bool IsCompleted => CurrentCommandIndex >= _queue.Count;
 
-        public int CurrentCommandIndex => throw new System.NotImplementedException();
-
-        public bool IsCompleted => throw new System.NotImplementedException();
+        public RuntimeCommandQueue()
+        {
+            _queue = new List<IRunnableCommand>();
+            CurrentCommandIndex = 0;
+        }
 
         public Process Abort()
         {
@@ -17,27 +22,38 @@ namespace LHRP.Api.Runtime
 
         public void Add(IRunnableCommand command)
         {
-            throw new System.NotImplementedException();
+            _queue.Add(command);
         }
 
-        public void Insert(IRunnableCommand command, int index)
+        public void Insert(int index, IRunnableCommand command)
         {
-            throw new System.NotImplementedException();
+            _queue.Insert(index, command);
         }
 
         public void Remove(int index)
         {
-            throw new System.NotImplementedException();
+            _queue.RemoveAt(index);
         }
 
-        public Process RetryLastCommand()
+        public Process RetryLastCommand(IRuntimeEngine engine)
         {
-            throw new System.NotImplementedException();
+            if(IsCompleted)
+            {
+                return new Process();
+            }
+
+            return _queue[CurrentCommandIndex].Run(engine);
         }
 
-        public Process RunNextCommand()
+        public Process RunNextCommand(IRuntimeEngine engine)
         {
-            throw new System.NotImplementedException();
+            CurrentCommandIndex++;
+            if(IsCompleted)
+            {
+                return new Process();
+            }
+
+            return _queue[CurrentCommandIndex].Run(engine);
         }
     }
 }

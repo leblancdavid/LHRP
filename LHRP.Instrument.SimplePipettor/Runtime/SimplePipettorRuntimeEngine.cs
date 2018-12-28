@@ -7,21 +7,11 @@ using LHRP.Instrument.SimplePipettor.Instrument;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime
 {
-    public class SimplePipettorRuntimeEngine : IRuntimeEngine
+    public class SimplePipettorRuntimeEngine : BaseRuntimeEngine, IRuntimeEngine
     {
-        public SimplePipettorRuntimeEngine()
+        public SimplePipettorRuntimeEngine() 
+            :base(new SimplePipettorInstrument(), new RuntimeCommandQueue(), new DefaultErrorHandler())
         {
-            Instrument = new SimplePipettorInstrument();
-        }
-        public IInstrument Instrument { get; private set; }
-
-        public IRuntimeCommandQueue Commands { get; private set; }
-
-        public IErrorHandler ErrorHandler => throw new System.NotImplementedException();
-
-        public Process Run()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

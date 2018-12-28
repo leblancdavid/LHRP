@@ -20,7 +20,7 @@ namespace LHRP.Api.Runtime
             var process = new Process();
             while(!Commands.IsCompleted)
             {
-                var result = Commands.RunNextCommand();
+                var result = Commands.RunNextCommand(this);
                 if(result.ContainsErrors)
                 {
                     foreach(var error in result.Errors)

@@ -7,7 +7,7 @@ using LHRP.Instrument.SimplePipettor.Instrument;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime
 {
-    public class SimplePipettorSimulationEngine : IRuntimeEngine, ISimulation, IScheduler
+    public class SimplePipettorSimulationEngine : BaseRuntimeEngine, IRuntimeEngine, ISimulation, IScheduler
     {
         SimplePipettorSimulatedInstrument _instrument;
         
@@ -26,24 +26,9 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
         }
         public double FailureRate { get; set; }
         public SimplePipettorSimulationEngine()
+            :base(new SimplePipettorSimulatedInstrument(), new RuntimeCommandQueue(), new DefaultErrorHandler())
         {
-            _instrument = new SimplePipettorSimulatedInstrument();
-        }
-        public IInstrument Instrument 
-        { 
-            get
-            {
-                return _instrument;
-            }
-        }
-        
-        public IRuntimeCommandQueue Commands { get; private set; }
-
-        public IErrorHandler ErrorHandler => throw new System.NotImplementedException();
-
-        public Process Run(IRunnable run)
-        {
-            return run.Run(this);
+            _instrument = Instrument as SimplePipettorSimulatedInstrument;
         }
 
         public Process Schedule(IRunnable run)
@@ -55,12 +40,6 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
             SimulationSpeedFactor = previousSpeedFactor;
 
             return process;
-        }
-
-    
-        public Process Run()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
