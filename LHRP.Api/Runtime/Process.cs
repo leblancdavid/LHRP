@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LHRP.Api.Runtime.Errors;
 
 namespace LHRP.Api.Runtime
 {
@@ -20,12 +21,12 @@ namespace LHRP.Api.Runtime
                 return false;
             } 
         }
-        private List<string> _errors = new List<string>();
-        public IEnumerable<string> Errors
+        private List<RuntimeError> _errors = new List<RuntimeError>();
+        public IEnumerable<RuntimeError> Errors
         {
             get
             {
-                List<string> errors = new List<string>();
+                List<RuntimeError> errors = new List<RuntimeError>();
                 errors.AddRange(_errors);
                 _subProcess.ForEach(p => errors.AddRange(p.Errors));
                 return errors;
@@ -41,12 +42,12 @@ namespace LHRP.Api.Runtime
                 return false;
             } 
         }
-        private List<string> _warnings = new List<string>();
-        public IEnumerable<string> Warnings
+        private List<RuntimeError> _warnings = new List<RuntimeError>();
+        public IEnumerable<RuntimeError> Warnings
         {
             get
             {
-                List<string> warnings = new List<string>();
+                List<RuntimeError> warnings = new List<RuntimeError>();
                 warnings.AddRange(_warnings);
                 _subProcess.ForEach(p => warnings.AddRange(p.Errors));
                 return warnings;
@@ -67,14 +68,14 @@ namespace LHRP.Api.Runtime
             ProcessId = Guid.NewGuid();
         }
 
-        public void AddError(string error)
+        public void AddError(RuntimeError error)
         {
-            _errors.Add($"({ProcessId.ToString()}): {error}");
+            _errors.Add(error);
         }
 
-        public void AddWarning(string warning)
+        public void AddWarning(RuntimeError warning)
         {
-            _warnings.Add($"({ProcessId.ToString()}): {warning}");
+            _warnings.Add(warning);
         }
 
         public void AppendSubProcess(Process subProcess)
