@@ -72,7 +72,7 @@ namespace LHRP.Domain.Tests.Instrument
     public void Successfully_RetrieveCoordinates_GivenAPositionAndAddess()
     {
       deck.AssignLabware(1, new TipRack(new TipRackDefinition("whatever1", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
-      var coordinates = deck.GetCoordinates(1, new LabwareAddress(1, 1));
+      var coordinates = deck.GetCoordinates(1, new LabwareAddress(1, 1,-1));
       coordinates.IsSuccess.Should().BeTrue();
       coordinates.Value.X.Should().BeApproximately(0.0, 0.0001);
       coordinates.Value.Y.Should().BeApproximately(0.0, 0.0001);
@@ -83,9 +83,9 @@ namespace LHRP.Domain.Tests.Instrument
     public void Fail_WhenRetrievingCoordinates_OfInvalidPositionsOrAddress()
     {
       deck.AssignLabware(1, new TipRack(new TipRackDefinition("whatever1", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
-      var coordinates = deck.GetCoordinates(999, new LabwareAddress(1, 1));
+      var coordinates = deck.GetCoordinates(999, new LabwareAddress(1, 1,-1));
       coordinates.IsSuccess.Should().BeFalse();
-      coordinates = deck.GetCoordinates(1, new LabwareAddress(999, 999));
+      coordinates = deck.GetCoordinates(1, new LabwareAddress(999, 999,-1));
       coordinates.IsSuccess.Should().BeFalse();
     }
 

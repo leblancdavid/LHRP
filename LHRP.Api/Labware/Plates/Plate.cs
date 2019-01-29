@@ -85,7 +85,7 @@ namespace LHRP.Api.Labware.Plates
                         Z = AbsolutePosition.Z + Definition.Offset.Z
                     };
 
-                    var labwareAddress = new LabwareAddress(i + 1, j + 1);
+                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _positionId);
                     
                     _wells.Add(labwareAddress, new Well(labwareAddress, absolutePosition, definition.WellDefinition));
                 }

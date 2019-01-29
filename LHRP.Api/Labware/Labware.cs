@@ -21,7 +21,6 @@ namespace LHRP.Api.Labware
             protected set
             {
                 _positionId = value;
-                
             } 
         }
         protected Coordinates _absolutePosition = new Coordinates();

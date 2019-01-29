@@ -14,7 +14,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
         {
             var channelStatus = new ChannelStatus();
             channelStatus.OnPickedUpTip(new Tip(
-                new LabwareAddress(1,1), 
+                new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
                 50, false));
             
@@ -27,12 +27,12 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
         {
             var channelStatus = new ChannelStatus();
             channelStatus.OnPickedUpTip(new Tip(
-                new LabwareAddress(1,1), 
+                new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
                 50, false));
             
             channelStatus.OnPickedUpTip(new Tip(
-                new LabwareAddress(2,2), 
+                new LabwareAddress(2,2,-1), 
                 new Coordinates(2,2,2),
                 50, false));
 
@@ -44,7 +44,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
         {
             var channelStatus = new ChannelStatus();
             channelStatus.OnPickedUpTip(new Tip(
-                new LabwareAddress(1,1), 
+                new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
                 50, false));
 
@@ -59,7 +59,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
         {
             var channelStatus = new ChannelStatus();
             channelStatus.OnPickedUpTip(new Tip(
-                new LabwareAddress(1,1), 
+                new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
                 50, false));
 
@@ -81,7 +81,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
         {
             var channelStatus = new ChannelStatus();
             channelStatus.OnPickedUpTip(new Tip(
-                new LabwareAddress(1,1), 
+                new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
                 50, false));
 
@@ -105,7 +105,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
         {
             var channelStatus = new ChannelStatus();
             channelStatus.OnPickedUpTip(new Tip(
-                new LabwareAddress(1,1), 
+                new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
                 50, false));
 

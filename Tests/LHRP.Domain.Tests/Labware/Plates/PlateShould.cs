@@ -19,21 +19,21 @@ namespace LHRP.Domain.Tests.Labware.Plates
         [Fact]
         public void SuccessfullyGetRealCoordinates_OfLabwareAddress()
         {
-            var result = _plate96.GetRealCoordinates(new LabwareAddress(1, 1));
+            var result = _plate96.GetRealCoordinates(new LabwareAddress(1, 1,-1));
             result.IsSuccess.Should().BeTrue();
         }
 
         [Fact]
         public void FailToGetRealCoordinates_OfInvalidLabwareAddresses()
         {
-            var result = _plate96.GetRealCoordinates(new LabwareAddress(9999, 9999));
+            var result = _plate96.GetRealCoordinates(new LabwareAddress(9999, 9999,-1));
             result.IsSuccess.Should().BeFalse();
         }
 
         [Fact]
         public void SuccessfullyRetrieveAWell_GivenALabwareAddress()
         {
-            var result = _plate96.GetWell(new LabwareAddress(1, 2));
+            var result = _plate96.GetWell(new LabwareAddress(1, 2,-1));
             result.IsSuccess.Should().BeTrue();
             result.Value.Address.Row.Should().Be(1);
             result.Value.Address.Column.Should().Be(2);
@@ -42,14 +42,14 @@ namespace LHRP.Domain.Tests.Labware.Plates
         [Fact]
         public void FailToGetAWell_GivenAnInvalidLabwareAddress()
         {
-            var result = _plate96.GetWell(new LabwareAddress(9999, 9999));
+            var result = _plate96.GetWell(new LabwareAddress(9999, 9999,-1));
             result.IsSuccess.Should().BeFalse();
         }
 
         [Fact]
         public void SuccessfullyGetAWell_GivenALiquid()
         {
-            var well = _plate96.GetWell(new LabwareAddress(1, 2));
+            var well = _plate96.GetWell(new LabwareAddress(1, 2,-1));
             well.IsSuccess.Should().BeTrue();
             var liquid = new Liquid(LiquidType.Water);
             well.Value.AddLiquid(liquid, 100.0);
