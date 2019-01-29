@@ -10,7 +10,20 @@ namespace LHRP.Api.Labware
         public double Width { get; protected set; }
         public double Height { get; protected set; }
         public double Depth { get; protected set; }
-        public int PositionId { get; protected set; }
+
+        protected int _positionId;
+        public int PositionId 
+        { 
+            get
+            {
+                return _positionId;
+            } 
+            protected set
+            {
+                _positionId = value;
+                
+            } 
+        }
         protected Coordinates _absolutePosition = new Coordinates();
         public virtual Coordinates AbsolutePosition 
         { 

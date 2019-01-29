@@ -52,7 +52,7 @@ namespace LHRP.Api.Instrument.TipManagement
                 return Result.Fail<TipChannelPattern>($"Insufficient number of tips of size {tipSize} for channel pattern {pattern.ToString()}");
             }
 
-            var tipChannelPattern = new TipChannelPattern(pattern.NumChannels);
+            var tipChannelPattern = new TipChannelPattern(pattern.NumChannels, availableTipRack.PositionId);
             for(int i = 0; i < pattern.NumChannels; ++i)
             {
                 if(pattern[i])

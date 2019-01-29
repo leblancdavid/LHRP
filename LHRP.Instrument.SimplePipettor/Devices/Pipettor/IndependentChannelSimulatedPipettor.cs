@@ -184,9 +184,9 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
         private TimeSpan GetTravelTimeToPosition(Coordinates position)
         {
-            double distance = Math.Sqrt((_pipettorStatus.CurrentPosition.X - position.X)*(_pipettorStatus.CurrentPosition.X - position.X) + 
-                (_pipettorStatus.CurrentPosition.Y - position.Y)*(_pipettorStatus.CurrentPosition.Y - position.Y) +
-                (_pipettorStatus.CurrentPosition.Z - position.Z)*(_pipettorStatus.CurrentPosition.Z - position.Z));
+            double distance = Math.Sqrt((PipettorStatus.CurrentPosition.X - position.X)*(PipettorStatus.CurrentPosition.X - position.X) + 
+                (PipettorStatus.CurrentPosition.Y - position.Y)*(PipettorStatus.CurrentPosition.Y - position.Y) +
+                (PipettorStatus.CurrentPosition.Z - position.Z)*(PipettorStatus.CurrentPosition.Z - position.Z));
 
             return new TimeSpan(0, 0, 0, 0, (int)(distance/_motorSpeed * 1000.0));
         }
