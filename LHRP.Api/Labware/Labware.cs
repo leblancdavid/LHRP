@@ -12,7 +12,7 @@ namespace LHRP.Api.Labware
         public double Depth { get; protected set; }
 
         protected int _positionId;
-        public int PositionId 
+        public virtual int PositionId 
         { 
             get
             {

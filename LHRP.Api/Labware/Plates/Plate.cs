@@ -36,6 +36,23 @@ namespace LHRP.Api.Labware.Plates
                 _absolutePosition = value;
             }
         }
+
+         public override int PositionId
+        {
+            get
+            {
+                return _positionId;
+            }
+            protected set
+            {
+                _positionId = value;
+                foreach (var well in _wells)
+                {
+                    well.Key.PositionId = value;
+                    well.Value.Address.PositionId = value;
+                }
+            }
+        }
         
         private Dictionary<LabwareAddress, Well> _wells = new Dictionary<LabwareAddress, Well>();
 

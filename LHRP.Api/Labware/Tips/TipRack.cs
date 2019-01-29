@@ -8,32 +8,32 @@ namespace LHRP.Api.Labware.Tips
 {
     public class TipRack : Labware
     {
-        public int TotalTipCount 
-        { 
+        public int TotalTipCount
+        {
             get
             {
                 return Definition.Rows * Definition.Columns;
             }
         }
-        public int RemainingTips 
-        { 
+        public int RemainingTips
+        {
             get
             {
                 return _tips.Count;
-            } 
+            }
         }
-        
+
         public TipRackDefinition Definition { get; private set; }
-        public override Coordinates AbsolutePosition 
-        { 
+        public override Coordinates AbsolutePosition
+        {
             get
             {
                 return _absolutePosition;
-            } 
+            }
             set
             {
                 //Before we update the absolute position, move all the tips along with the rack.
-                foreach(var tip in _tips.Values)
+                foreach (var tip in _tips.Values)
                 {
                     tip.AbsolutePosition.X = value.X - _absolutePosition.X;
                     tip.AbsolutePosition.Y = value.Y - _absolutePosition.Y;
@@ -43,22 +43,39 @@ namespace LHRP.Api.Labware.Tips
             }
         }
 
+        public override int PositionId
+        {
+            get
+            {
+                return _positionId;
+            }
+            protected set
+            {
+                _positionId = value;
+                foreach (var tip in _tips)
+                {
+                    tip.Key.PositionId = value;
+                    tip.Value.Address.PositionId = value;
+                }
+            }
+        }
+
         private Dictionary<LabwareAddress, Tip> _tips = new Dictionary<LabwareAddress, Tip>();
 
         public TipRack(TipRackDefinition definition)
         {
             Definition = definition;
-            
+
             Refill();
         }
 
-        
+
         public void Refill()
         {
             _tips.Clear();
-            for(int i = 0; i < Definition.Rows; ++i)
+            for (int i = 0; i < Definition.Rows; ++i)
             {
-                for(int j = 0; j < Definition.Columns; ++j)
+                for (int j = 0; j < Definition.Columns; ++j)
                 {
                     var absolutePosition = new Coordinates()
                     {
@@ -68,7 +85,7 @@ namespace LHRP.Api.Labware.Tips
                     };
 
                     var labwareAddress = new LabwareAddress(i + 1, j + 1, _positionId);
-                    
+
                     _tips.Add(labwareAddress, new Tip(labwareAddress, absolutePosition, Definition.TipVolume, Definition.AreFilteredTips));
                 }
             }
@@ -76,7 +93,7 @@ namespace LHRP.Api.Labware.Tips
 
         public Result Consume(LabwareAddress address)
         {
-            if(!_tips.Remove(address))
+            if (!_tips.Remove(address))
             {
                 return Result.Fail("Tip-rack does not contain a tip at address '" + address.ToString() + "'.");
             }
@@ -86,19 +103,19 @@ namespace LHRP.Api.Labware.Tips
 
         public Result<Tip> GetNextAvailableTip()
         {
-            if(RemainingTips == 0)
+            if (RemainingTips == 0)
             {
                 return Result.Fail<Tip>("Tip-rack is empty.");
             }
 
             LabwareAddress nextAddress = _tips.Keys.FirstOrDefault();
-            foreach(var address in _tips.Keys)
+            foreach (var address in _tips.Keys)
             {
-                if(address.Column < nextAddress.Column)
+                if (address.Column < nextAddress.Column)
                 {
                     nextAddress = address;
                 }
-                else if(address.Column == nextAddress.Column && address.Row < nextAddress.Row)
+                else if (address.Column == nextAddress.Column && address.Row < nextAddress.Row)
                 {
                     nextAddress = address;
                 }
@@ -109,7 +126,7 @@ namespace LHRP.Api.Labware.Tips
 
         public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
         {
-            if(!_tips.ContainsKey(address))
+            if (!_tips.ContainsKey(address))
             {
                 return Result.Fail<Coordinates>("Invalid labware address");
             }
