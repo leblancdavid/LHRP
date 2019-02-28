@@ -42,8 +42,8 @@ namespace LHRP.Api.Protocol.Transfers.OneToOne
         private bool TryAssignTransferToGroup(OneToOneTransfer transfer, TransferGroup<OneToOneTransfer> group, IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
-            var sourceCoordinates = instrument.Deck.GetCoordinates(transfer.Source.PositionId, transfer.Source.Address);
-            var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.PositionId, transfer.Target.Address);
+            var sourceCoordinates = instrument.Deck.GetCoordinates(transfer.Source.Address);
+            var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.Address);
             
 
             if(group.ChannelPattern.IsFull())

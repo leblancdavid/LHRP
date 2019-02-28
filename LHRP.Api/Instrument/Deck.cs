@@ -55,18 +55,18 @@ namespace LHRP.Api.Instrument
             return Result.Ok(_deckPositions[positionId].AssignedLabware);
         }
 
-        public Result<Coordinates> GetCoordinates(int positionId, LabwareAddress address)
+        public Result<Coordinates> GetCoordinates(LabwareAddress address)
         {
-             if(!_deckPositions.ContainsKey(positionId))
+             if(!_deckPositions.ContainsKey(address.PositionId))
             {
                 return Result.Fail<Coordinates>("Invalid deck position ID");
             }
-            if(!_deckPositions[positionId].IsOccupied)
+            if(!_deckPositions[address.PositionId].IsOccupied)
             {
-               return Result.Fail<Coordinates>($"No labware found in position {positionId}");
+               return Result.Fail<Coordinates>($"No labware found in position {address.PositionId}");
             }
 
-            return _deckPositions[positionId].AssignedLabware.GetRealCoordinates(address);
+            return _deckPositions[address.PositionId].AssignedLabware.GetRealCoordinates(address);
         }
 
         public IEnumerable<TipRack> GetTipRacks()

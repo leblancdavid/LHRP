@@ -17,7 +17,7 @@ namespace LHRP.Api.Instrument
         Result<Labware.Labware> GetLabware(int positionId);
         IEnumerable<TipRack> GetTipRacks();
         IEnumerable<Plate> GetPlates();
-        Result<Coordinates> GetCoordinates(int positionId, LabwareAddress address);
+        Result<Coordinates> GetCoordinates(LabwareAddress address);
         
     }
 }

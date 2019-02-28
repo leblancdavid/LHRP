@@ -44,7 +44,7 @@ namespace LHRP.Api.Protocol.Transfers
         private bool TryAssignTransferToGroup(T transfer, TransferGroup<T> group, IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
-            var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.PositionId, transfer.Target.Address);
+            var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.Address);
             
 
             if(group.ChannelPattern.IsFull())

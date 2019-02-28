@@ -32,13 +32,14 @@ namespace LHRP.Api.Labware
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int result = Row;
-                result = (result*397) ^ Column;
-                result = (result*397) ^ PositionId;
-                return result;
-            }
+            return 0;
+            // unchecked
+            // {
+            //     int result = Row;
+            //     result = (result*397) ^ Column;
+            //     result = (result*397) ^ PositionId;
+            //     return result;
+            // }
         }
     }
 }

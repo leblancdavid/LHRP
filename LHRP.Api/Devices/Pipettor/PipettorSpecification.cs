@@ -9,7 +9,7 @@ namespace LHRP.Api.Devices.Pipettor
         public bool AreIndependentChannels { get; private set; }
 
         private List<ChannelSpecification> _channels;
-        public IEnumerable<ChannelSpecification> Channels { get; private set; }
+        public IEnumerable<ChannelSpecification> Channels => _channels;
 
         public int NumChannels 
         {
