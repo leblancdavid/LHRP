@@ -12,10 +12,10 @@ namespace LHRP.Api.Protocol.Pipetting
         private ChannelPattern _pattern;
         private double _desiredTipSize;
         public PickupTips(ChannelPattern pattern, 
-            double desireTipSize)
+            double desiredTipSize)
         {
             _pattern = pattern;
-            _desiredTipSize = desireTipSize;
+            _desiredTipSize = desiredTipSize;
         }
 
         public Process Run(IRuntimeEngine engine)
@@ -36,7 +36,12 @@ namespace LHRP.Api.Protocol.Pipetting
             {
                 if(tipsResult.Value[channel] && pipettor.PipettorStatus[channel].HasTip)
                 {
-                    //tipManager.ConsumeTip()
+                    var consumeResult = tipManager.ConsumeTip(tipsResult.Value.GetTip(channel));
+                    if(consumeResult.IsFailure)
+                    {
+                        process.AddError(new RuntimeError());
+                        return process;
+                    }
                 }
             }
 

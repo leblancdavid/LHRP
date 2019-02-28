@@ -91,6 +91,10 @@ namespace LHRP.Api.Labware.Tips
             }
         }
 
+        public Result Consume(Tip tip)
+        {
+            return Consume(tip.Address);
+        }
         public Result Consume(LabwareAddress address)
         {
             if (!_tips.Remove(address))

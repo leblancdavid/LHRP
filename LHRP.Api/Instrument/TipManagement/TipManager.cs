@@ -15,9 +15,9 @@ namespace LHRP.Api.Instrument.TipManagement
             _deck = deck;
         }
 
-        public Result ConsumeTip(int positionId, LabwareAddress tip)
+        public Result ConsumeTip(Tip tip)
         {
-            var position = _deck.GetDeckPosition(positionId);
+            var position = _deck.GetDeckPosition(tip.Address.PositionId);
             if(position.IsFailure)
             {
                 return position;
@@ -25,7 +25,7 @@ namespace LHRP.Api.Instrument.TipManagement
 
             if(!position.Value.IsOccupied || !(position.Value.AssignedLabware is TipRack))
             {
-                return Result.Fail($"Position Id {positionId} does not contain a tip rack");
+                return Result.Fail($"Position Id {tip.Address.PositionId} does not contain a tip rack");
             }
 
             var tipRack = position.Value.AssignedLabware as TipRack;
