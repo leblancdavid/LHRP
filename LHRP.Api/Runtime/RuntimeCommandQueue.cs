@@ -12,7 +12,7 @@ namespace LHRP.Api.Runtime
         public RuntimeCommandQueue()
         {
             _queue = new List<IRunnableCommand>();
-            CurrentCommandIndex = 0;
+            CurrentCommandIndex = -1;
         }
 
         public Process Abort()

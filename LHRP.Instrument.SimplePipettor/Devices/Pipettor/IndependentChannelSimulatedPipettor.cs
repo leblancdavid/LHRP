@@ -87,7 +87,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             var sb = new StringBuilder();
             sb.Append("Picking-up tips with channels pattern '");
             sb.Append(parameters.Pattern.GetChannelString());
-            sb.Append("' from positions: ");
+            sb.Append("' from: ");
 
             Coordinates position = new Coordinates();
             for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
@@ -96,7 +96,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 {
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip.AbsolutePosition;
-                    sb.Append($"({tip.Address.Row},{tip.Address.Column});");
+                    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.Row},{tip.Address.Column});");
                     PipettorStatus[i].OnPickedUpTip(tip);
                 }
                 else
@@ -123,7 +123,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 var sb = new StringBuilder();
                 sb.Append("Dropping tips with channels pattern '");
                 sb.Append(parameters.Pattern.GetChannelString());
-                sb.Append("' from positions: ");
+                sb.Append("' to positions: ");
 
                 Coordinates position = new Coordinates();
                 for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
@@ -132,7 +132,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                     {
                         var tip = parameters.Pattern.GetTip(i);
                         position = tip.AbsolutePosition;
-                        sb.Append($"({tip.Address.Row},{tip.Address.Column});");
+                        sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.Row},{tip.Address.Column});");
                         PipettorStatus[i].OnDroppedTip();
                     }
                     else
