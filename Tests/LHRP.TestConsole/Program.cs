@@ -48,8 +48,8 @@ namespace LHRP.TestConsole
                 for(int j = 1; j <= cols; ++j)
                 {
                     var liquid = new Liquid();
-                    var sourceTarget = new TransferTarget(new LabwareAddress(i, j, sourcePositionId), sourcePositionId, liquid, volume);
-                    var destinationTarget = new TransferTarget(new LabwareAddress(i, j, destinationPositionId), destinationPositionId, liquid, volume);
+                    var sourceTarget = new TransferTarget(new LabwareAddress(i, j, sourcePositionId), liquid, volume);
+                    var destinationTarget = new TransferTarget(new LabwareAddress(i, j, destinationPositionId), liquid, volume);
                     tp.AddTransfer(new OneToOneTransfer(sourceTarget, destinationTarget));
                 }
             }
