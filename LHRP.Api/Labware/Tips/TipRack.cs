@@ -128,6 +128,24 @@ namespace LHRP.Api.Labware.Tips
             return Result.Ok(_tips[nextAddress]);
         }
 
+        public Result<Tip[]> GetNextAvailableTips(int numberTips)
+        {
+            if (RemainingTips < numberTips)
+            {
+                return Result.Fail<Tip[]>($"Insufficient tips on tip-rack at position {PositionId}");
+            }
+
+            //TODO This will need to be optimized, but for now just grab the first N tips you find...
+            var availableTips = new Tip[numberTips];
+            var tipsOnRack = _tips.Values.ToArray();
+            for(int i = 0; i < numberTips; ++i)
+            {
+                availableTips[i] = tipsOnRack[i];
+            }
+
+            return Result.Ok<Tip[]>(availableTips);
+        }
+
         public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
         {
             if (!_tips.ContainsKey(address))

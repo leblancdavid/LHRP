@@ -31,9 +31,9 @@ namespace LHRP.TestConsole
 
             
             var schedule = simplePipettorSimulation.Schedule(protocol);
-            simplePipettorSimulation.SimulationSpeedFactor = 5;
+            //simplePipettorSimulation.SimulationSpeedFactor = 5;
 
-            var processResult = protocol.Run(simplePipettorSimulation);
+            //var processResult = protocol.Run(simplePipettorSimulation);
 
             //can also schedule or run an individual step
             //nimbusLiteSimulation.Run(transferSampleStep);

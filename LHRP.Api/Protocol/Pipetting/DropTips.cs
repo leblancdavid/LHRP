@@ -21,7 +21,7 @@ namespace LHRP.Api.Protocol.Pipetting
             TipDropParameters parameters;
             if(_returnToSource)
             {
-                var tipPattern = new TipChannelPattern(pipettor.Specification.NumChannels, -1);
+                var tipPattern = new TipChannelPattern(pipettor.Specification.NumChannels);
                 var pipettorStatus = (PipettorStatus)pipettor.DeviceStatus;
                 for(int i = 0; i < pipettor.Specification.NumChannels; ++i)
                 {

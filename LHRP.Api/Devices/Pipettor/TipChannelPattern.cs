@@ -8,11 +8,9 @@ namespace LHRP.Api.Devices.Pipettor
     public class TipChannelPattern : ChannelPattern
     {
         private Tip[] _tips;
-        public int PositionId { get; private set; }
-        public TipChannelPattern(int numChannels, int positionId) : base(numChannels)
+        public TipChannelPattern(int numChannels) : base(numChannels)
         {
             _tips = new Tip[numChannels];
-            PositionId = positionId;
         }
 
         public Tip GetTip(int channelIndex)
