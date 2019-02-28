@@ -16,7 +16,19 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public Process Run(IRuntimeEngine engine)
         {
-            return engine.Instrument.Pipettor.Aspirate(_parameters);
+            var pipettor = engine.Instrument.Pipettor;
+            var liquidManager = engine.Instrument.LiquidManager;
+
+            var processResult = pipettor.Aspirate(_parameters);
+            if(!processResult.ContainsErrors)
+            {
+                foreach(var target in _parameters.Targets)
+                {
+                    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
+                }
+            }
+            
+            return processResult;
         }
     }
 }

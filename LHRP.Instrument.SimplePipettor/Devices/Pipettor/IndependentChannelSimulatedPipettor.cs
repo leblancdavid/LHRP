@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using CSharpFunctionalExtensions;
@@ -52,34 +53,70 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
         public Process Aspirate(AspirateParameters parameters)
         {
-            // Console.WriteLine("Aspirating " + parameters.Volume + "uL from position: (" + 
-            //     parameters.Position.X + ", " +
-            //     parameters.Position.Y + ", " + 
-            //     parameters.Position.Z + ")");
+           var sb = new StringBuilder();
+            sb.Append("Aspirating with channels pattern '");
+            sb.Append(parameters.Pattern.GetChannelString());
+            sb.Append("' from: ");
 
-            // var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 1);
-            // SimulateRuntimeWait(estimatedTime);
+            Coordinates position = new Coordinates();
+            int t = 0;
+            for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
+            {
+                if(parameters.Pattern[i])
+                {
+                    var target = parameters.Targets.ToArray()[t];
+                    sb.Append($"Pos{target.Address.PositionId}-({target.Address.Row},{target.Address.Column}), {target.Volume}uL; ");
+                    t++;
+                }
+                else
+                {
+                    sb.Append($"(*,*,*);");
+                }
+            }
 
-            // _pipettorStatus.CurrentPosition = parameters.Position;
+            //takes 3 seconds to pickup tips
+            var estimatedTime = GetTravelTimeToPosition(position) + new TimeSpan(0, 0, 3); 
+            SimulateRuntimeWait(estimatedTime);
 
-            // return new Process(estimatedTime, estimatedTime);
-            return new Process();
+            PipettorStatus.CurrentPosition = position;
+
+            Console.WriteLine(sb.ToString());
+
+            return new Process(estimatedTime, estimatedTime);
         }
 
         public Process Dispense(DispenseParameters parameters)
         {
-            // Console.WriteLine("Dispensing " + parameters.Volume + "uL to position: (" + 
-            //     parameters.Position.X + ", " +
-            //     parameters.Position.Y + ", " + 
-            //     parameters.Position.Z + ")");
+            var sb = new StringBuilder();
+            sb.Append("Dispensing with channels pattern '");
+            sb.Append(parameters.Pattern.GetChannelString());
+            sb.Append("' to: ");
 
-            // var estimatedTime = GetTravelTimeToPosition(parameters.Position) + new TimeSpan(0, 0, 1);
-            // SimulateRuntimeWait(estimatedTime);
+            Coordinates position = new Coordinates();
+            int t = 0;
+            for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
+            {
+                if(parameters.Pattern[i])
+                {
+                    var target = parameters.Targets.ToArray()[t];
+                    sb.Append($"Pos{target.Address.PositionId}-({target.Address.Row},{target.Address.Column}), {target.Volume}uL; ");
+                    t++;
+                }
+                else
+                {
+                    sb.Append($"(*,*,*); ");
+                }
+            }
 
-            // _pipettorStatus.CurrentPosition = parameters.Position;
+            //takes 3 seconds to pickup tips
+            var estimatedTime = GetTravelTimeToPosition(position) + new TimeSpan(0, 0, 3); 
+            SimulateRuntimeWait(estimatedTime);
 
-            // return new Process(estimatedTime, estimatedTime);
-            return  new Process();
+            PipettorStatus.CurrentPosition = position;
+
+            Console.WriteLine(sb.ToString());
+
+            return new Process(estimatedTime, estimatedTime);
         }
 
         public Process PickupTips(TipPickupParameters parameters)
@@ -96,12 +133,12 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 {
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip.AbsolutePosition;
-                    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.Row},{tip.Address.Column});");
+                    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.Row},{tip.Address.Column}); ");
                     PipettorStatus[i].OnPickedUpTip(tip);
                 }
                 else
                 {
-                    sb.Append($"(*,*,*);");
+                    sb.Append($"(*,*,*); ");
                 }
             }
 
@@ -132,12 +169,12 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                     {
                         var tip = parameters.Pattern.GetTip(i);
                         position = tip.AbsolutePosition;
-                        sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.Row},{tip.Address.Column});");
+                        sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.Row},{tip.Address.Column}); ");
                         PipettorStatus[i].OnDroppedTip();
                     }
                     else
                     {
-                        sb.Append($"(*,*,*);");
+                        sb.Append($"(*,*,*); ");
                     }
                 }
 

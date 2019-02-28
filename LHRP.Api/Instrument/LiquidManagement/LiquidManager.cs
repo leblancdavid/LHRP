@@ -16,13 +16,13 @@ namespace LHRP.Api.Instrument.LiquidManagement
             _deck = deck;
             _configuration = configuration;
         }
-        public Result RemoveLiquidFromPosition(int positionId, LabwareAddress address, double volume)
+        public Result RemoveLiquidFromPosition(LabwareAddress address, double volume)
         {
             var plates = _deck.GetPlates();
-            var targetPlate = plates.FirstOrDefault(x => x.PositionId == positionId);
+            var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
             if(targetPlate == null)
             {
-                return Result.Fail($"No plate found in position {positionId}");
+                return Result.Fail($"No plate found in position {address.PositionId}");
             }
             
             var well = targetPlate.GetWell(address);
@@ -30,16 +30,6 @@ namespace LHRP.Api.Instrument.LiquidManagement
             {
                 return well;
             }
-
-            // if(well.Value.ContainsLiquid(target.Liquid))
-            // {
-            //     if(!_configuration.AutoLiquidAssignment)
-            //     {
-            //         return Result.Fail($"Liquid {target.Liquid.AssignedId} not found in well({well.Value.Address.Row},{well.Value.Address.Column})");
-            //     }
-                
-            //     well.Value.AddLiquid(target.Liquid, target.Volume);
-            // }
 
             if(well.Value.Volume < volume)
             {
@@ -51,13 +41,13 @@ namespace LHRP.Api.Instrument.LiquidManagement
             return Result.Ok();
         }
 
-        public Result AddLiquidToPosition(int positionId, LabwareAddress address, Liquid liquidToAssign, double volume)
+        public Result AddLiquidToPosition(LabwareAddress address, Liquid liquidToAssign, double volume)
         {
              var plates = _deck.GetPlates();
-            var targetPlate = plates.FirstOrDefault(x => x.PositionId == positionId);
+            var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
             if(targetPlate == null)
             {
-                return Result.Fail($"No plate found in position {positionId}");
+                return Result.Fail($"No plate found in position {address.PositionId}");
             }
             
             var well = targetPlate.GetWell(address);

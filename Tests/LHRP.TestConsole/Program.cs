@@ -26,14 +26,12 @@ namespace LHRP.TestConsole
             var protocol = new Protocol();
             var transferSampleStep = new TransferSamplesStep(
                 new TransferSamplesStepData(GetOneToOneTransferFor96Wells(2, 3, 50.0), 
-                300.0, true));
+                300.0, false));
             protocol.AddStep(transferSampleStep);
 
-            
-            var schedule = simplePipettorSimulation.Schedule(protocol);
-            //simplePipettorSimulation.SimulationSpeedFactor = 5;
-
-            //var processResult = protocol.Run(simplePipettorSimulation);
+            //var schedule = simplePipettorSimulation.Schedule(protocol);
+            simplePipettorSimulation.SimulationSpeedFactor = 5;
+            var processResult = protocol.Run(simplePipettorSimulation);
 
             //can also schedule or run an individual step
             //nimbusLiteSimulation.Run(transferSampleStep);
