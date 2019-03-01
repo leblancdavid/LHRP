@@ -34,7 +34,7 @@ namespace LHRP.Api.Protocol.Steps
             var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
             if(tranfersResult.IsFailure)
             {
-                process.AddError(new RuntimeError());
+                process.AddError(new RuntimeError(""));
                 return process;
             }
 

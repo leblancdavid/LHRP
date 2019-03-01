@@ -1,5 +1,6 @@
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime.ErrorHandling;
+using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Api.Runtime
 {
@@ -25,8 +26,12 @@ namespace LHRP.Api.Runtime
                 {
                     foreach(var error in result.Errors)
                     {
-                        var resolver = ErrorHandler.HandleError(Instrument, error);
-                        resolver.Resolve(Commands);
+                        var errorHandlingResult = ErrorHandler.HandleError(this, error);
+                        if(errorHandlingResult.IsFailure)
+                        {
+                            Commands.Abort();
+                            process.AddError(new RuntimeError(errorHandlingResult.Error));
+                        }
                     }
                 }
 

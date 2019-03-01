@@ -28,7 +28,7 @@ namespace LHRP.Api.Protocol.Pipetting
 
             if(tipsResult.IsFailure)
             {
-                process.AddError(new RuntimeError());
+                process.AddError(new RuntimeError(""));
                 return process;
             }
 
@@ -40,7 +40,7 @@ namespace LHRP.Api.Protocol.Pipetting
                     var consumeResult = tipManager.ConsumeTip(tipsResult.Value.GetTip(channel));
                     if(consumeResult.IsFailure)
                     {
-                        process.AddError(new RuntimeError());
+                        process.AddError(new RuntimeError(""));
                         return process;
                     }
                 }
