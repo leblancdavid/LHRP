@@ -17,7 +17,9 @@ namespace LHRP.Api.Runtime
 
         public Process Abort()
         {
-            throw new System.NotImplementedException();
+            CurrentCommandIndex = 0;
+            _queue.Clear();
+            return new Process();
         }
 
         public void Add(IRunnableCommand command)
@@ -58,7 +60,7 @@ namespace LHRP.Api.Runtime
             {
                 return new Process();
             }
-            
+
             var result = _queue[CurrentCommandIndex].Run(engine);
 
             CurrentCommandIndex++;

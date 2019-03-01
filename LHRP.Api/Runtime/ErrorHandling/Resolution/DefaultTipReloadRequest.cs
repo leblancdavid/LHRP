@@ -4,7 +4,7 @@ using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Api.Runtime.ErrorHandling.Resolution
 {
-    public class TipReloadRequest : IErrorResolver
+    public class DefaultTipReloadRequest : IErrorResolver
     {
         public Result Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
         {

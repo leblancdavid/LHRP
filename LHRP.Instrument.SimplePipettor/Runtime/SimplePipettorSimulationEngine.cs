@@ -4,6 +4,7 @@ using LHRP.Api.Protocol;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Instrument.SimplePipettor.Instrument;
+using LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime
 {
@@ -26,7 +27,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
         }
         public double FailureRate { get; set; }
         public SimplePipettorSimulationEngine()
-            :base(new SimplePipettorSimulatedInstrument(), new RuntimeCommandQueue(), new DefaultErrorHandler())
+            :base(new SimplePipettorSimulatedInstrument(), new RuntimeCommandQueue(), new SimplePipettorErrorHandler())
         {
             _instrument = Instrument as SimplePipettorSimulatedInstrument;
         }

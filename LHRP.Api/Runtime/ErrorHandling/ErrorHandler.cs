@@ -6,31 +6,31 @@ using LHRP.Api.Runtime.ErrorHandling.Resolution;
 
 namespace LHRP.Api.Runtime.ErrorHandling
 {
-    public class DefaultErrorHandler : IErrorHandler
+    public class ErrorHandler : IErrorHandler
     {
-        private Dictionary<System.Type, IErrorResolver> _resolutionTable;
+        protected Dictionary<System.Type, IErrorResolver> ResolutionTable;
 
-        public DefaultErrorHandler()
+        public ErrorHandler()
         {
-            _resolutionTable = new Dictionary<System.Type, IErrorResolver>();
-            _resolutionTable[typeof(InsuffientTipsRuntimeError)] = new TipReloadRequest();
+            ResolutionTable = new Dictionary<System.Type, IErrorResolver>();
+            ConfigureResolution<InsuffientTipsRuntimeError>(new DefaultTipReloadRequest());
         }
 
         public void ConfigureResolution<TErrorType>(IErrorResolver resolver) where TErrorType : RuntimeError
         {
             var errorType = typeof(TErrorType);
-            _resolutionTable[errorType] = resolver;
+            ResolutionTable[errorType] = resolver;
         }
 
         public Result HandleError(IRuntimeEngine engine, RuntimeError error)
         {
             var errorType = error.GetType();
-            if(!_resolutionTable.ContainsKey(errorType))
+            if(!ResolutionTable.ContainsKey(errorType))
             {
                 return Result.Fail($"No resolution found for error type '{errorType.ToString()}'");
             }
 
-            return _resolutionTable[errorType].Resolve(engine, error);
+            return ResolutionTable[errorType].Resolve(engine, error);
         }
     }
 }
