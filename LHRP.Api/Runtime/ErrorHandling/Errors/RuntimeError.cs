@@ -1,4 +1,4 @@
-namespace LHRP.Api.Runtime.ErrorHandling
+namespace LHRP.Api.Runtime.ErrorHandling.Errors
 {
     public class RuntimeError
     {

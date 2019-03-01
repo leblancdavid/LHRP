@@ -9,6 +9,7 @@ using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
+using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Api.Protocol.Steps
 {
