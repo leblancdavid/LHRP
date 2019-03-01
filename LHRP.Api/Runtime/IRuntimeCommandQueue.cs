@@ -9,6 +9,7 @@ namespace LHRP.Api.Runtime
         int CurrentCommandIndex { get; }
         bool IsCompleted { get; }
 
+        void MoveToLastCommand();
         Process RunNextCommand(IRuntimeEngine engine);
         Process RetryLastCommand(IRuntimeEngine engine);
         Process Abort();

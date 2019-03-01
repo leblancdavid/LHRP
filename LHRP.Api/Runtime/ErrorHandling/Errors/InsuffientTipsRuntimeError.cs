@@ -2,8 +2,10 @@ namespace LHRP.Api.Runtime.ErrorHandling.Errors
 {
     public class InsuffientTipsRuntimeError : RuntimeError
     {
-        public InsuffientTipsRuntimeError(string message) : base(message)
+        public int TipTypeId { get; private set; }
+        public InsuffientTipsRuntimeError(int tipTypeId) : base($"Insufficient tips")
         {
+            TipTypeId = tipTypeId;
         }
     }
 }

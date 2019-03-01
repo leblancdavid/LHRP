@@ -40,7 +40,7 @@ namespace LHRP.Api.Protocol.Steps
 
             foreach(var transfer in tranfersResult.Value)
             {
-                engine.Commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.DesiredTipSize));
+                engine.Commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.TipTypeId));
                 engine.Commands.Add(new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), 
                     transfer.ChannelPattern)));
                 engine.Commands.Add(new Dispense(new DispenseParameters(transfer.Transfers.Select(x => x.Target).ToList(),

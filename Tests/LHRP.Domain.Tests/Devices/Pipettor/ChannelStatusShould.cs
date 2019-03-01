@@ -16,7 +16,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
             channelStatus.OnPickedUpTip(new Tip(
                 new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
-                50, false));
+                50, false, 0));
             
             channelStatus.HasTip.Should().BeTrue();
             channelStatus.HasErrors.Should().BeFalse();
@@ -29,12 +29,12 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
             channelStatus.OnPickedUpTip(new Tip(
                 new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
-                50, false));
+                50, false, 0));
             
             channelStatus.OnPickedUpTip(new Tip(
                 new LabwareAddress(2,2,-1), 
                 new Coordinates(2,2,2),
-                50, false));
+                50, false, 0));
 
             channelStatus.HasErrors.Should().BeTrue();
         }
@@ -46,7 +46,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
             channelStatus.OnPickedUpTip(new Tip(
                 new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
-                50, false));
+                50, false, 0));
 
             channelStatus.OnAspiratedVolume(20);
 
@@ -61,7 +61,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
             channelStatus.OnPickedUpTip(new Tip(
                 new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
-                50, false));
+                50, false, 0));
 
             channelStatus.OnAspiratedVolume(999);
 
@@ -83,7 +83,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
             channelStatus.OnPickedUpTip(new Tip(
                 new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
-                50, false));
+                50, false, 0));
 
             channelStatus.OnAspiratedVolume(50);
             channelStatus.OnDispensedVolume(25);
@@ -107,7 +107,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
             channelStatus.OnPickedUpTip(new Tip(
                 new LabwareAddress(1,1,-1), 
                 new Coordinates(1,1,1),
-                50, false));
+                50, false, 0));
 
             channelStatus.OnDroppedTip();
 

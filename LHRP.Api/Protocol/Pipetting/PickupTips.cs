@@ -11,12 +11,12 @@ namespace LHRP.Api.Protocol.Pipetting
     public class PickupTips : IRunnableCommand
     {
         private ChannelPattern _pattern;
-        private double _desiredTipSize;
+        private int _tipTypeId;
         public PickupTips(ChannelPattern pattern, 
-            double desiredTipSize)
+            int tipTypeId)
         {
             _pattern = pattern;
-            _desiredTipSize = desiredTipSize;
+            _tipTypeId = tipTypeId;
         }
 
         public Process Run(IRuntimeEngine engine)
@@ -24,15 +24,20 @@ namespace LHRP.Api.Protocol.Pipetting
             var process = new Process();
             var tipManager = engine.Instrument.TipManager;
             var pipettor = engine.Instrument.Pipettor;
-            var tipsResult = tipManager.RequestTips(_pattern, _desiredTipSize);
+            var tipsResult = tipManager.RequestTips(_pattern, _tipTypeId);
 
             if(tipsResult.IsFailure)
             {
-                process.AddError(new RuntimeError(""));
+                process.AddError(new InsuffientTipsRuntimeError(_tipTypeId));
                 return process;
             }
 
             var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value));
+            if(!commandResult.ContainsErrors)
+            {
+                //TODO LOGIC HERE TO RESOLVE PICKUP ERRORS    
+            }
+
             for(int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
                 if(tipsResult.Value[channel] && pipettor.PipettorStatus[channel].HasTip)
@@ -46,10 +51,7 @@ namespace LHRP.Api.Protocol.Pipetting
                 }
             }
 
-            if(!commandResult.ContainsErrors)
-            {
-                
-            }
+           
             return commandResult;
         }
     }

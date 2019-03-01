@@ -2,12 +2,19 @@ using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.ErrorHandling.Resolution;
 
 namespace LHRP.Api.Runtime.ErrorHandling
 {
     public class DefaultErrorHandler : IErrorHandler
     {
-        private Dictionary<System.Type, IErrorResolver> _resolutionTable = new Dictionary<System.Type, IErrorResolver>();
+        private Dictionary<System.Type, IErrorResolver> _resolutionTable;
+
+        public DefaultErrorHandler()
+        {
+            _resolutionTable = new Dictionary<System.Type, IErrorResolver>();
+            _resolutionTable[typeof(InsuffientTipsRuntimeError)] = new TipReloadRequest();
+        }
 
         public void ConfigureResolution<TErrorType>(IErrorResolver resolver) where TErrorType : RuntimeError
         {

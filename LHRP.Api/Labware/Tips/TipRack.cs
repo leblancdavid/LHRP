@@ -86,7 +86,7 @@ namespace LHRP.Api.Labware.Tips
 
                     var labwareAddress = new LabwareAddress(i + 1, j + 1, _positionId);
 
-                    _tips.Add(labwareAddress, new Tip(labwareAddress, absolutePosition, Definition.TipVolume, Definition.AreFilteredTips));
+                    _tips.Add(labwareAddress, new Tip(labwareAddress, absolutePosition, Definition.TipVolume, Definition.AreFilteredTips, Definition.Id));
                 }
             }
         }

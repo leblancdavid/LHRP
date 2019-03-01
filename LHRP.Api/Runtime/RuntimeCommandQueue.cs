@@ -35,6 +35,13 @@ namespace LHRP.Api.Runtime
             _queue.RemoveAt(index);
         }
 
+        public void MoveToLastCommand()
+        {
+            if(CurrentCommandIndex >= 0)
+            {
+                CurrentCommandIndex--;
+            }
+        }
         public Process RetryLastCommand(IRuntimeEngine engine)
         {
             if(IsCompleted)
