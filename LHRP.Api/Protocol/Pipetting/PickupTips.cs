@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Protocol.Pipetting
 {

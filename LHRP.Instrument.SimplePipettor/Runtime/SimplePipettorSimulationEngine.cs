@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Instrument.SimplePipettor.Instrument;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime

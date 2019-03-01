@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LHRP.Api.Runtime.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Runtime
 {

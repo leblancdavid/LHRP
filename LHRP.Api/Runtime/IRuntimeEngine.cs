@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol;
-using LHRP.Api.Runtime.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Runtime
 {
