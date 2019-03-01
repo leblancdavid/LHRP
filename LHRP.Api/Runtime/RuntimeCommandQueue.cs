@@ -7,12 +7,12 @@ namespace LHRP.Api.Runtime
         private List<IRunnableCommand> _queue;
         public IEnumerable<IRunnableCommand> Queue => _queue;
         public int CurrentCommandIndex { get; private set; }
-        public bool IsCompleted => CurrentCommandIndex >= _queue.Count;
+        public bool IsCompleted => CurrentCommandIndex == _queue.Count;
 
         public RuntimeCommandQueue()
         {
             _queue = new List<IRunnableCommand>();
-            CurrentCommandIndex = -1;
+            CurrentCommandIndex = 0;
         }
 
         public Process Abort()
@@ -37,7 +37,7 @@ namespace LHRP.Api.Runtime
 
         public void MoveToLastCommand()
         {
-            if(CurrentCommandIndex >= 0)
+            if(CurrentCommandIndex > 0)
             {
                 CurrentCommandIndex--;
             }
@@ -54,13 +54,15 @@ namespace LHRP.Api.Runtime
 
         public Process RunNextCommand(IRuntimeEngine engine)
         {
-            CurrentCommandIndex++;
             if(IsCompleted)
             {
                 return new Process();
             }
+            
+            var result = _queue[CurrentCommandIndex].Run(engine);
 
-            return _queue[CurrentCommandIndex].Run(engine);
+            CurrentCommandIndex++;
+            return result;
         }
     }
 }
