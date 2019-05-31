@@ -19,6 +19,14 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling.Resolution
             }
 
             Console.WriteLine(insuffientTipsError.Message);
+            Console.Write("Would you like to reload tips (y,n): ");
+            var requestInput = Console.ReadLine();
+            if(requestInput != "y" && requestInput != "yes")
+            {
+                Console.WriteLine("Aborting the run...");
+                engine.Commands.Abort();
+                return Result.Ok();
+            }
             //Add the tip reloading logic here, logic could vary based on the instrument
             var reloadResult = engine.Instrument.TipManager.ReloadTips(insuffientTipsError.TipTypeId);
             if(reloadResult.IsFailure)
