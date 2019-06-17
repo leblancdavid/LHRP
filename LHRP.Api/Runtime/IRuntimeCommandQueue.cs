@@ -12,7 +12,7 @@ namespace LHRP.Api.Runtime
         void MoveToLastCommand();
         Process RunNextCommand(IRuntimeEngine engine);
         Process RetryLastCommand(IRuntimeEngine engine);
-        Process Abort();
+        Process Clear();
 
         void Add(IRunnableCommand command);
         void Insert(int index, IRunnableCommand command);

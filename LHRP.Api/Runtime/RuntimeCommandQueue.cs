@@ -15,7 +15,7 @@ namespace LHRP.Api.Runtime
             CurrentCommandIndex = 0;
         }
 
-        public Process Abort()
+        public Process Clear()
         {
             CurrentCommandIndex = 0;
             _queue.Clear();

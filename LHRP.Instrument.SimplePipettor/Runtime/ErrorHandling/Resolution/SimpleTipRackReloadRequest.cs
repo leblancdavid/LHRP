@@ -24,7 +24,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling.Resolution
             if(requestInput != "y" && requestInput != "yes")
             {
                 Console.WriteLine("Aborting the run...");
-                engine.Commands.Abort();
+                engine.Commands.Clear();
                 return Result.Ok();
             }
             //Add the tip reloading logic here, logic could vary based on the instrument
