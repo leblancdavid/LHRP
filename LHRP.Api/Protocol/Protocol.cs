@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using CSharpFunctionalExtensions;
-using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol
 {
@@ -28,6 +27,11 @@ namespace LHRP.Api.Protocol
             }
 
             return process;
+        }
+
+        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

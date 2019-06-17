@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LHRP.Api.Runtime
+namespace LHRP.Api.Runtime.Scheduling
 {
     public interface ISchedulable
     {

@@ -1,4 +1,4 @@
-namespace LHRP.Api.Runtime
+namespace LHRP.Api.Runtime.Scheduling
 {
     public class Schedule
     {

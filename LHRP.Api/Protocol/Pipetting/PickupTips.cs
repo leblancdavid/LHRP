@@ -5,6 +5,7 @@ using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -53,6 +54,11 @@ namespace LHRP.Api.Protocol.Pipetting
 
            
             return commandResult;
+        }
+
+        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

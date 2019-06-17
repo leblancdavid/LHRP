@@ -1,4 +1,4 @@
-namespace LHRP.Api.Protocol.Resources
+namespace LHRP.Api.Runtime.Scheduling
 {
     public class ResourcesUsage
     {

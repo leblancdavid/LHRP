@@ -1,15 +1,12 @@
 using System.Linq;
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Instrument;
 using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Steps
 {
@@ -49,6 +46,11 @@ namespace LHRP.Api.Protocol.Steps
             }
             
             return engine.Run();
+        }
+
+        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,8 +1,7 @@
-using CSharpFunctionalExtensions;
-using LHRP.Api.Instrument;
-using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
 using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Runtime.Scheduling;
+using System;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -29,6 +28,11 @@ namespace LHRP.Api.Protocol.Pipetting
             }
             
             return processResult;
+        }
+
+        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        {
+            throw new NotImplementedException();
         }
     }
 }
