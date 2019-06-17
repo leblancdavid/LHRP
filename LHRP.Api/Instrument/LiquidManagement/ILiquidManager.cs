@@ -10,5 +10,6 @@ namespace LHRP.Api.Instrument.LiquidManagement
         Result AddLiquidToPosition(LabwareAddress address, Liquid liquidToAssign, double volume);
         Result<TransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume);
         Result RemoveLiquidFromPosition(LabwareAddress address, double volume);
+        Result ClearLiquidAtPosition(LabwareAddress address);
     }
 }

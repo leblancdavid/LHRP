@@ -1,13 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
+using LHRP.Api.Instrument;
 using LHRP.Api.Labware;
 using LHRP.Api.Protocol.Transfers;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LHRP.Api.Runtime.Resources
 {
-    public class WellUsage
+    public class LiquidContainerUsage
     {
         public LabwareAddress Address { get; private set; }
 
@@ -82,7 +82,24 @@ namespace LHRP.Api.Runtime.Resources
             }
         }
 
-        public WellUsage(LabwareAddress address)
+        public double ExpectedFinalLiquidVolume
+        {
+            get
+            {
+                double volume = 0.0;
+                for (int i = 0; i < _transferHistory.Count; ++i)
+                {
+                    var target = _transferHistory[i];
+                    if (target.TransferType == TransferType.Destination)
+                        volume += target.Volume;
+                    else
+                        volume -= target.Volume;
+                }
+                return volume + RequiredLiquidVolumeAtStart;
+            }
+        }
+
+        public LiquidContainerUsage(LabwareAddress address)
         {
             Address = address;
         }
@@ -95,6 +112,32 @@ namespace LHRP.Api.Runtime.Resources
             }
 
             _transferHistory.Add(target);
+            return Result.Ok();
+        }
+
+        public Result LoadInstrument(IInstrument instrument)
+        {
+            var clearResult = instrument.LiquidManager.ClearLiquidAtPosition(Address);
+            if(clearResult.IsFailure)
+            {
+                return clearResult;
+            }
+
+            for (int i = 0; i < _transferHistory.Count; ++i)
+            {
+                var target = _transferHistory[i];
+                if (target.TransferType == TransferType.Destination)
+                {
+                    break;
+                }
+
+                var addResult = instrument.LiquidManager.AddLiquidToPosition(target.Address, target.Liquid, target.Volume);
+                if (addResult.IsFailure)
+                {
+                    return addResult;
+                }
+            }
+
             return Result.Ok();
         }
     }
