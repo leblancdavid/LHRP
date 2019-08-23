@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
@@ -27,22 +28,17 @@ namespace LHRP.Api.Protocol.Steps
         public Process Run(IRuntimeEngine engine)
         {
             var process = new Process();
-            var pipettor = engine.Instrument.Pipettor;
-            var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
-            if(tranfersResult.IsFailure)
+
+            var commands = GetCommands(engine);
+            if(commands.IsFailure)
             {
-                process.AddError(new RuntimeError(""));
+                process.AddError(new RuntimeError(commands.Error));
                 return process;
             }
 
-            foreach(var transfer in tranfersResult.Value)
+            foreach(var command in commands.Value)
             {
-                engine.Commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.TipTypeId));
-                engine.Commands.Add(new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), 
-                    transfer.ChannelPattern)));
-                engine.Commands.Add(new Dispense(new DispenseParameters(transfer.Transfers.Select(x => x.Target).ToList(),
-                    transfer.ChannelPattern)));
-                engine.Commands.Add(new DropTips(_stepData.ReturnTipsToSource));
+                engine.Commands.Add(command);
             }
             
             return engine.Run();
@@ -50,7 +46,41 @@ namespace LHRP.Api.Protocol.Steps
 
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
         {
-            throw new System.NotImplementedException();
+            var schedule = new Schedule();
+            var commands = GetCommands(runtimeEngine);
+            if (commands.IsFailure)
+            {
+                return schedule;
+            }
+
+            foreach (var command in commands.Value)
+            {
+                var commandSchedule = command.Schedule(runtimeEngine);
+                schedule.Combine(commandSchedule);
+            }
+
+            return schedule;
+        }
+
+        private Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
+        {
+            var pipettor = engine.Instrument.Pipettor;
+            var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
+            if (tranfersResult.IsFailure)
+            {
+                return Result.Fail<IEnumerable<IRunnableCommand>>(tranfersResult.Error);
+            }
+
+            var commands = new List<IRunnableCommand>();
+            foreach (var transfer in tranfersResult.Value)
+            {
+                commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.TipTypeId));
+                commands.Add(new Aspirate(new AspirateParameters(transfer.Transfers.Select(x => x.Source).ToList(), transfer.ChannelPattern)));
+                commands.Add(new Dispense(new DispenseParameters(transfer.Transfers.Select(x => x.Target).ToList(), transfer.ChannelPattern)));
+                commands.Add(new DropTips(_stepData.ReturnTipsToSource));
+            }
+
+            return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
         }
     }
 }

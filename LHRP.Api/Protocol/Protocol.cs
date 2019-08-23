@@ -31,7 +31,14 @@ namespace LHRP.Api.Protocol
 
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
         {
-            throw new System.NotImplementedException();
+            var schedule = new Schedule();
+            foreach(var step in _steps)
+            {
+                var stepSchedule = step.Schedule(runtimeEngine);
+                schedule.Combine(stepSchedule);
+            }
+
+            return schedule;
         }
     }
 }

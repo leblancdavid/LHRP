@@ -31,7 +31,13 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
         {
-            throw new System.NotImplementedException();
+            var schedule = new Schedule();
+            foreach (var target in _parameters.Targets)
+            {
+                schedule.ResourcesUsage.AddTransfer(target);
+            }
+
+            return schedule;
         }
     }
 }

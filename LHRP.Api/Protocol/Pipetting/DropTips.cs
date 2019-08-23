@@ -48,7 +48,9 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
         {
-            throw new System.NotImplementedException();
+            var schedule = new Schedule();
+            //TODO
+            return schedule;
         }
     }
 }

@@ -58,7 +58,9 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
         {
-            throw new System.NotImplementedException();
+            var schedule = new Schedule();
+            schedule.ResourcesUsage.AddTipUsage(_tipTypeId, _pattern.GetNumberActiveChannels());
+            return schedule;
         }
     }
 }
