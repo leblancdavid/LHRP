@@ -2,7 +2,7 @@
 {
     public enum TransferType
     {
-        Source,
-        Destination
+        Aspirate,
+        Dispense
     }
 }

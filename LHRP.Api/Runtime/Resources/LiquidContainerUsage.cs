@@ -19,7 +19,7 @@ namespace LHRP.Api.Runtime.Resources
             get
             {
                 var firstTransfer = _transferHistory.FirstOrDefault();
-                if(firstTransfer == null || firstTransfer.TransferType == TransferType.Destination)
+                if(firstTransfer == null || firstTransfer.TransferType == TransferType.Dispense)
                 {
                     return false;
                 }
@@ -35,7 +35,7 @@ namespace LHRP.Api.Runtime.Resources
                 for(int i = 0; i < _transferHistory.Count; ++i)
                 {
                     var target = _transferHistory[i];
-                    if (target.TransferType == TransferType.Destination)
+                    if (target.TransferType == TransferType.Dispense)
                     {
                         break;
                     }
@@ -55,7 +55,7 @@ namespace LHRP.Api.Runtime.Resources
                 for (i = 0; i < _transferHistory.Count; ++i)
                 {
                     var target = _transferHistory[i];
-                    if (target.TransferType == TransferType.Destination)
+                    if (target.TransferType == TransferType.Dispense)
                     {
                         break;
                     }
@@ -65,7 +65,7 @@ namespace LHRP.Api.Runtime.Resources
                 for(; i < _transferHistory.Count; ++i)
                 {
                     var target = _transferHistory[i];
-                    if (target.TransferType == TransferType.Destination)
+                    if (target.TransferType == TransferType.Dispense)
                     {
                         volume += target.Volume;
                     }
@@ -90,7 +90,7 @@ namespace LHRP.Api.Runtime.Resources
                 for (int i = 0; i < _transferHistory.Count; ++i)
                 {
                     var target = _transferHistory[i];
-                    if (target.TransferType == TransferType.Destination)
+                    if (target.TransferType == TransferType.Dispense)
                         volume += target.Volume;
                     else
                         volume -= target.Volume;
@@ -126,7 +126,7 @@ namespace LHRP.Api.Runtime.Resources
             for (int i = 0; i < _transferHistory.Count; ++i)
             {
                 var target = _transferHistory[i];
-                if (target.TransferType == TransferType.Destination)
+                if (target.TransferType == TransferType.Dispense)
                 {
                     break;
                 }

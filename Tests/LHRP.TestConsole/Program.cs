@@ -6,6 +6,7 @@ using LHRP.Api.Protocol;
 using LHRP.Api.Protocol.Steps;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
+using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Instrument;
 using LHRP.Instrument.SimplePipettor.Runtime;
 
@@ -28,14 +29,17 @@ namespace LHRP.TestConsole
                 new TransferSamplesStepData(GetOneToOneTransferFor96Wells(2, 3, 50.0), 
                 0, false));
             protocol.AddStep(transferSampleStep);
-            //Repeat the transfer again
-            protocol.AddStep(transferSampleStep);
-            //var schedule = simplePipettorSimulation.Schedule(protocol);
-            simplePipettorSimulation.SimulationSpeedFactor = 0;
+            var transferSampleBackStep = new TransferSamplesStep(
+                new TransferSamplesStepData(GetOneToOneTransferFor96Wells(3, 2, 45.0),
+                0, false));
+            protocol.AddStep(transferSampleBackStep);
+            
+            var schedule = protocol.Schedule(simplePipettorSimulation);
+            PrintSchedule(schedule);
+
             var processResult = protocol.Run(simplePipettorSimulation);
 
-            //can also schedule or run an individual step
-            //nimbusLiteSimulation.Run(transferSampleStep);
+            Console.ReadLine();
         }
 
         static TransferPattern<OneToOneTransfer> GetOneToOneTransferFor96Wells(int sourcePositionId, int destinationPositionId, double volume)
@@ -47,14 +51,33 @@ namespace LHRP.TestConsole
                 for(int j = 1; j <= cols; ++j)
                 {
                     var liquid = new Liquid();
-                    var sourceTarget = new TransferTarget(new LabwareAddress(i, j, sourcePositionId), liquid, volume, TransferType.Source);
-                    var destinationTarget = new TransferTarget(new LabwareAddress(i, j, destinationPositionId), liquid, volume, TransferType.Destination);
+                    var sourceTarget = new TransferTarget(new LabwareAddress(i, j, sourcePositionId), liquid, volume, TransferType.Aspirate);
+                    var destinationTarget = new TransferTarget(new LabwareAddress(i, j, destinationPositionId), liquid, volume, TransferType.Dispense);
                     tp.AddTransfer(new OneToOneTransfer(sourceTarget, destinationTarget));
                 }
             }
 
             return tp;
             
+        }
+
+        static void PrintSchedule(Schedule schedule)
+        {
+            Console.WriteLine("Usage in liquid containers:");
+            foreach(var liquidUsage in schedule.ResourcesUsage.LiquidContainerUsages)
+            {
+                Console.WriteLine($"Pos{liquidUsage.Address.PositionId}-{liquidUsage.Address.ToAlphaAddress()}, Starting liquid volume: {liquidUsage.RequiredLiquidVolumeAtStart}uL, Ending volume: {liquidUsage.ExpectedFinalLiquidVolume}uL");
+                foreach(var transfer in liquidUsage.TransferHistory)
+                {
+                    Console.WriteLine($"{transfer.TransferType} {transfer.Volume}uL");
+                }
+            }
+            Console.ReadLine();
+            Console.WriteLine("Tip usage:");
+            foreach (var tipUsage in schedule.ResourcesUsage.TipUsages)
+            {
+                Console.WriteLine($"Total tips used: {tipUsage.ExpectedTotalTipUsage}");
+            }
         }
     }
 }

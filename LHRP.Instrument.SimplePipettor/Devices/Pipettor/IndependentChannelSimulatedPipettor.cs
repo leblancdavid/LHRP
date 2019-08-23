@@ -65,7 +65,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 if(parameters.Pattern[i])
                 {
                     var target = parameters.Targets.ToArray()[t];
-                    sb.Append($"Pos{target.Address.PositionId}-({target.Address.Row},{target.Address.Column}), {target.Volume}uL; ");
+                    sb.Append($"Pos{target.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     t++;
                 }
                 else
@@ -99,7 +99,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 if(parameters.Pattern[i])
                 {
                     var target = parameters.Targets.ToArray()[t];
-                    sb.Append($"Pos{target.Address.PositionId}-({target.Address.Row},{target.Address.Column}), {target.Volume}uL; ");
+                    sb.Append($"Pos{target.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     t++;
                 }
                 else
@@ -133,7 +133,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 {
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip.AbsolutePosition;
-                    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.Row},{tip.Address.Column}); ");
+                    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
                     PipettorStatus[i].OnPickedUpTip(tip);
                 }
                 else
@@ -169,7 +169,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                     {
                         var tip = parameters.Pattern.GetTip(i);
                         position = tip.AbsolutePosition;
-                        sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.Row},{tip.Address.Column}); ");
+                        sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
                         PipettorStatus[i].OnDroppedTip();
                     }
                     else
