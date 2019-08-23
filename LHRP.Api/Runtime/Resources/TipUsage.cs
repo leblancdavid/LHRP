@@ -14,7 +14,7 @@ namespace LHRP.Api.Runtime.Resources
 
         public int GetExpectedReloadCount(IInstrument instrument)
         {
-
+            return 0;
         }
     }
 }

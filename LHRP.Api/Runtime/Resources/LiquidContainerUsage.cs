@@ -115,7 +115,7 @@ namespace LHRP.Api.Runtime.Resources
             return Result.Ok();
         }
 
-        public Result LoadInstrument(IInstrument instrument)
+        public Result InitializeInstrumentState(IInstrument instrument)
         {
             var clearResult = instrument.LiquidManager.ClearLiquidAtPosition(Address);
             if(clearResult.IsFailure)
@@ -139,6 +139,17 @@ namespace LHRP.Api.Runtime.Resources
             }
 
             return Result.Ok();
+        }
+
+        public void Combine(params LiquidContainerUsage[] usages)
+        {
+            for(int i = 0; i < usages.Length; ++i)
+            {
+                if (!Address.Equals(usages[i].Address))
+                    continue;
+
+                _transferHistory.AddRange(usages[i].TransferHistory);
+            }
         }
     }
 }

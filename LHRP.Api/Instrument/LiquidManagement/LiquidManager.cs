@@ -61,7 +61,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
             return Result.Ok();
         }
 
-        public Result<TransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume)
+        public Result<TransferTarget> ContainsTargetLiquid(Liquid liquid, double desiredVolume)
         {
             throw new System.NotImplementedException();
         }

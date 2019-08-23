@@ -8,7 +8,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
     public interface ILiquidManager
     {
         Result AddLiquidToPosition(LabwareAddress address, Liquid liquidToAssign, double volume);
-        Result<TransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume);
+        Result<TransferTarget> ContainsTargetLiquid(Liquid liquid, double desiredVolume);
         Result RemoveLiquidFromPosition(LabwareAddress address, double volume);
         Result ClearLiquidAtPosition(LabwareAddress address);
     }
