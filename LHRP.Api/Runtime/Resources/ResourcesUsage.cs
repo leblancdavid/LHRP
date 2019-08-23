@@ -28,6 +28,7 @@ namespace LHRP.Api.Runtime.Resources
         public ResourcesUsage()
         {
             _liquidContainerUsages = new Dictionary<LabwareAddress, LiquidContainerUsage>();
+            _tipUsages = new Dictionary<int, TipUsage>();
         }
 
         public Result AddTransfer(TransferTarget target)
@@ -60,7 +61,25 @@ namespace LHRP.Api.Runtime.Resources
                 newTipUsage.ExpectedTotalTipUsage += count;
                 _tipUsages[tipTypeId] = newTipUsage;
             }
+        }
 
+        public void Combine(params ResourcesUsage[] resourcesUsages)
+        {
+            for(int i = 0; i < resourcesUsages.Length; ++i)
+            {
+                foreach(var liquidContainerUsage in resourcesUsages[i].LiquidContainerUsages)
+                {
+                    foreach(var transfer in liquidContainerUsage.TransferHistory)
+                    {
+                        AddTransfer(transfer);
+                    }
+                }
+
+                foreach(var tipUsage in resourcesUsages[i].TipUsages)
+                {
+                    AddTipUsage(tipUsage.TipTypeId, tipUsage.ExpectedTotalTipUsage);
+                }
+            }
         }
     }
 }
