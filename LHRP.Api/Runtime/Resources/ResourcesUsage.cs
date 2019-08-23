@@ -16,6 +16,15 @@ namespace LHRP.Api.Runtime.Resources
             }
         }
 
+        private Dictionary<int, TipUsage> _tipUsages;
+        public IEnumerable<TipUsage> TipUsages
+        {
+            get
+            {
+                return _tipUsages.Values;
+            }
+        }
+
         public ResourcesUsage()
         {
             _liquidContainerUsages = new Dictionary<LabwareAddress, LiquidContainerUsage>();
@@ -37,6 +46,21 @@ namespace LHRP.Api.Runtime.Resources
                 _liquidContainerUsages[target.Address] = newContainer;
                 return result;
             }
+        }
+
+        public void AddTipUsage(int tipTypeId, int count)
+        {
+            if (_tipUsages.ContainsKey(tipTypeId))
+            {
+                _tipUsages[tipTypeId].ExpectedTotalTipUsage += count;
+            }
+            else
+            {
+                var newTipUsage = new TipUsage(tipTypeId);
+                newTipUsage.ExpectedTotalTipUsage += count;
+                _tipUsages[tipTypeId] = newTipUsage;
+            }
+
         }
     }
 }

@@ -10,11 +10,13 @@ namespace LHRP.Api.Runtime.Resources
         public TipUsage(int tipTypeId)
         {
             TipTypeId = tipTypeId;
+            ExpectedTotalTipUsage = 0;
         }
 
         public int GetExpectedReloadCount(IInstrument instrument)
         {
-            return 0;
+            int tipCount = instrument.TipManager.GetTotalTipCount(TipTypeId);
+            return ExpectedTotalTipUsage / tipCount;
         }
     }
 }
