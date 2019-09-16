@@ -87,5 +87,20 @@ namespace LHRP.Api.Instrument.TipManagement
 
             return Result.Ok();
         }
+
+        public int GetTotalTipCount(int tipTypeId)
+        {
+            int totalCount = 0;
+            var tipRacks = _deck.GetTipRacks();
+            foreach (var tr in tipRacks)
+            {
+                if(tr.Definition.Id == tipTypeId)
+                {
+                    totalCount += tr.TotalTipCount;
+                }
+            }
+
+            return totalCount;
+        }
     }
 }

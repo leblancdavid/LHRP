@@ -43,7 +43,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
 
         public Result AddLiquidToPosition(LabwareAddress address, Liquid liquidToAssign, double volume)
         {
-             var plates = _deck.GetPlates();
+            var plates = _deck.GetPlates();
             var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
             if(targetPlate == null)
             {
@@ -61,9 +61,28 @@ namespace LHRP.Api.Instrument.LiquidManagement
             return Result.Ok();
         }
 
-        public Result<TransferTarget> RequestTargetLiquid(Liquid liquid, double desiredVolume)
+        public Result<TransferTarget> ContainsTargetLiquid(Liquid liquid, double desiredVolume)
         {
             throw new System.NotImplementedException();
+        }
+
+        public Result ClearLiquidAtPosition(LabwareAddress address)
+        {
+            var plates = _deck.GetPlates();
+            var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
+            if (targetPlate == null)
+            {
+                return Result.Fail($"No plate found in position {address.PositionId}");
+            }
+
+            var well = targetPlate.GetWell(address);
+            if (well.IsFailure)
+            {
+                return well;
+            }
+
+            well.Value.Clear();
+            return Result.Ok();
         }
     }
 }

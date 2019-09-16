@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
@@ -5,6 +6,7 @@ using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -53,6 +55,17 @@ namespace LHRP.Api.Protocol.Pipetting
 
            
             return commandResult;
+        }
+
+        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        {
+            var schedule = new Schedule();
+            schedule.ResourcesUsage.AddTipUsage(_tipTypeId, _pattern.GetNumberActiveChannels());
+
+            //Todo: come up with a way to calculate time
+            schedule.ExpectedDuration = new TimeSpan(0, 0, 4);
+
+            return schedule;
         }
     }
 }

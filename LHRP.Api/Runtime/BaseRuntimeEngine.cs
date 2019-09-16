@@ -29,7 +29,7 @@ namespace LHRP.Api.Runtime
                         var errorHandlingResult = ErrorHandler.HandleError(this, error);
                         if(errorHandlingResult.IsFailure)
                         {
-                            Commands.Abort();
+                            Commands.Clear();
                             process.AddError(new RuntimeError(errorHandlingResult.Error));
                         }
                     }

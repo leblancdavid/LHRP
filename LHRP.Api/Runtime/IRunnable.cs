@@ -1,10 +1,8 @@
-using CSharpFunctionalExtensions;
-using LHRP.Api.Instrument;
-using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Runtime
 {
-    public interface IRunnable
+    public interface IRunnable : ISchedulable
     {
          Process Run(IRuntimeEngine enigne);
     }
