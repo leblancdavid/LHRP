@@ -51,7 +51,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true); 
         }
 
-        public Process Aspirate(AspirateParameters parameters)
+        public ProcessResult Aspirate(AspirateParameters parameters)
         {
            var sb = new StringBuilder();
             sb.Append("Aspirating with channels pattern '");
@@ -82,10 +82,10 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
-            return new Process(estimatedTime, estimatedTime);
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
-        public Process Dispense(DispenseParameters parameters)
+        public ProcessResult Dispense(DispenseParameters parameters)
         {
             var sb = new StringBuilder();
             sb.Append("Dispensing with channels pattern '");
@@ -116,10 +116,10 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
-            return new Process(estimatedTime, estimatedTime);
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
-        public Process PickupTips(TipPickupParameters parameters)
+        public ProcessResult PickupTips(TipPickupParameters parameters)
         {
             var sb = new StringBuilder();
             sb.Append("Picking-up tips with channels pattern '");
@@ -150,10 +150,10 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
-            return new Process(estimatedTime, estimatedTime);
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
-        public Process DropTips(TipDropParameters parameters)
+        public ProcessResult DropTips(TipDropParameters parameters)
         {
             if(parameters.Pattern != null)
             {
@@ -186,7 +186,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
                 Console.WriteLine(sb.ToString());
 
-                return new Process(estimatedTime, estimatedTime);
+                return new ProcessResult(estimatedTime, estimatedTime);
             }
             else
             {
@@ -203,18 +203,18 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
                 Console.WriteLine(sb.ToString());
 
-                return new Process(estimatedTime, estimatedTime);
+                return new ProcessResult(estimatedTime, estimatedTime);
             }
         }
 
         
         public bool IsInitialized => throw new NotImplementedException();
-        public Process Initialize()
+        public ProcessResult Initialize()
         {
             throw new NotImplementedException();
         }
 
-        public Process Deinitialize()
+        public ProcessResult Deinitialize()
         {
             throw new NotImplementedException();
         }

@@ -10,9 +10,9 @@ namespace LHRP.Api.Runtime
         bool IsCompleted { get; }
 
         void MoveToLastCommand();
-        Process RunNextCommand(IRuntimeEngine engine);
-        Process RetryLastCommand(IRuntimeEngine engine);
-        Process Clear();
+        ProcessResult RunNextCommand(IRuntimeEngine engine);
+        ProcessResult RetryLastCommand(IRuntimeEngine engine);
+        ProcessResult Clear();
 
         void Add(IRunnableCommand command);
         void Insert(int index, IRunnableCommand command);

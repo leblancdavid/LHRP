@@ -25,9 +25,9 @@ namespace LHRP.Api.Protocol.Steps
             _transferOptimizer = optimizer;
         }
 
-        public Process Run(IRuntimeEngine engine)
+        public ProcessResult Run(IRuntimeEngine engine)
         {
-            var process = new Process();
+            var process = new ProcessResult();
 
             var commands = GetCommands(engine);
             if(commands.IsFailure)

@@ -8,8 +8,8 @@ namespace LHRP.Api.Devices
     {
         Guid DeviceId { get; }
         bool IsInitialized { get; }
-        Process Initialize();
-        Process Deinitialize();
+        ProcessResult Initialize();
+        ProcessResult Deinitialize();
 
         IDeviceStatus DeviceStatus { get; }
     }

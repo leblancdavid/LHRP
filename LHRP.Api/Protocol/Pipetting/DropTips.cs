@@ -15,9 +15,9 @@ namespace LHRP.Api.Protocol.Pipetting
             _returnToSource = returnToSource;
         }
 
-        public Process Run(IRuntimeEngine engine)
+        public ProcessResult Run(IRuntimeEngine engine)
         {
-            var process = new Process();
+            var process = new ProcessResult();
             var pipettor = engine.Instrument.Pipettor;
             
             TipDropParameters parameters;

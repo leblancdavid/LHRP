@@ -4,6 +4,6 @@ namespace LHRP.Api.Runtime
 {
     public interface IRunnable : ISchedulable
     {
-         Process Run(IRuntimeEngine enigne);
+         ProcessResult Run(IRuntimeEngine enigne);
     }
 }

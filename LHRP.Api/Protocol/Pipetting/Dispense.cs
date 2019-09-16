@@ -13,7 +13,7 @@ namespace LHRP.Api.Protocol.Pipetting
             _parameters = parameters;
         }
 
-        public Process Run(IRuntimeEngine engine)
+        public ProcessResult Run(IRuntimeEngine engine)
         {
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;

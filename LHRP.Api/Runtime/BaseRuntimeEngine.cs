@@ -16,9 +16,9 @@ namespace LHRP.Api.Runtime
 
         public IRuntimeCommandQueue Commands { get; protected set; }
         public IErrorHandler ErrorHandler { get; protected set; }
-        public Process Run()
+        public ProcessResult Run()
         {
-            var process = new Process();
+            var process = new ProcessResult();
             while(!Commands.IsCompleted)
             {
                 var result = Commands.RunNextCommand(this);

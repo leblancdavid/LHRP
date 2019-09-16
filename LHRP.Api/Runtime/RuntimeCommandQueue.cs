@@ -15,11 +15,11 @@ namespace LHRP.Api.Runtime
             CurrentCommandIndex = 0;
         }
 
-        public Process Clear()
+        public ProcessResult Clear()
         {
             CurrentCommandIndex = 0;
             _queue.Clear();
-            return new Process();
+            return new ProcessResult();
         }
 
         public void Add(IRunnableCommand command)
@@ -44,21 +44,21 @@ namespace LHRP.Api.Runtime
                 CurrentCommandIndex--;
             }
         }
-        public Process RetryLastCommand(IRuntimeEngine engine)
+        public ProcessResult RetryLastCommand(IRuntimeEngine engine)
         {
             if(IsCompleted)
             {
-                return new Process();
+                return new ProcessResult();
             }
 
             return _queue[CurrentCommandIndex].Run(engine);
         }
 
-        public Process RunNextCommand(IRuntimeEngine engine)
+        public ProcessResult RunNextCommand(IRuntimeEngine engine)
         {
             if(IsCompleted)
             {
-                return new Process();
+                return new ProcessResult();
             }
 
             var result = _queue[CurrentCommandIndex].Run(engine);

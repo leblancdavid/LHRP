@@ -11,6 +11,6 @@ namespace LHRP.Api.Runtime
         IRuntimeCommandQueue Commands { get; }
         IErrorHandler ErrorHandler { get; }
 
-        Process Run();
+        ProcessResult Run();
     }
 }

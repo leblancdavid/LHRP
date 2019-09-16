@@ -13,9 +13,9 @@ namespace LHRP.Api.Protocol
             _steps.Add(step);
         }
 
-        public Process Run(IRuntimeEngine runtime)
+        public ProcessResult Run(IRuntimeEngine runtime)
         {
-            var process = new Process();
+            var process = new ProcessResult();
             foreach(var step in _steps)
             {
                 var stepProcess = step.Run(runtime);
