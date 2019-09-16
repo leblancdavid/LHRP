@@ -13,7 +13,10 @@ namespace LHRP.Api.Protocol.Pipetting
         public DropTips(bool returnToSource=false)
         {
             _returnToSource = returnToSource;
+            CommandId = Guid.NewGuid();
         }
+
+        public Guid CommandId { get; private set; }
 
         public ProcessResult Run(IRuntimeEngine engine)
         {

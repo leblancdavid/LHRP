@@ -19,7 +19,9 @@ namespace LHRP.Api.Protocol.Pipetting
         {
             _pattern = pattern;
             _tipTypeId = tipTypeId;
+            CommandId = Guid.NewGuid();
         }
+        public Guid CommandId { get; private set; }
 
         public ProcessResult Run(IRuntimeEngine engine)
         {

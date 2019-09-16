@@ -11,7 +11,10 @@ namespace LHRP.Api.Protocol.Pipetting
         public Aspirate(AspirateParameters parameters)
         {
             _parameters = parameters;
+            CommandId = Guid.NewGuid();
         }
+
+        public Guid CommandId { get; private set; }
 
         public ProcessResult Run(IRuntimeEngine engine)
         {
