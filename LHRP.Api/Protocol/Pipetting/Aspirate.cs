@@ -38,6 +38,9 @@ namespace LHRP.Api.Protocol.Pipetting
                 schedule.ResourcesUsage.AddTransfer(target);
             }
 
+            //Todo: come up with a way to calculate time
+            schedule.ExpectedDuration = new TimeSpan(0, 0, 5);
+
             return schedule;
         }
     }

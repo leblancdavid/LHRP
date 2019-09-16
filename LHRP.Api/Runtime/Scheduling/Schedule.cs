@@ -1,10 +1,12 @@
 using LHRP.Api.Runtime.Resources;
+using System;
 
 namespace LHRP.Api.Runtime.Scheduling
 {
     public class Schedule
     {
         public ResourcesUsage ResourcesUsage { get; private set; }
+        public TimeSpan ExpectedDuration { get; set; }
 
         public Schedule()
         {
@@ -16,6 +18,7 @@ namespace LHRP.Api.Runtime.Scheduling
             for(int i = 0; i < schedules.Length; ++i)
             {
                 ResourcesUsage.Combine(schedules[i].ResourcesUsage);
+                ExpectedDuration += schedules[i].ExpectedDuration;
             }
         }
     }

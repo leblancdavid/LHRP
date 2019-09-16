@@ -72,12 +72,15 @@ namespace LHRP.TestConsole
                     Console.WriteLine($"{transfer.TransferType} {transfer.Volume}uL");
                 }
             }
-            Console.ReadLine();
             Console.WriteLine("Tip usage:");
             foreach (var tipUsage in schedule.ResourcesUsage.TipUsages)
             {
-                Console.WriteLine($"Total tips used: {tipUsage.ExpectedTotalTipUsage}");
+                Console.WriteLine($"Total tips ({tipUsage.TipTypeId}) used: {tipUsage.ExpectedTotalTipUsage}");
             }
+            
+            Console.WriteLine($"Estimated total run-time: {schedule.ExpectedDuration.ToString("c")}");
+
+            Console.ReadLine();
         }
     }
 }

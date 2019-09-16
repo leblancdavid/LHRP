@@ -1,6 +1,7 @@
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.Scheduling;
+using System;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -36,6 +37,9 @@ namespace LHRP.Api.Protocol.Pipetting
             {
                 schedule.ResourcesUsage.AddTransfer(target);
             }
+
+            //Todo: come up with a way to calculate time
+            schedule.ExpectedDuration = new TimeSpan(0, 0, 5);
 
             return schedule;
         }
