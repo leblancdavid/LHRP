@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace LHRP.Api.Runtime
 {
@@ -76,6 +77,16 @@ namespace LHRP.Api.Runtime
 
             CurrentCommandIndex++;
             return result;
+        }
+
+        public Result<IRunnableCommand> GetCommandAt(int index)
+        {
+            if(index < 0 || index >= _queue.Count)
+            {
+                return Result.Fail<IRunnableCommand>($"Invalid command index '{index}'");
+            }
+
+            return Result.Ok(_queue[index]);
         }
     }
 }
