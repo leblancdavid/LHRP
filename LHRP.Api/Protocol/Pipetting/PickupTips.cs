@@ -41,7 +41,7 @@ namespace LHRP.Api.Protocol.Pipetting
                 return process;
             }
 
-            var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value));
+            var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value, _tipTypeId));
             if(!commandResult.ContainsErrors)
             {
                 foreach(var error in commandResult.Errors)
