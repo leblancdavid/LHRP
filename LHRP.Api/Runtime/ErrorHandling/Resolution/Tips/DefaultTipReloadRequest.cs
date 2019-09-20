@@ -21,7 +21,7 @@ namespace LHRP.Api.Runtime.ErrorHandling.Resolution
                 return reloadResult;
             }
 
-            engine.Commands.MoveToLastCommand();
+            engine.Commands.MoveToLastExecutedCommand();
 
             return Result.Ok();
         }

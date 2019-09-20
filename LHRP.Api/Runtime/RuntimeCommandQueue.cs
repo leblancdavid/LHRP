@@ -7,6 +7,17 @@ namespace LHRP.Api.Runtime
         private List<IRunnableCommand> _queue;
         public IEnumerable<IRunnableCommand> Queue => _queue;
         public int CurrentCommandIndex { get; private set; }
+        public IRunnableCommand CurrentCommand
+        {
+            get
+            {
+                if(IsCompleted)
+                {
+                    return null;
+                }
+                return _queue[CurrentCommandIndex];
+            }
+        }
         public bool IsCompleted => CurrentCommandIndex == _queue.Count;
 
         public RuntimeCommandQueue()
@@ -37,7 +48,7 @@ namespace LHRP.Api.Runtime
             _queue.RemoveAt(index);
         }
 
-        public void MoveToLastCommand()
+        public void MoveToLastExecutedCommand()
         {
             if(CurrentCommandIndex > 0)
             {

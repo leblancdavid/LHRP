@@ -5,15 +5,23 @@ using System;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class Dispense : IRunnableCommand
+    public class Dispense : IPipettingCommand
     {
         private DispenseParameters _parameters;
-        public Dispense(DispenseParameters parameters)
+        public Dispense(DispenseParameters parameters,
+            int retryAttempt = 0)
         {
             _parameters = parameters;
             CommandId = Guid.NewGuid();
+            RetryCount = retryAttempt;
         }
         public Guid CommandId { get; private set; }
+        public int RetryCount { get; private set; }
+
+        public void ApplyChannelMask(ChannelPattern channelPattern)
+        {
+            _parameters.Pattern = channelPattern;
+        }
 
         public ProcessResult Run(IRuntimeEngine engine)
         {

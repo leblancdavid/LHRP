@@ -7,9 +7,10 @@ namespace LHRP.Api.Runtime
     {
         IEnumerable<IRunnableCommand> Queue { get; }
         int CurrentCommandIndex { get; }
+        IRunnableCommand CurrentCommand { get; }
         bool IsCompleted { get; }
 
-        void MoveToLastCommand();
+        void MoveToLastExecutedCommand();
         ProcessResult RunNextCommand(IRuntimeEngine engine);
         ProcessResult RetryLastCommand(IRuntimeEngine engine);
         ProcessResult Clear();

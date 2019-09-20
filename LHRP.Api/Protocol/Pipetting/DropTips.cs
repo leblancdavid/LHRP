@@ -7,16 +7,24 @@ using System;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class DropTips : IRunnableCommand
+    public class DropTips : IPipettingCommand
     {
         private bool _returnToSource;
-        public DropTips(bool returnToSource=false)
+        public DropTips(bool returnToSource=false,
+            int retryAttempt = 0)
         {
             _returnToSource = returnToSource;
             CommandId = Guid.NewGuid();
+            RetryCount = retryAttempt;
         }
 
         public Guid CommandId { get; private set; }
+        public int RetryCount { get; private set; }
+
+        public void ApplyChannelMask(ChannelPattern channelPattern)
+        {
+            //Do nothing
+        }
 
         public ProcessResult Run(IRuntimeEngine engine)
         {

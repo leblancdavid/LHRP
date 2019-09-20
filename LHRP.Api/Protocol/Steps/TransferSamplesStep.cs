@@ -62,16 +62,16 @@ namespace LHRP.Api.Protocol.Steps
             return schedule;
         }
 
-        private Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
+        private Result<IEnumerable<Runtime.IRunnableCommand>> GetCommands(IRuntimeEngine engine)
         {
             var pipettor = engine.Instrument.Pipettor;
             var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
             if (tranfersResult.IsFailure)
             {
-                return Result.Fail<IEnumerable<IRunnableCommand>>(tranfersResult.Error);
+                return Result.Fail<IEnumerable<Runtime.IRunnableCommand>>(tranfersResult.Error);
             }
 
-            var commands = new List<IRunnableCommand>();
+            var commands = new List<Runtime.IRunnableCommand>();
             foreach (var transfer in tranfersResult.Value)
             {
                 commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.TipTypeId));
@@ -80,7 +80,7 @@ namespace LHRP.Api.Protocol.Steps
                 commands.Add(new DropTips(_stepData.ReturnTipsToSource));
             }
 
-            return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
+            return Result.Ok<IEnumerable<Runtime.IRunnableCommand>>(commands);
         }
     }
 }

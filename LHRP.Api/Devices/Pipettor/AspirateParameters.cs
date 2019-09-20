@@ -7,7 +7,7 @@ namespace LHRP.Api.Devices.Pipettor
     {
         private List<TransferTarget> _targets;
         public IEnumerable<TransferTarget> Targets => _targets;
-        public ChannelPattern Pattern { get; private set; }
+        public ChannelPattern Pattern { get; set; }
         public  AspirateParameters(List<TransferTarget> targets, ChannelPattern pattern)
         {
             _targets = targets;
