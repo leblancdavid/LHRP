@@ -11,15 +11,24 @@ namespace LHRP.Api.Runtime
             Instrument = instrument;
             Commands = commands;
             ErrorHandler = errorHandler;
+            Status = RuntimeStatus.Idle;
         }
         public IInstrument Instrument { get; protected set; }
 
         public IRuntimeCommandQueue Commands { get; protected set; }
         public IErrorHandler ErrorHandler { get; protected set; }
+        public RuntimeStatus Status { get; protected set; }
+
+        public void Abort()
+        {
+            Commands.Clear();
+            Status = RuntimeStatus.Aborted;
+        }
+
         public ProcessResult Run()
         {
             var process = new ProcessResult();
-            while(!Commands.IsCompleted)
+            while(!Commands.IsCompleted && Status != RuntimeStatus.Aborted)
             {
                 var result = Commands.RunNextCommand(this);
                 if(result.ContainsErrors)

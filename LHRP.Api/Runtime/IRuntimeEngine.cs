@@ -10,7 +10,9 @@ namespace LHRP.Api.Runtime
         IInstrument Instrument { get; }
         IRuntimeCommandQueue Commands { get; }
         IErrorHandler ErrorHandler { get; }
-
+        RuntimeStatus Status { get; }
         ProcessResult Run();
+
+        void Abort();
     }
 }

@@ -42,7 +42,7 @@ namespace LHRP.Api.Protocol.Pipetting
             }
 
             var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value, _tipTypeId));
-            if(!commandResult.ContainsErrors)
+            if(commandResult.ContainsErrors)
             {
                 foreach(var error in commandResult.Errors)
                 {

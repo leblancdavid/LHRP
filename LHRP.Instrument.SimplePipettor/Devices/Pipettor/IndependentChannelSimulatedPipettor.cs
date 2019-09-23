@@ -139,8 +139,11 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip.AbsolutePosition;
                     sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
-                    PipettorStatus[i].OnPickedUpTip(tip);
                     errorPattern[i] = random.NextDouble() < _tipPickupFailureRate;
+                    if(!errorPattern[i])
+                    {
+                        PipettorStatus[i].OnPickedUpTip(tip);
+                    }
                 }
                 else
                 {
@@ -159,7 +162,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             if(errorPattern.GetNumberActiveChannels() > 0)
             {
                 var process = new ProcessResult(estimatedTime, estimatedTime);
-                process.AddError(new TipPickupRuntimeError("Tip pick-up error", parameters.TipTypeId, errorPattern, parameters.Pattern));
+                process.AddError(new TipPickupRuntimeError($"Tip pick-up error: {errorPattern.GetChannelString()}", parameters.TipTypeId, errorPattern, parameters.Pattern));
                 return process;
             }
 
@@ -213,6 +216,10 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 SimulateRuntimeWait(estimatedTime);
 
                 PipettorStatus.CurrentPosition = position;
+                foreach(var status in PipettorStatus.ChannelStatus)
+                {
+                    status.OnDroppedTip();
+                }
 
                 Console.WriteLine(sb.ToString());
 

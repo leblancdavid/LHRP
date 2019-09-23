@@ -42,7 +42,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             else
             {
                 Console.WriteLine("Aborting...");
-                engine.Commands.Clear();
+                engine.Abort();
                 return Result.Ok();
             }
 
@@ -118,7 +118,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             }
             
             var newChannelPattern = error.RequestedPattern - error.ChannelErrors;
-            int index = engine.Commands.CurrentCommandIndex + 1;
+            int index = engine.Commands.CurrentCommandIndex;
             Result<IRunnableCommand> nextCommand = engine.Commands.GetCommandAt(index);
             while (nextCommand.IsSuccess && 
                 nextCommand.Value is IPipettingCommand &&
