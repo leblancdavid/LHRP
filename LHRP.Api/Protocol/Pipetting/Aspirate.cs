@@ -4,26 +4,35 @@ using LHRP.Api.Runtime.Scheduling;
 using System;
 using CSharpFunctionalExtensions;
 using System.Collections.Generic;
+using LHRP.Api.Protocol.Transfers;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
     public class Aspirate : IPipettingCommand
     {
+        public Guid CommandId { get; private set; }
         private AspirateParameters _parameters;
-        public Aspirate(AspirateParameters parameters, int retryAttempt = 0)
+        private List<TransferTarget> _targets;
+        public IEnumerable<TransferTarget> Targets => _targets;
+        public ChannelPattern Pattern { get; set; }
+        public int RetryCount { get; private set; }
+
+        public Aspirate(AspirateParameters parameters, 
+            List<TransferTarget> targets, 
+            ChannelPattern pattern,
+            int retryAttempt = 0)
         {
             _parameters = parameters;
+            _targets = targets;
+            Pattern = pattern;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
         }
 
-        public Guid CommandId { get; private set; }
-
-        public int RetryCount { get; private set; }
 
         public void ApplyChannelMask(ChannelPattern channelPattern)
         {
-            _parameters.Pattern = channelPattern;
+            Pattern = channelPattern;
         }
 
         public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
@@ -36,10 +45,10 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;
 
-            var processResult = pipettor.Aspirate(_parameters);
+            var processResult = pipettor.Aspirate(_parameters, _targets, Pattern);
             if(!processResult.ContainsErrors)
             {
-                foreach(var target in _parameters.Targets)
+                foreach(var target in _targets)
                 {
                     liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
                 }
@@ -51,7 +60,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
         {
             var schedule = new Schedule();
-            foreach(var target in _parameters.Targets)
+            foreach(var target in _targets)
             {
                 schedule.ResourcesUsage.AddTransfer(target);
             }

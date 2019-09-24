@@ -7,6 +7,7 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
 
@@ -54,20 +55,22 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true); 
         }
 
-        public ProcessResult Aspirate(AspirateParameters parameters)
+        public ProcessResult Aspirate(AspirateParameters parameters,
+            List<TransferTarget> targets,
+            ChannelPattern pattern)
         {
            var sb = new StringBuilder();
             sb.Append("Aspirating with channels pattern '");
-            sb.Append(parameters.Pattern.GetChannelString());
+            sb.Append(pattern.GetChannelString());
             sb.Append("' from: ");
 
             Coordinates position = new Coordinates();
             int t = 0;
-            for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
+            for(int i = 0; i < pattern.NumChannels; ++i)
             {
-                if(parameters.Pattern[i])
+                if(pattern[i])
                 {
-                    var target = parameters.Targets.ToArray()[t];
+                    var target = targets.ToArray()[t];
                     sb.Append($"Pos{target.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     t++;
                 }
@@ -88,20 +91,22 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             return new ProcessResult(estimatedTime, estimatedTime);
         }
 
-        public ProcessResult Dispense(DispenseParameters parameters)
+        public ProcessResult Dispense(DispenseParameters parameters,
+            List<TransferTarget> targets,
+            ChannelPattern pattern)
         {
             var sb = new StringBuilder();
             sb.Append("Dispensing with channels pattern '");
-            sb.Append(parameters.Pattern.GetChannelString());
+            sb.Append(pattern.GetChannelString());
             sb.Append("' to: ");
 
             Coordinates position = new Coordinates();
             int t = 0;
-            for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
+            for(int i = 0; i < pattern.NumChannels; ++i)
             {
-                if(parameters.Pattern[i])
+                if(pattern[i])
                 {
-                    var target = parameters.Targets.ToArray()[t];
+                    var target = targets.ToArray()[t];
                     sb.Append($"Pos{target.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     t++;
                 }

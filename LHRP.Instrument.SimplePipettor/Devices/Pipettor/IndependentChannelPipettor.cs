@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
@@ -36,13 +36,17 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true); 
         }
 
-        public ProcessResult Aspirate(AspirateParameters parameters)
+        public ProcessResult Aspirate(AspirateParameters parameters,
+            List<TransferTarget> targets,
+            ChannelPattern pattern)
         {
             Console.WriteLine(parameters);
             return new ProcessResult(new TimeSpan(), new TimeSpan());
         }
 
-        public ProcessResult Dispense(DispenseParameters parameters)
+        public ProcessResult Dispense(DispenseParameters parameters,
+            List<TransferTarget> targets,
+            ChannelPattern pattern)
         {
             Console.WriteLine(parameters);
             return new ProcessResult(new TimeSpan(), new TimeSpan());
