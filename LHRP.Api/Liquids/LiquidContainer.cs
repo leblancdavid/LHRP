@@ -52,7 +52,7 @@ namespace LHRP.Api.Liquids
             }
             
             var volumeFactor = 1.0 - volume/totalVolume;
-            foreach(var liquid in _liquidVolumes.Keys)
+            foreach(var liquid in _liquidVolumes.Keys.ToList())
             {
                 _liquidVolumes[liquid] *= volumeFactor;
             }

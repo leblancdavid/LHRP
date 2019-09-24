@@ -36,36 +36,36 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true); 
         }
 
-        public Process Aspirate(AspirateParameters parameters)
+        public ProcessResult Aspirate(AspirateParameters parameters)
         {
             Console.WriteLine(parameters);
-            return new Process(new TimeSpan(), new TimeSpan());
+            return new ProcessResult(new TimeSpan(), new TimeSpan());
         }
 
-        public Process Dispense(DispenseParameters parameters)
+        public ProcessResult Dispense(DispenseParameters parameters)
         {
             Console.WriteLine(parameters);
-            return new Process(new TimeSpan(), new TimeSpan());
+            return new ProcessResult(new TimeSpan(), new TimeSpan());
         }
 
-        public Process PickupTips(TipPickupParameters parameters)
+        public ProcessResult PickupTips(TipPickupParameters parameters)
         {
             Console.WriteLine(parameters);
-            return new Process(new TimeSpan(), new TimeSpan());
+            return new ProcessResult(new TimeSpan(), new TimeSpan());
         }
 
-        public Process DropTips(TipDropParameters parameters)
+        public ProcessResult DropTips(TipDropParameters parameters)
         {
             Console.WriteLine(parameters);
-            return new Process(new TimeSpan(), new TimeSpan());
+            return new ProcessResult(new TimeSpan(), new TimeSpan());
         }
 
-        public Process Initialize()
+        public ProcessResult Initialize()
         {
         throw new NotImplementedException();
         }
 
-        public Process Deinitialize()
+        public ProcessResult Deinitialize()
         {
         throw new NotImplementedException();
         }

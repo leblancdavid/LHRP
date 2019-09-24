@@ -17,7 +17,7 @@ namespace LHRP.TestConsole
         static void Main(string[] args)
         {
             var simplePipettorSimulation = new SimplePipettorSimulationEngine();
-            
+            simplePipettorSimulation.SimulationSpeedFactor = 10;
             //First setup the deck, add a tip rack and 2 plates
             simplePipettorSimulation.Instrument.Deck.AssignLabware(1, LabwareCreator.GetTipRack());
             simplePipettorSimulation.Instrument.Deck.AssignLabware(2, LabwareCreator.GetPlate());
@@ -34,11 +34,12 @@ namespace LHRP.TestConsole
                 0, false));
             protocol.AddStep(transferSampleBackStep);
             
-            var schedule = protocol.Schedule(simplePipettorSimulation);
-            PrintSchedule(schedule);
+            //var schedule = protocol.Schedule(simplePipettorSimulation);
+            //PrintSchedule(schedule);
 
             var processResult = protocol.Run(simplePipettorSimulation);
 
+            Console.WriteLine("Done... Hit enter key to continue.");
             Console.ReadLine();
         }
 

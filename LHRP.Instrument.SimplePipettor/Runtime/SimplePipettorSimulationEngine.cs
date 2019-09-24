@@ -28,7 +28,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
             _instrument = Instrument as SimplePipettorSimulatedInstrument;
         }
 
-        public Process Schedule(IRunnable run)
+        public ProcessResult Schedule(IRunnable run)
         {
             var previousSpeedFactor = _simulationSpeedFactor;
             SimulationSpeedFactor = 0;

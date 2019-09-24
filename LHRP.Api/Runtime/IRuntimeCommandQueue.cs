@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Protocol;
 
 namespace LHRP.Api.Runtime
@@ -7,16 +8,19 @@ namespace LHRP.Api.Runtime
     {
         IEnumerable<IRunnableCommand> Queue { get; }
         int CurrentCommandIndex { get; }
+        IRunnableCommand CurrentCommand { get; }
         bool IsCompleted { get; }
 
-        void MoveToLastCommand();
-        Process RunNextCommand(IRuntimeEngine engine);
-        Process RetryLastCommand(IRuntimeEngine engine);
-        Process Clear();
+        void MoveToLastExecutedCommand();
+        ProcessResult RunNextCommand(IRuntimeEngine engine);
+        ProcessResult RetryLastCommand(IRuntimeEngine engine);
+        ProcessResult Clear();
 
         void Add(IRunnableCommand command);
         void Insert(int index, IRunnableCommand command);
         void Remove(int index);
+
+        Result<IRunnableCommand> GetCommandAt(int index); 
 
 
     }

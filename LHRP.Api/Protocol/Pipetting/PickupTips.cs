@@ -1,43 +1,54 @@
 using System;
 using System.Linq;
-using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
 using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class PickupTips : IRunnableCommand
+    public class PickupTips : IPipettingCommand
     {
         private ChannelPattern _pattern;
         private int _tipTypeId;
         public PickupTips(ChannelPattern pattern, 
-            int tipTypeId)
+            int tipTypeId,
+            int retryAttempt = 0)
         {
             _pattern = pattern;
             _tipTypeId = tipTypeId;
+            CommandId = Guid.NewGuid();
+            RetryCount = retryAttempt;
+        }
+        public Guid CommandId { get; private set; }
+        public int RetryCount { get; private set; }
+
+        public void ApplyChannelMask(ChannelPattern channelPattern)
+        {
+            _pattern = channelPattern;
         }
 
-        public Process Run(IRuntimeEngine engine)
+        public ProcessResult Run(IRuntimeEngine engine)
         {
-            var process = new Process();
+            var process = new ProcessResult();
             var tipManager = engine.Instrument.TipManager;
             var pipettor = engine.Instrument.Pipettor;
             var tipsResult = tipManager.RequestTips(_pattern, _tipTypeId);
 
             if(tipsResult.IsFailure)
             {
-                process.AddError(new InsuffientTipsRuntimeError(_tipTypeId));
+                process.AddError(new InsuffientTipsRuntimeError(tipsResult.Error, _tipTypeId));
                 return process;
             }
 
-            var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value));
-            if(!commandResult.ContainsErrors)
+            var commandResult = pipettor.PickupTips(new TipPickupParameters(tipsResult.Value, _tipTypeId));
+            if(commandResult.ContainsErrors)
             {
-                //TODO LOGIC HERE TO RESOLVE PICKUP ERRORS    
+                foreach(var error in commandResult.Errors)
+                {
+                    process.AddError(error);
+                }
+                return process;
             }
 
             for(int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
@@ -47,7 +58,7 @@ namespace LHRP.Api.Protocol.Pipetting
                     var consumeResult = tipManager.ConsumeTip(tipsResult.Value.GetTip(channel));
                     if(consumeResult.IsFailure)
                     {
-                        process.AddError(new RuntimeError(""));
+                        process.AddError(new RuntimeError($"Unable to consume tips: '{consumeResult.Error}'"));
                         return process;
                     }
                 }

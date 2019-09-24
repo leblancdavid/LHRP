@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace LHRP.Api.Runtime
 {
@@ -7,6 +8,17 @@ namespace LHRP.Api.Runtime
         private List<IRunnableCommand> _queue;
         public IEnumerable<IRunnableCommand> Queue => _queue;
         public int CurrentCommandIndex { get; private set; }
+        public IRunnableCommand CurrentCommand
+        {
+            get
+            {
+                if(IsCompleted)
+                {
+                    return null;
+                }
+                return _queue[CurrentCommandIndex];
+            }
+        }
         public bool IsCompleted => CurrentCommandIndex == _queue.Count;
 
         public RuntimeCommandQueue()
@@ -15,11 +27,11 @@ namespace LHRP.Api.Runtime
             CurrentCommandIndex = 0;
         }
 
-        public Process Clear()
+        public ProcessResult Clear()
         {
             CurrentCommandIndex = 0;
             _queue.Clear();
-            return new Process();
+            return new ProcessResult();
         }
 
         public void Add(IRunnableCommand command)
@@ -37,34 +49,44 @@ namespace LHRP.Api.Runtime
             _queue.RemoveAt(index);
         }
 
-        public void MoveToLastCommand()
+        public void MoveToLastExecutedCommand()
         {
             if(CurrentCommandIndex > 0)
             {
                 CurrentCommandIndex--;
             }
         }
-        public Process RetryLastCommand(IRuntimeEngine engine)
+        public ProcessResult RetryLastCommand(IRuntimeEngine engine)
         {
             if(IsCompleted)
             {
-                return new Process();
+                return new ProcessResult();
             }
 
             return _queue[CurrentCommandIndex].Run(engine);
         }
 
-        public Process RunNextCommand(IRuntimeEngine engine)
+        public ProcessResult RunNextCommand(IRuntimeEngine engine)
         {
             if(IsCompleted)
             {
-                return new Process();
+                return new ProcessResult();
             }
 
             var result = _queue[CurrentCommandIndex].Run(engine);
 
             CurrentCommandIndex++;
             return result;
+        }
+
+        public Result<IRunnableCommand> GetCommandAt(int index)
+        {
+            if(index < 0 || index >= _queue.Count)
+            {
+                return Result.Fail<IRunnableCommand>($"Invalid command index '{index}'");
+            }
+
+            return Result.Ok(_queue[index]);
         }
     }
 }

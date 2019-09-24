@@ -6,11 +6,11 @@ using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Api.Runtime
 {
-    public class Process
+    public class ProcessResult
     {
         public Guid ProcessId { get; private set; }
-        private List<Process> _subProcess = new List<Process>();
-        public IEnumerable<Process> SubProcess => _subProcess;
+        private List<ProcessResult> _subProcess = new List<ProcessResult>();
+        public IEnumerable<ProcessResult> SubProcess => _subProcess;
         public TimeSpan Duration { get; private set; }
         public TimeSpan EstimatedDuration { get; set; }
         public bool ContainsErrors 
@@ -55,14 +55,14 @@ namespace LHRP.Api.Runtime
             }
         }
 
-        public Process()
+        public ProcessResult()
         {
             Duration = new TimeSpan(0);
             EstimatedDuration = new TimeSpan(0);
             ProcessId = Guid.NewGuid();
         }
 
-        public Process(TimeSpan estimate, TimeSpan duration)
+        public ProcessResult(TimeSpan estimate, TimeSpan duration)
         {
             Duration = duration;
             EstimatedDuration = estimate;
@@ -79,7 +79,7 @@ namespace LHRP.Api.Runtime
             _warnings.Add(warning);
         }
 
-        public void AppendSubProcess(Process subProcess)
+        public void AppendSubProcess(ProcessResult subProcess)
         {
             Duration += subProcess.Duration;
             EstimatedDuration += subProcess.EstimatedDuration;

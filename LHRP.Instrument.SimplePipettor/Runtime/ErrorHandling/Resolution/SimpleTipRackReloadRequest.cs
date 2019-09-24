@@ -4,7 +4,7 @@ using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
 
-namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling.Resolution
+namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 {
     public class SimpleTipRackReloadRequest : IErrorResolver
     {
@@ -24,7 +24,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling.Resolution
             if(requestInput != "y" && requestInput != "yes")
             {
                 Console.WriteLine("Aborting the run...");
-                engine.Commands.Clear();
+                engine.Abort();
                 return Result.Ok();
             }
             //Add the tip reloading logic here, logic could vary based on the instrument
@@ -36,7 +36,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling.Resolution
             }
 
             Console.WriteLine($"Tip-reloading of tip type '{insuffientTipsError.TipTypeId}' successful!");
-            engine.Commands.MoveToLastCommand();
+            engine.Commands.MoveToLastExecutedCommand();
 
             return Result.Ok();
         }

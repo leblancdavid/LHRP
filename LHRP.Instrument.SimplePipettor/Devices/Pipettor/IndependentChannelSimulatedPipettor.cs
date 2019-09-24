@@ -8,6 +8,7 @@ using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 {
@@ -26,6 +27,8 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         public Guid DeviceId { get; private set; }
 
         public PipettorSpecification Specification { get; private set; }
+
+        private double _tipPickupFailureRate = 0.2;
 
 
         public IndependentChannelSimulatedPipettor()
@@ -51,7 +54,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true); 
         }
 
-        public Process Aspirate(AspirateParameters parameters)
+        public ProcessResult Aspirate(AspirateParameters parameters)
         {
            var sb = new StringBuilder();
             sb.Append("Aspirating with channels pattern '");
@@ -82,10 +85,10 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
-            return new Process(estimatedTime, estimatedTime);
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
-        public Process Dispense(DispenseParameters parameters)
+        public ProcessResult Dispense(DispenseParameters parameters)
         {
             var sb = new StringBuilder();
             sb.Append("Dispensing with channels pattern '");
@@ -116,10 +119,10 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
-            return new Process(estimatedTime, estimatedTime);
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
-        public Process PickupTips(TipPickupParameters parameters)
+        public ProcessResult PickupTips(TipPickupParameters parameters)
         {
             var sb = new StringBuilder();
             sb.Append("Picking-up tips with channels pattern '");
@@ -127,14 +130,20 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             sb.Append("' from: ");
 
             Coordinates position = new Coordinates();
-            for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
+            Random random = new Random();
+            var errorPattern = ChannelPattern.Empty(parameters.Pattern.NumChannels);
+            for (int i = 0; i < parameters.Pattern.NumChannels; ++i)
             {
                 if(parameters.Pattern[i])
                 {
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip.AbsolutePosition;
                     sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
-                    PipettorStatus[i].OnPickedUpTip(tip);
+                    errorPattern[i] = random.NextDouble() < _tipPickupFailureRate;
+                    if(!errorPattern[i])
+                    {
+                        PipettorStatus[i].OnPickedUpTip(tip);
+                    }
                 }
                 else
                 {
@@ -150,10 +159,17 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
-            return new Process(estimatedTime, estimatedTime);
+            if(errorPattern.GetNumberActiveChannels() > 0)
+            {
+                var process = new ProcessResult(estimatedTime, estimatedTime);
+                process.AddError(new TipPickupRuntimeError($"Tip pick-up error: {errorPattern.GetChannelString()}", parameters.TipTypeId, errorPattern, parameters.Pattern));
+                return process;
+            }
+
+            return new ProcessResult(estimatedTime, estimatedTime);
         }
 
-        public Process DropTips(TipDropParameters parameters)
+        public ProcessResult DropTips(TipDropParameters parameters)
         {
             if(parameters.Pattern != null)
             {
@@ -186,7 +202,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
                 Console.WriteLine(sb.ToString());
 
-                return new Process(estimatedTime, estimatedTime);
+                return new ProcessResult(estimatedTime, estimatedTime);
             }
             else
             {
@@ -200,21 +216,25 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 SimulateRuntimeWait(estimatedTime);
 
                 PipettorStatus.CurrentPosition = position;
+                foreach(var status in PipettorStatus.ChannelStatus)
+                {
+                    status.OnDroppedTip();
+                }
 
                 Console.WriteLine(sb.ToString());
 
-                return new Process(estimatedTime, estimatedTime);
+                return new ProcessResult(estimatedTime, estimatedTime);
             }
         }
 
         
         public bool IsInitialized => throw new NotImplementedException();
-        public Process Initialize()
+        public ProcessResult Initialize()
         {
             throw new NotImplementedException();
         }
 
-        public Process Deinitialize()
+        public ProcessResult Deinitialize()
         {
             throw new NotImplementedException();
         }
