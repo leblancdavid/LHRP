@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
@@ -26,6 +28,11 @@ namespace LHRP.Api.Protocol.Pipetting
         public void ApplyChannelMask(ChannelPattern channelPattern)
         {
             _pattern = channelPattern;
+        }
+
+        public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
+        {
+            return Result.Ok<IEnumerable<IRunnableCommand>>(new List<IRunnableCommand>() { this });
         }
 
         public ProcessResult Run(IRuntimeEngine engine)

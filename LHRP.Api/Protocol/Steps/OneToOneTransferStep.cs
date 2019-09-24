@@ -11,11 +11,11 @@ using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Steps
 {
-    public class TransferSamplesStep : IRunnable
+    public class OneToOneTransferStep : IRunnable
     {
-        private TransferSamplesStepData _stepData;
+        private OneToOneTransferStepData _stepData;
         private ITransferOptimizer<OneToOneTransfer> _transferOptimizer;
-        public TransferSamplesStep(TransferSamplesStepData stepData, ITransferOptimizer<OneToOneTransfer> optimizer = null)
+        public OneToOneTransferStep(OneToOneTransferStepData stepData, ITransferOptimizer<OneToOneTransfer> optimizer = null)
         {
             _stepData = stepData;
             if(optimizer == null)
@@ -62,7 +62,7 @@ namespace LHRP.Api.Protocol.Steps
             return schedule;
         }
 
-        private Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
+        public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
         {
             var pipettor = engine.Instrument.Pipettor;
             var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);

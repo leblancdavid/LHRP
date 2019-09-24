@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.Scheduling;
 
@@ -11,6 +12,11 @@ namespace LHRP.Api.Protocol
         public void AddStep(IRunnable step)
         {
             _steps.Add(step);
+        }
+
+        public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
+        {
+            throw new System.NotImplementedException();
         }
 
         public ProcessResult Run(IRuntimeEngine runtime)

@@ -25,12 +25,12 @@ namespace LHRP.TestConsole
             
             //Setup protocol and steps
             var protocol = new Protocol();
-            var transferSampleStep = new TransferSamplesStep(
-                new TransferSamplesStepData(GetOneToOneTransferFor96Wells(2, 3, 50.0), 
+            var transferSampleStep = new OneToOneTransferStep(
+                new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(2, 3, 50.0), 
                 0, false));
             protocol.AddStep(transferSampleStep);
-            var transferSampleBackStep = new TransferSamplesStep(
-                new TransferSamplesStepData(GetOneToOneTransferFor96Wells(3, 2, 45.0),
+            var transferSampleBackStep = new OneToOneTransferStep(
+                new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(3, 2, 45.0),
                 0, false));
             protocol.AddStep(transferSampleBackStep);
             

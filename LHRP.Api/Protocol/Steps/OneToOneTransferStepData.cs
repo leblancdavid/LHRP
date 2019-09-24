@@ -3,12 +3,12 @@ using LHRP.Api.Protocol.Transfers.OneToOne;
 
 namespace LHRP.Api.Protocol.Steps
 {
-    public class TransferSamplesStepData
+    public class OneToOneTransferStepData
     {
         public TransferPattern<OneToOneTransfer> Pattern { get; private set; }
         public int TipTypeId { get; private set; }
         public bool ReturnTipsToSource { get; private set; }
-        public TransferSamplesStepData(TransferPattern<OneToOneTransfer> pattern,
+        public OneToOneTransferStepData(TransferPattern<OneToOneTransfer> pattern,
             int tipTypeId,
             bool returnTipsToSource)
         {
