@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.ErrorHandling.Errors;
 using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol
@@ -16,23 +17,37 @@ namespace LHRP.Api.Protocol
 
         public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
         {
-            throw new System.NotImplementedException();
+            var runnableCommands = new List<IRunnableCommand>();
+            foreach(var step in _steps)
+            {
+                var stepCommands = step.GetCommands(engine);
+                if(stepCommands.IsFailure)
+                {
+                    return stepCommands;
+                }
+                runnableCommands.AddRange(stepCommands.Value);
+            }
+
+            return Result.Ok<IEnumerable<IRunnableCommand>>(runnableCommands);
         }
 
         public ProcessResult Run(IRuntimeEngine runtime)
         {
             var process = new ProcessResult();
-            foreach(var step in _steps)
+            var commands = GetCommands(runtime);
+
+            if(commands.IsFailure)
             {
-                var stepProcess = step.Run(runtime);
-                if(stepProcess.ContainsErrors)
-                {
-                    //TODO handle errors
-                }
-                process.AppendSubProcess(stepProcess);
+                process.AddError(new RuntimeError(commands.Error));
+                return process;
             }
 
-            return process;
+            foreach(var command in commands.Value)
+            {
+                runtime.Commands.Add(command);
+            }
+
+            return runtime.Run();
         }
 
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
