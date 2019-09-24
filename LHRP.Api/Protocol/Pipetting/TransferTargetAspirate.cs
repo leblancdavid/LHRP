@@ -8,7 +8,7 @@ using LHRP.Api.Protocol.Transfers;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class Aspirate : IPipettingCommand
+    public class TransferTargetAspirate : IPipettingCommand
     {
         public Guid CommandId { get; private set; }
         private AspirateParameters _parameters;
@@ -17,7 +17,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public ChannelPattern Pattern { get; set; }
         public int RetryCount { get; private set; }
 
-        public Aspirate(AspirateParameters parameters, 
+        public TransferTargetAspirate(AspirateParameters parameters, 
             List<TransferTarget> targets, 
             ChannelPattern pattern,
             int retryAttempt = 0)

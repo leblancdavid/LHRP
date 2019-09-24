@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Labware;
@@ -61,9 +62,23 @@ namespace LHRP.Api.Instrument.LiquidManagement
             return Result.Ok();
         }
 
-        public Result<TransferTarget> ContainsTargetLiquid(Liquid liquid, double desiredVolume)
+        public Result<TransferTarget> RequestLiquid(Liquid liquid, double desiredVolume)
         {
-            throw new System.NotImplementedException();
+            var plates = _deck.GetPlates();
+            var liquidContainers = new List<LiquidContainer>();
+            foreach(var plate in plates)
+            {
+                var containers = plate.GetWellsWithLiquid(liquid);
+                foreach(var container in containers)
+                {
+                    if(container.Volume > desiredVolume)
+                    {
+                        return Result.Ok(new TransferTarget(container.Address, liquid, desiredVolume, TransferType.Aspirate));
+                    }
+                }
+            }
+
+            return Result.Fail<TransferTarget>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.AssignedId}'");
         }
 
         public Result ClearLiquidAtPosition(LabwareAddress address)
