@@ -13,6 +13,7 @@ namespace LHRP.Api.Labware.Plates
         public Coordinates AbsolutePosition { get; private set; }
 
         public Well(LabwareAddress address, Coordinates absolutePosition, WellDefinition definition)
+            : base(definition.WellCapacity)
         {
             Address = address;
             AbsolutePosition = absolutePosition;

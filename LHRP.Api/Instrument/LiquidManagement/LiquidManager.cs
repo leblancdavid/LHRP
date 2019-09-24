@@ -61,6 +61,38 @@ namespace LHRP.Api.Instrument.LiquidManagement
 
             return Result.Ok();
         }
+        public Result AddLiquid(Liquid liquid, double volume)
+        {
+            var plates = _deck.GetPlates();
+            double remainingLiquidVolumeToAssign = volume;
+            bool liquidAssignmentFound = false;
+            foreach(var plate in plates)
+            {
+                var wellsWithLiquid = plate.GetWellsWithLiquid(liquid);
+                foreach(var well in wellsWithLiquid)
+                {
+                    if(well.IsPure)
+                    {
+                        liquidAssignmentFound = true;
+                        double availableVolume = well.AvailableVolume;
+                        well.AddLiquid(liquid, remainingLiquidVolumeToAssign);
+                        remainingLiquidVolumeToAssign -= availableVolume;
+                        if (remainingLiquidVolumeToAssign <= 0)
+                            break;
+                    }
+                }
+
+                if (remainingLiquidVolumeToAssign <= 0)
+                    break;
+            }
+
+            if(liquidAssignmentFound)
+            {
+                return Result.Fail($"Unable to add liquid '{liquid.AssignedId}' since no positions were assigned to the liquid");
+            }
+
+            return Result.Ok();
+        }
 
         public Result<TransferTarget> RequestLiquid(Liquid liquid, double desiredVolume)
         {
@@ -99,5 +131,6 @@ namespace LHRP.Api.Instrument.LiquidManagement
             well.Value.Clear();
             return Result.Ok();
         }
+
     }
 }

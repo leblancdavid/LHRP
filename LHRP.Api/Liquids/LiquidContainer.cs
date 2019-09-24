@@ -12,6 +12,17 @@ namespace LHRP.Api.Liquids
                 return _liquidVolumes.Values.Sum();
             }
         }
+
+        public double MaxVolume { get; protected set; }
+
+        public double AvailableVolume
+        {
+            get
+            {
+                return MaxVolume - Volume;
+            }
+        }
+
         private List<Liquid> _liquids = new List<Liquid>();
         public IEnumerable<Liquid> Liquids => _liquids;
         private Dictionary<string,double> _liquidVolumes = new Dictionary<string, double>();
@@ -32,6 +43,11 @@ namespace LHRP.Api.Liquids
             }
         }
 
+        public LiquidContainer(double maxVolume)
+        {
+            MaxVolume = maxVolume;
+        }
+
         public void AddLiquid(Liquid liquid, double volume)
         {
             if(!ContainsLiquid(liquid))
@@ -39,8 +55,23 @@ namespace LHRP.Api.Liquids
                 _liquids.Add(liquid);
                 _liquidVolumes[liquid.AssignedId] = 0.0;
             }
-            _liquidVolumes[liquid.AssignedId] += volume;
 
+            if(_liquidVolumes[liquid.AssignedId] + volume > MaxVolume)
+            {
+                _liquidVolumes[liquid.AssignedId] = MaxVolume;
+            }
+            else
+            {
+                _liquidVolumes[liquid.AssignedId] += volume;
+            }
+        }
+
+        public void AssignLiquid(Liquid liquid)
+        {
+            _liquids.Clear();
+            _liquidVolumes.Clear();
+            _liquids.Add(liquid);
+            _liquidVolumes[liquid.AssignedId] = 0.0;
         }
 
         public void Remove(double volume)

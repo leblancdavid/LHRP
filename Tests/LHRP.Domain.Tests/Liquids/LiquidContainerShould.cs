@@ -11,7 +11,7 @@ namespace LHRP.Domain.Tests.Liquids
 
         public LiquidContainerShould()
         {
-            _liquidContainer = new LiquidContainer();
+            _liquidContainer = new LiquidContainer(9999);
         }
 
         [Fact]
