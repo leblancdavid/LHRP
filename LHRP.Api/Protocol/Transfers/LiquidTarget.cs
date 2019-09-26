@@ -2,7 +2,7 @@
 {
     public class LiquidTarget
     {
-        public double Volume { get; private set; }
+        public double Volume { get; set; }
         public Liquids.Liquid Liquid { get; private set; }
 
         public TransferType TransferType { get; private set; }

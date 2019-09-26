@@ -34,8 +34,8 @@ namespace LHRP.TestConsole
                 0, false));
             protocol.AddStep(transferSampleBackStep);
             
-            //var schedule = protocol.Schedule(simplePipettorSimulation);
-            //PrintSchedule(schedule);
+            var schedule = protocol.Schedule(simplePipettorSimulation);
+            PrintSchedule(schedule);
 
             var processResult = protocol.Run(simplePipettorSimulation);
 
@@ -78,7 +78,13 @@ namespace LHRP.TestConsole
             {
                 Console.WriteLine($"Total tips ({tipUsage.TipTypeId}) used: {tipUsage.ExpectedTotalTipUsage}");
             }
-            
+
+            Console.WriteLine("Liquid usage:");
+            foreach (var liquidUsage in schedule.ResourcesUsage.ConsumableLiquidUsages)
+            {
+                Console.WriteLine($"Liquid '{liquidUsage.Key.LiquidType.ToString()}' ({liquidUsage.Key.AssignedId}): {liquidUsage.Value}uL");
+            }
+
             Console.WriteLine($"Estimated total run-time: {schedule.ExpectedDuration.ToString("c")}");
 
             Console.ReadLine();

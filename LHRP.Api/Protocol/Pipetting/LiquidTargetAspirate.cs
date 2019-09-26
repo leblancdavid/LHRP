@@ -50,7 +50,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var transferTargets = GetTransferTargets(liquidManager);
             if(transferTargets.IsFailure)
             {
-
+                //TODO Insufficient liquid error
             }
 
             var processResult = pipettor.Aspirate(_parameters, transferTargets.Value, Pattern);
@@ -70,8 +70,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var schedule = new Schedule();
             foreach (var target in _targets)
             {
-                //Not sure how we should deal with that
-                //schedule.ResourcesUsage.AddTransfer(target);
+                schedule.ResourcesUsage.AddConsumableLiquidUsage(target.Liquid, target.Volume);
             }
 
             //Todo: come up with a way to calculate time
@@ -87,18 +86,22 @@ namespace LHRP.Api.Protocol.Pipetting
             {
                 volumeUsagePerLiquid[liquidTarget.Liquid.AssignedId] += liquidTarget.Volume;
             }
-
+            
             var transferTargets = new List<TransferTarget>();
             foreach (var liquidTarget in _targets)
             {
+                //First we need to make sure there's enough liquid in the container to complete the transfer
                 var transferTarget = liquidManager.RequestLiquid(liquidTarget.Liquid, volumeUsagePerLiquid[liquidTarget.Liquid.AssignedId]);
+                //If this happens then there's not enough liquid
                 if(transferTarget.IsFailure)
                 {
                     return Result.Fail<List<TransferTarget>>(transferTarget.Error);
                 }
+
+                transferTarget.Value.Volume = liquidTarget.Volume;
                 transferTargets.Add(transferTarget.Value);
             }
-
+            
             return Result.Ok(transferTargets);
         }
     }

@@ -25,9 +25,13 @@ namespace LHRP.Api.Runtime.Resources
             }
         }
 
+        private Dictionary<Liquids.Liquid, double> _consumableLiquidUsages;
+        public IReadOnlyDictionary<Liquids.Liquid, double> ConsumableLiquidUsages => _consumableLiquidUsages;
+
         public ResourcesUsage()
         {
             _liquidContainerUsages = new Dictionary<LabwareAddress, LiquidContainerUsage>();
+            _consumableLiquidUsages = new Dictionary<Liquids.Liquid, double>();
             _tipUsages = new Dictionary<int, TipUsage>();
         }
 
@@ -47,6 +51,12 @@ namespace LHRP.Api.Runtime.Resources
                 _liquidContainerUsages[target.Address] = newContainer;
                 return result;
             }
+        }
+
+        public Result AddConsumableLiquidUsage(Liquids.Liquid liquid, double volume)
+        {
+            _consumableLiquidUsages[liquid] += volume;
+            return Result.Ok();
         }
 
         public void AddTipUsage(int tipTypeId, int count)
@@ -78,6 +88,11 @@ namespace LHRP.Api.Runtime.Resources
                 foreach(var tipUsage in resourcesUsages[i].TipUsages)
                 {
                     AddTipUsage(tipUsage.TipTypeId, tipUsage.ExpectedTotalTipUsage);
+                }
+
+                foreach(var consumable in resourcesUsages[i].ConsumableLiquidUsages)
+                {
+                    AddConsumableLiquidUsage(consumable.Key, consumable.Value);
                 }
             }
         }
