@@ -22,6 +22,8 @@ namespace LHRP.Api.Protocol.Pipetting
             int retryAttempt = 0)
         {
             _parameters = parameters;
+            _targets = targets;
+            Pattern = pattern;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
         }

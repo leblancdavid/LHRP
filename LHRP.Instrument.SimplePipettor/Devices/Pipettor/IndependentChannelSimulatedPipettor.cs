@@ -29,7 +29,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
         public PipettorSpecification Specification { get; private set; }
 
-        private double _tipPickupFailureRate = 0.2;
+        private double _tipPickupFailureRate = 0.0;
 
 
         public IndependentChannelSimulatedPipettor()

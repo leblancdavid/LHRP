@@ -86,8 +86,6 @@ namespace LHRP.TestConsole
             }
 
             Console.WriteLine($"Estimated total run-time: {schedule.ExpectedDuration.ToString("c")}");
-
-            Console.ReadLine();
         }
     }
 }
