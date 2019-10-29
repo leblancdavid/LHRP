@@ -18,14 +18,16 @@ namespace LHRP.Scripting.TestConsole
         {
 
             var script = File.ReadAllText("MySimpleProtocol.csx");
+            var engine = new SimplePipettorSimulationEngine();
+            engine.SimulationSpeedFactor = 100;
+            var host = new ScriptHost()
+            {
+                SimulationEngine = engine,
+                Protocol = new ProtocolScript()
+            };
 
             //note: we block here, because we are in Main method, normally we could await as scripting APIs are async
-            var result = CSharpScript.EvaluateAsync<int>(script, null,
-                new ScriptHost
-                {
-                    SimulationEngine = new SimplePipettorSimulationEngine(),
-                    Protocol = new ProtocolScript()
-                }).Result;
+            var result = CSharpScript.EvaluateAsync<int>(script, null, host).Result;
 
             Console.ReadLine();
         }
