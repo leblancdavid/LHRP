@@ -8,9 +8,16 @@ namespace LHRP.Api.Devices.Pipettor
     {
         public ChannelPattern(int numChannels)
         {
-            this.NumChannels = numChannels;
-            this._activeChannels = new bool[numChannels];
+            NumChannels = numChannels;
+            _activeChannels = new bool[numChannels];
         }
+
+        public ChannelPattern(string channelPattern)
+        {
+            NumChannels = channelPattern.Length;
+            _activeChannels = channelPattern.Select(x => x == '1').ToArray();
+        }
+
         public int NumChannels { get; private set; }
 
         protected bool[] _activeChannels;
@@ -74,6 +81,8 @@ namespace LHRP.Api.Devices.Pipettor
             }
             return cp;
         }
+
+        public static 
 
         public static ChannelPattern operator& (ChannelPattern b, ChannelPattern c)
         {

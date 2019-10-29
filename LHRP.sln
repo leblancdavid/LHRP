@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LHRP.Instrument.SimplePipet
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LHRP.Domain.Tests", "Tests\LHRP.Domain.Tests\LHRP.Domain.Tests.csproj", "{DE200601-4B83-4C0D-87A0-077E65840F76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LHRP.Scripting", "LHRP.Scripting\LHRP.Scripting.csproj", "{4976B722-F65C-440D-8394-5609034D5962}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,18 @@ Global
 		{DE200601-4B83-4C0D-87A0-077E65840F76}.Release|x64.Build.0 = Release|Any CPU
 		{DE200601-4B83-4C0D-87A0-077E65840F76}.Release|x86.ActiveCfg = Release|Any CPU
 		{DE200601-4B83-4C0D-87A0-077E65840F76}.Release|x86.Build.0 = Release|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Debug|x64.Build.0 = Debug|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Debug|x86.Build.0 = Debug|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Release|x64.ActiveCfg = Release|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Release|x64.Build.0 = Release|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Release|x86.ActiveCfg = Release|Any CPU
+		{4976B722-F65C-440D-8394-5609034D5962}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

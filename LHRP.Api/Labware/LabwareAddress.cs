@@ -1,5 +1,6 @@
 using LHRP.Api.Devices;
 using System;
+using System.Linq;
 
 namespace LHRP.Api.Labware
 {
@@ -13,6 +14,35 @@ namespace LHRP.Api.Labware
         {
             Row = row;
             Column = column;
+            PositionId = positionId;
+        }
+
+        public LabwareAddress(string alphaAddress, int positionId)
+        {
+            if (string.IsNullOrEmpty(alphaAddress))
+            {
+                Row = 0;
+                Column = 0;
+            }
+
+            char alpha = alphaAddress.ElementAt(0);
+            if (!Char.IsLetter(alpha))
+            {
+                Row = 0;
+                Column = 0;
+            }
+
+            Row = (int)alpha - 63; 
+            var columnString = alphaAddress.Substring(1, alphaAddress.Length - 1);
+            int columnInt;
+            var didParse = int.TryParse(columnString, out columnInt);
+            if (!didParse)
+            {
+                Row = 0;
+                Column = 0;
+            }
+            Column = columnInt;
+
             PositionId = positionId;
         }
 
