@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LHRP.Domain.Tests", "Tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LHRP.Scripting", "LHRP.Scripting\LHRP.Scripting.csproj", "{4976B722-F65C-440D-8394-5609034D5962}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LHRP.Scripting.TestConsole", "Tests\LHRP.Scripting.TestConsole\LHRP.Scripting.TestConsole.csproj", "{FC624585-8D55-4ADF-9231-155F0E0E0444}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,18 @@ Global
 		{4976B722-F65C-440D-8394-5609034D5962}.Release|x64.Build.0 = Release|Any CPU
 		{4976B722-F65C-440D-8394-5609034D5962}.Release|x86.ActiveCfg = Release|Any CPU
 		{4976B722-F65C-440D-8394-5609034D5962}.Release|x86.Build.0 = Release|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Debug|x64.Build.0 = Debug|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Debug|x86.Build.0 = Debug|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Release|x64.ActiveCfg = Release|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Release|x64.Build.0 = Release|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Release|x86.ActiveCfg = Release|Any CPU
+		{FC624585-8D55-4ADF-9231-155F0E0E0444}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +105,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{33F0B2D1-E9E3-448E-AE3A-04603DAAD14F} = {A57594B7-4F64-459B-9D5A-1960E89E99E1}
 		{DE200601-4B83-4C0D-87A0-077E65840F76} = {A57594B7-4F64-459B-9D5A-1960E89E99E1}
+		{FC624585-8D55-4ADF-9231-155F0E0E0444} = {A57594B7-4F64-459B-9D5A-1960E89E99E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {69CAAB6D-C9CE-4D6F-B99A-EC4D57C951DB}

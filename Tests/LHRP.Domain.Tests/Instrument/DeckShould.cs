@@ -60,8 +60,8 @@ namespace LHRP.Domain.Tests.Instrument
     [Fact]
     public void Successfully_RetrieveAllTipRacks()
     {
-        deck.AssignLabware(1, new TipRack(new TipRackDefinition("whatever1", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
-        deck.AssignLabware(2, new TipRack(new TipRackDefinition("whatever2", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
+        deck.AssignLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
+        deck.AssignLabware(2, new TipRack(new TipRackDefinition(300, "whatever2", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
         var tipRacks = deck.GetTipRacks().ToList();
         tipRacks.Count.Should().Be(2);
         tipRacks[0].Definition.DisplayName.Should().Be("whatever1");
@@ -71,7 +71,7 @@ namespace LHRP.Domain.Tests.Instrument
     [Fact]
     public void Successfully_RetrieveCoordinates_GivenAPositionAndAddess()
     {
-      deck.AssignLabware(1, new TipRack(new TipRackDefinition("whatever1", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
+      deck.AssignLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
       var coordinates = deck.GetCoordinates(new LabwareAddress(1, 1, 1));
       coordinates.IsSuccess.Should().BeTrue();
       coordinates.Value.X.Should().BeApproximately(0.0, 0.0001);
@@ -82,7 +82,7 @@ namespace LHRP.Domain.Tests.Instrument
     [Fact]
     public void Fail_WhenRetrievingCoordinates_OfInvalidPositionsOrAddress()
     {
-      deck.AssignLabware(1, new TipRack(new TipRackDefinition("whatever1", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
+      deck.AssignLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8,12, new Coordinates(0,0,0), 9.0)));
       var coordinates = deck.GetCoordinates(new LabwareAddress(1, 1, 999));
       coordinates.IsSuccess.Should().BeFalse();
       coordinates = deck.GetCoordinates(new LabwareAddress(999, 999, 1));

@@ -32,7 +32,7 @@ namespace LHRP.Api.Labware
                 Column = 0;
             }
 
-            Row = (int)alpha - 63; 
+            Row = (int)alpha - 64; 
             var columnString = alphaAddress.Substring(1, alphaAddress.Length - 1);
             int columnInt;
             var didParse = int.TryParse(columnString, out columnInt);

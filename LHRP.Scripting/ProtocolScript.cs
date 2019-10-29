@@ -11,34 +11,34 @@ using System.Linq;
 
 namespace LHRP.Scripting
 {
-    public static class ProtocolScript
+    public class ProtocolScript
     {
-        private static IRuntimeEngine _runtimeEngine;
-        private static void SetRuntimeEngine(IRuntimeEngine runtimeEngine)
+        private IRuntimeEngine _runtimeEngine;
+        public void SetRuntimeEngine(IRuntimeEngine runtimeEngine)
         {
             _runtimeEngine = runtimeEngine;
         }
 
-        private static void AddLabware(string labwareDefinition, int positionId, int labwareId)
+        public void AddLabware(string labwareDefinition, int positionId, int labwareId)
         {
             //TODO labware definitions
             _runtimeEngine.Instrument.Deck.AssignLabware(positionId,
                     new Plate(new PlateDefinition("Costar 96", new WellDefinition(), 8, 12, new Coordinates(86, 127, 14), 9.0)));
         }
 
-        private static void AddTips(string labwareDefinitinon, int positionId, int tipTypeId)
+        public void AddTips(string labwareDefinitinon, int positionId, int tipTypeId)
         {
             //TODO labware definitions
             _runtimeEngine.Instrument.Deck.AssignLabware(positionId,
-                new TipRack(new TipRackDefinition("300uL Tips", 300.0, false, 8, 12, new Coordinates(9.0, 9.0, 9.0), 9.0)));
+                new TipRack(new TipRackDefinition(300, "300uL Tips", 300.0, false, 8, 12, new Coordinates(9.0, 9.0, 9.0), 9.0)));
         }
 
-        private static void PickUpTips(int tipTypeId, string channelPattern)
+        public void PickUpTips(int tipTypeId, string channelPattern)
         {
             _runtimeEngine.Commands.Add(new PickupTips(new ChannelPattern(channelPattern), tipTypeId));
         }
 
-        private static void Aspirate(int positionId, string addresses, string channelPattern, double volume, string liquid)
+        public void Aspirate(int positionId, string addresses, string channelPattern, double volume, string liquid)
         {
             var addressArray = addresses.Split(';', ',');
             var pattern = new ChannelPattern(channelPattern);
@@ -55,7 +55,7 @@ namespace LHRP.Scripting
             _runtimeEngine.Commands.Add(new TransferTargetAspirate(new AspirateParameters(), transferTargets, new ChannelPattern(channelPattern)));
         }
 
-        private static void Dispense(int positionId, string addresses, string channelPattern, double volume, string liquid)
+        public void Dispense(int positionId, string addresses, string channelPattern, double volume, string liquid)
         {
             var addressArray = addresses.Split(';', ',');
             var pattern = new ChannelPattern(channelPattern);
@@ -73,12 +73,12 @@ namespace LHRP.Scripting
 
         }
 
-        private static void DropTips(bool returnToSource)
+        public void DropTips(bool returnToSource)
         {
             _runtimeEngine.Commands.Add(new DropTips(returnToSource));
         }
 
-        private static void Run()
+        public void Run()
         {
             _runtimeEngine.Run();
         }

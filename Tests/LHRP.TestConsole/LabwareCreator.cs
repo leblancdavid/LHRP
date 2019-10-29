@@ -10,7 +10,8 @@ namespace LHRP.TestConsole
         public static TipRack GetTipRack()
         {
             var tipRack = new TipRack(
-                new TipRackDefinition("300uL Tips",
+                new TipRackDefinition(300, 
+                    "300uL Tips",
                     300.0,
                     false,
                     8, 12,

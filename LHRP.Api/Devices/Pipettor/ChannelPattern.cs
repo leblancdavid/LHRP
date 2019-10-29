@@ -82,8 +82,6 @@ namespace LHRP.Api.Devices.Pipettor
             return cp;
         }
 
-        public static 
-
         public static ChannelPattern operator& (ChannelPattern b, ChannelPattern c)
         {
             int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;

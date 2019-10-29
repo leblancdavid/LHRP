@@ -14,12 +14,13 @@ namespace LHRP.Api.Labware.Tips
         public Coordinates Offset { get; private set; }
         public double Spacing { get; private set; }
 
-        public TipRackDefinition(string displayName,
+        public TipRackDefinition(int id,
+            string displayName,
             double tipVolume,
             bool areFilteredTips, int rows, int columns, 
             Coordinates offset, double spacing)
         {
-            Id = 0;
+            Id = id;
             DisplayName = displayName;
             TipVolume = tipVolume;
             AreFilteredTips = areFilteredTips;
