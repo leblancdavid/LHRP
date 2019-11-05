@@ -108,7 +108,7 @@ namespace LHRP.Api.Runtime.Resources
         {
             if(target.Address != Address)
             {
-                return Result.Fail($"Unable to add TransferTarget to WellUsage at address {Address.ToString()}: Invalid transfer target address {target.Address.ToString()}");
+                return Result.Failure($"Unable to add TransferTarget to WellUsage at address {Address.ToString()}: Invalid transfer target address {target.Address.ToString()}");
             }
 
             _transferHistory.Add(target);

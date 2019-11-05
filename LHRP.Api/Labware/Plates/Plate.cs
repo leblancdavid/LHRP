@@ -66,7 +66,7 @@ namespace LHRP.Api.Labware.Plates
         {
             if(!_wells.ContainsKey(address))
             {
-                return Result.Fail<Coordinates>("Invalid plate address");
+                return Result.Failure<Coordinates>("Invalid plate address");
             }
 
             return Result.Ok(_wells[address].AbsolutePosition);
@@ -76,8 +76,8 @@ namespace LHRP.Api.Labware.Plates
         {
             if(!_wells.ContainsKey(address))
             {
-                // return Result.Fail<Well>("Sorry! Hope you feel better soon!!!");
-                return Result.Fail<Well>("Invalid plate address");
+                // return Result.Failure<Well>("Sorry! Hope you feel better soon!!!");
+                return Result.Failure<Well>("Invalid plate address");
             }
 
             return Result.Ok(_wells[address]);

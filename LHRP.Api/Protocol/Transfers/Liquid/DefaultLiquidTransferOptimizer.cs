@@ -26,7 +26,7 @@ namespace LHRP.Api.Protocol.Transfers.Liquid
                     var newGroup = new TransferGroup<LiquidTransfer>(pipettor.Specification.NumChannels);
                     if (!TryAssignTransferToGroup(transfer, newGroup, instrument))
                     {
-                        return Result.Fail<IEnumerable<TransferGroup<LiquidTransfer>>>("Unable to assign a transfer to a transfer group");
+                        return Result.Failure<IEnumerable<TransferGroup<LiquidTransfer>>>("Unable to assign a transfer to a transfer group");
                     }
                     transferGroups.Add(newGroup);
                 }

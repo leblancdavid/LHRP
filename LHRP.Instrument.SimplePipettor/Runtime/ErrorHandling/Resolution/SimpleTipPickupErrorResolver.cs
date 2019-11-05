@@ -17,7 +17,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             {
                 var errorMsg = $"Invalid error type {error.GetType()}";
                 Console.WriteLine(errorMsg);
-                return Result.Fail(errorMsg);
+                return Result.Failure(errorMsg);
             }
 
             Console.WriteLine(tipError.Message);
@@ -61,7 +61,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
                     {
-                        return Result.Fail($"Unable to consume tips: '{consumeResult.Error}'");
+                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
                     }
                 }
             }
@@ -87,7 +87,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
                     {
-                        return Result.Fail($"Unable to consume tips: '{consumeResult.Error}'");
+                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
                     }
                 }
             }
@@ -112,7 +112,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
                     {
-                        return Result.Fail($"Unable to consume tips: '{consumeResult.Error}'");
+                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
                     }
                 }
             }

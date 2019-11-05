@@ -95,7 +95,7 @@ namespace LHRP.Api.Protocol.Pipetting
                 //If this happens then there's not enough liquid
                 if(transferTarget.IsFailure)
                 {
-                    return Result.Fail<List<TransferTarget>>(transferTarget.Error);
+                    return Result.Failure<List<TransferTarget>>(transferTarget.Error);
                 }
 
                 transferTarget.Value.Volume = liquidTarget.Volume;

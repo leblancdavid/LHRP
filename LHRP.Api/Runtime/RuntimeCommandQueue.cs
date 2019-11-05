@@ -83,7 +83,7 @@ namespace LHRP.Api.Runtime
         {
             if(index < 0 || index >= _queue.Count)
             {
-                return Result.Fail<IRunnableCommand>($"Invalid command index '{index}'");
+                return Result.Failure<IRunnableCommand>($"Invalid command index '{index}'");
             }
 
             return Result.Ok(_queue[index]);

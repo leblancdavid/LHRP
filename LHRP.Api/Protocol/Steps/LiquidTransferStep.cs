@@ -66,7 +66,7 @@ namespace LHRP.Api.Protocol.Steps
             //var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
             //if (tranfersResult.IsFailure)
             //{
-            //    return Result.Fail<IEnumerable<IRunnableCommand>>(tranfersResult.Error);
+            //    return Result.Failure<IEnumerable<IRunnableCommand>>(tranfersResult.Error);
             //}
 
             var commands = new List<IRunnableCommand>();

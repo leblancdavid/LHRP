@@ -15,7 +15,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             {
                 var errorMsg = $"Invalid error type {error.GetType()}";
                 Console.WriteLine(errorMsg);
-                return Result.Fail(errorMsg);
+                return Result.Failure(errorMsg);
             }
 
             Console.WriteLine(insuffientTipsError.Message);

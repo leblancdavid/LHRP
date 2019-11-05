@@ -23,7 +23,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
             var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
             if(targetPlate == null)
             {
-                return Result.Fail($"No plate found in position {address.PositionId}");
+                return Result.Failure($"No plate found in position {address.PositionId}");
             }
             
             var well = targetPlate.GetWell(address);
@@ -34,7 +34,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
 
             if(well.Value.Volume < volume)
             {
-                return Result.Fail($"Insufficient liquid found in well({well.Value.Address.Row},{well.Value.Address.Column})");
+                return Result.Failure($"Insufficient liquid found in well({well.Value.Address.Row},{well.Value.Address.Column})");
             }
             
             well.Value.Remove(volume);
@@ -48,7 +48,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
             var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
             if(targetPlate == null)
             {
-                return Result.Fail($"No plate found in position {address.PositionId}");
+                return Result.Failure($"No plate found in position {address.PositionId}");
             }
             
             var well = targetPlate.GetWell(address);
@@ -88,7 +88,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
 
             if(liquidAssignmentFound)
             {
-                return Result.Fail($"Unable to add liquid '{liquid.AssignedId}' since no positions were assigned to the liquid");
+                return Result.Failure($"Unable to add liquid '{liquid.AssignedId}' since no positions were assigned to the liquid");
             }
 
             return Result.Ok();
@@ -110,7 +110,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
                 }
             }
 
-            return Result.Fail<TransferTarget>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.AssignedId}'");
+            return Result.Failure<TransferTarget>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.AssignedId}'");
         }
 
         public Result ClearLiquidAtPosition(LabwareAddress address)
@@ -119,7 +119,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
             var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
             if (targetPlate == null)
             {
-                return Result.Fail($"No plate found in position {address.PositionId}");
+                return Result.Failure($"No plate found in position {address.PositionId}");
             }
 
             var well = targetPlate.GetWell(address);

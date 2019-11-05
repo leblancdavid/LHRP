@@ -32,7 +32,7 @@ namespace LHRP.Api.Protocol.Transfers
                     var newGroup = new TransferGroup<T>(pipettor.Specification.NumChannels);
                     if(!TryAssignTransferToGroup(transfer, newGroup, instrument))
                     {
-                        return Result.Fail<IEnumerable<TransferGroup<T>>>("Unable to assign a transfer to a transfer group");
+                        return Result.Failure<IEnumerable<TransferGroup<T>>>("Unable to assign a transfer to a transfer group");
                     }
                     transferGroups.Add(newGroup);
                 }

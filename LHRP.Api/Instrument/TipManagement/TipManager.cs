@@ -26,7 +26,7 @@ namespace LHRP.Api.Instrument.TipManagement
 
             if(!position.Value.IsOccupied || !(position.Value.AssignedLabware is TipRack))
             {
-                return Result.Fail($"Position Id {tip.Address.PositionId} does not contain a tip rack");
+                return Result.Failure($"Position Id {tip.Address.PositionId} does not contain a tip rack");
             }
 
             var tipRack = position.Value.AssignedLabware as TipRack;
@@ -50,12 +50,12 @@ namespace LHRP.Api.Instrument.TipManagement
 
             if(availableTipRack == null)
             {
-                return Result.Fail<TipChannelPattern>($"Insufficient number of tips of type {tipTypeId} for channel pattern {pattern.GetChannelString()}");
+                return Result.Failure<TipChannelPattern>($"Insufficient number of tips of type {tipTypeId} for channel pattern {pattern.GetChannelString()}");
             }
             var availableTips = availableTipRack.GetNextAvailableTips(pattern.GetNumberActiveChannels());
             if(availableTips.IsFailure)
             {
-                return Result.Fail<TipChannelPattern>($"Insufficient number of tips of type {tipTypeId} for channel pattern {pattern.GetChannelString()}");
+                return Result.Failure<TipChannelPattern>($"Insufficient number of tips of type {tipTypeId} for channel pattern {pattern.GetChannelString()}");
             }
 
             var tipChannelPattern = new TipChannelPattern(pattern.NumChannels);
@@ -77,7 +77,7 @@ namespace LHRP.Api.Instrument.TipManagement
             var tipRacks = _deck.GetTipRacks().Where(tr => tr.Definition.Id == tipTypeId);
             if(tipRacks.Count() == 0)
             {
-                return Result.Fail($"No tip rack with definition ID {tipTypeId} found");
+                return Result.Failure($"No tip rack with definition ID {tipTypeId} found");
             }
 
             foreach(var tipRack in tipRacks)
