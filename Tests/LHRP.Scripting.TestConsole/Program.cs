@@ -26,8 +26,13 @@ namespace LHRP.Scripting.TestConsole
                 Protocol = new ProtocolScript()
             };
 
+
+            host.Protocol.SetRuntimeEngine(host.SimulationEngine);
+            
             //note: we block here, because we are in Main method, normally we could await as scripting APIs are async
             var result = CSharpScript.EvaluateAsync<int>(script, null, host).Result;
+
+            host.Protocol.Run();
 
             Console.ReadLine();
         }
