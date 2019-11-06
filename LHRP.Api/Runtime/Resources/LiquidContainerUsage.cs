@@ -131,11 +131,11 @@ namespace LHRP.Api.Runtime.Resources
                     break;
                 }
 
-                var addResult = instrument.LiquidManager.AddLiquidToPosition(target.Address, target.Liquid, target.Volume);
-                if (addResult.IsFailure)
-                {
-                    return addResult;
-                }
+                //var addResult = instrument.LiquidManager.AddLiquidToPosition(target.Address, target.Liquid, target.Volume);
+                //if (addResult.IsFailure)
+                //{
+                //    return addResult;
+                //}
             }
 
             return Result.Ok();

@@ -93,16 +93,15 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             return overallChannelPattern;
         }
 
-        public static List<LiquidTarget> GetAspirateLiquidTargets(this TransferGroup<LiquidToManyTransfer> transferGroup, double additionalVolume = 0.0)
+        public static List<LiquidTransferSource> GetAspirateLiquidTargets(this TransferGroup<LiquidToManyTransfer> transferGroup, double additionalVolume = 0.0)
         {
-            var liquidTargets = new List<LiquidTarget>();
+            var liquidTargets = new List<LiquidTransferSource>();
             for(int i = 0; i < transferGroup.ChannelPattern.NumChannels; ++i)
             {
                 if(transferGroup.ChannelPattern[i])
                 {
-                    liquidTargets.Add(new LiquidTarget(transferGroup[i].Source,
-                        transferGroup[i].GetTotalTransferVolume() + additionalVolume,
-                        TransferType.Aspirate));
+                    liquidTargets.Add(new LiquidTransferSource(transferGroup[i].Source,
+                        transferGroup[i].GetTotalTransferVolume() + additionalVolume));
                 }
                 else
                 {

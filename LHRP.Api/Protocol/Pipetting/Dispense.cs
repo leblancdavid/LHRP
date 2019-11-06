@@ -46,10 +46,11 @@ namespace LHRP.Api.Protocol.Pipetting
             var processResult = pipettor.Dispense(_parameters, _targets, Pattern);
             if(!processResult.ContainsErrors)
             {
-                foreach(var target in _targets)
-                {
-                    liquidManager.AddLiquidToPosition(target.Address, target.Liquid, target.Volume);
-                }
+                //For now we'll comment this out
+                //foreach(var target in _targets)
+                //{
+                //    liquidManager.AddLiquidToPosition(target.Address, target.Liquid, target.Volume);
+                //}
             }
             
             return processResult;
