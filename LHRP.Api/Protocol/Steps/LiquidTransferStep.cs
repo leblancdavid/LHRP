@@ -76,7 +76,7 @@ namespace LHRP.Api.Protocol.Steps
             return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
         }
 
-        private Result<IEnumerable<IRunnableCommand>> GetMultiDispenseCommandsWithTipReuse(
+        private Result<IEnumerable<IRunnableCommand>> GetMultiDispenseCommands(
             List<TransferGroup<LiquidToOneTransfer>> liquidTransferGroups,
             IRuntimeEngine engine)
         {
@@ -92,51 +92,24 @@ namespace LHRP.Api.Protocol.Steps
             {
                 return Result.Failure<IEnumerable<IRunnableCommand>>("Insufficient tip capacity to handle liquid transfer with pre/post aliquots");
             }
-            
-            var channelPattern = GetOverallChannelPattern(liquidTransferGroups);
-            int numChannels = channelPattern.NumChannels;
+
+            var multiDispenseTransferGroups = _stepData.Pattern.GetMultiDispenseTransferGroups(engine.Instrument, _transferOptimizer, workingVolume);
+            if(multiDispenseTransferGroups.IsFailure)
+            {
+                return Result.Failure<IEnumerable<IRunnableCommand>>(multiDispenseTransferGroups.Error);
+            }
 
             var commands = new List<IRunnableCommand>();
-            commands.Add(new PickupTips(channelPattern, _stepData.TipTypeId));
-            for (int i = 0; i < liquidTransferGroups.Count; ++i)
+            if(_stepData.ReuseTips)
             {
-                var liquidTargets = new List<LiquidTarget>();
-                int numTransfers = 0;
-                for(int j = i; j < liquidTransferGroups.Count; ++j)
+                commands.Add(new PickupTips(ChannelPattern.Full(liquidTransferGroups.First().ChannelPattern.NumChannels), _stepData.TipTypeId));
+                foreach(var transferGroup in multiDispenseTransferGroups.Value)
                 {
-                    for(int channel = 0; channel < numChannels; ++channel)
-                    {
-                        //if(liquidTransferGroups[j].ChannelPattern[channel] &&)
-                    }
+                    //commands.Add(new LiquidToOneAspirate(new AspirateParameters(), transferGroup ))
                 }
             }
-            commands.Add(new DropTips(_stepData.ReturnTipsToSource));
-
-            //foreach (var transfer in liquidTransferGroups)
-            //{
-            //    commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.TipTypeId));
-            //    commands.Add(new LiquidTargetAspirate(new AspirateParameters(), transfer.Transfers.Select(x => )) .ToList(), transfer.ChannelPattern)));
-            //    commands.Add(new Dispense(new DispenseParameters(transfer.Transfers.Select(x => x.Target).ToList(), transfer.ChannelPattern)));
-            //    commands.Add(new DropTips(_stepData.ReturnTipsToSource));
-            //}
 
             return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
-        }
-
-        private ChannelPattern GetOverallChannelPattern(List<TransferGroup<LiquidToOneTransfer>> liquidTransferGroups)
-        {
-            if(!liquidTransferGroups.Any())
-            {
-                return ChannelPattern.Empty(0);
-            }
-
-            var overallChannelPattern = ChannelPattern.Empty(liquidTransferGroups.First().ChannelPattern.NumChannels);
-            foreach(var transfer in liquidTransferGroups)
-            {
-                overallChannelPattern = overallChannelPattern + transfer.ChannelPattern;
-            }
-
-            return overallChannelPattern;
         }
     }
 }

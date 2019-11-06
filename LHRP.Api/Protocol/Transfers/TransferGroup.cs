@@ -6,7 +6,26 @@ namespace LHRP.Api.Protocol.Transfers
 {
     public class TransferGroup<T> where T : ITransfer
     {
-        public ChannelPattern ChannelPattern { get; private set; }
+        private ChannelPattern _channelPattern;
+        public ChannelPattern ChannelPattern
+        {
+            get
+            {
+                return _channelPattern;
+            }
+            set
+            {
+
+                _channelPattern = value;
+                for(int i = 0; i < _channelPattern.NumChannels && i < _transfers.Length; ++i)
+                {
+                    if(!_channelPattern[i])
+                    {
+                        _transfers[i] = default(T);
+                    }
+                }
+            }
+        }
 
         private T[] _transfers;
         public T[] Transfers => _transfers;

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
 {
-    public static class LiquidTransferPatternExtension
+    public static class LiquidTransferPatternExtensions
     {
         public static Result<IEnumerable<TransferGroup<LiquidToManyTransfer>>> GetMultiDispenseTransferGroups(
             this TransferPattern<LiquidToOneTransfer> transferPattern,
@@ -91,6 +91,25 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             }
 
             return overallChannelPattern;
+        }
+
+        public static List<LiquidTarget> GetAspirateLiquidTargets(this TransferGroup<LiquidToManyTransfer> transferGroup, double additionalVolume = 0.0)
+        {
+            var liquidTargets = new List<LiquidTarget>();
+            for(int i = 0; i < transferGroup.ChannelPattern.NumChannels; ++i)
+            {
+                if(transferGroup.ChannelPattern[i])
+                {
+                    liquidTargets.Add(new LiquidTarget(transferGroup[i].Source,
+                        transferGroup[i].GetTotalTransferVolume() + additionalVolume,
+                        TransferType.Aspirate));
+                }
+                else
+                {
+                    liquidTargets.Add(null);
+                }
+            }
+            return liquidTargets;
         }
     }
 }

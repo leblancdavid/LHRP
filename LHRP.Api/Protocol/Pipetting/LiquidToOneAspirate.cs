@@ -2,6 +2,7 @@
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Protocol.Transfers;
+using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.Scheduling;
 using System;
@@ -10,24 +11,19 @@ using System.Text;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
-    public class LiquidTargetAspirate : IPipettingCommand
+    public class LiquidToOneAspirate : IPipettingCommand
     {
         public Guid CommandId { get; private set; }
         private AspirateParameters _parameters;
-        private List<LiquidTarget> _liquidTargets;
-        public IEnumerable<LiquidTarget> LiquidTargets => _liquidTargets;
-        public double Volume { get; set; }
-        public ChannelPattern Pattern { get; set; }
+        public TransferGroup<LiquidToOneTransfer> TransferGroup { get; private set; }
         public int RetryCount { get; private set; }
 
-        public LiquidTargetAspirate(AspirateParameters parameters,
-            List<LiquidTarget> liquidTargets,
-            ChannelPattern pattern,
+        public LiquidToOneAspirate(AspirateParameters parameters,
+            TransferGroup<LiquidToOneTransfer> transferGroup,
             int retryAttempt = 0)
         {
             _parameters = parameters;
-            _liquidTargets = liquidTargets;
-            Pattern = pattern;
+            TransferGroup = transferGroup;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
         }
@@ -35,7 +31,7 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public void ApplyChannelMask(ChannelPattern channelPattern)
         {
-            Pattern = channelPattern;
+            TransferGroup.ChannelPattern = channelPattern;
         }
 
         public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
@@ -54,7 +50,7 @@ namespace LHRP.Api.Protocol.Pipetting
                 //TODO Insufficient liquid error
             }
 
-            var processResult = pipettor.Aspirate(_parameters, transferTargets.Value, Pattern);
+            var processResult = pipettor.Aspirate(_parameters, transferTargets.Value, TransferGroup.ChannelPattern);
             if (!processResult.ContainsErrors)
             {
                 foreach (var target in transferTargets.Value)
@@ -69,9 +65,9 @@ namespace LHRP.Api.Protocol.Pipetting
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
         {
             var schedule = new Schedule();
-            foreach (var target in _liquidTargets)
+            foreach (var target in TransferGroup.Transfers)
             {
-                schedule.ResourcesUsage.AddConsumableLiquidUsage(target.Liquid, target.Volume);
+                schedule.ResourcesUsage.AddConsumableLiquidUsage(target.Source, target.Target.Volume);
             }
 
             //Todo: come up with a way to calculate time
@@ -83,23 +79,23 @@ namespace LHRP.Api.Protocol.Pipetting
         private Result<List<TransferTarget>> GetTransferTargets(ILiquidManager liquidManager)
         {
             var volumeUsagePerLiquid = new Dictionary<string, double>();
-            foreach(var liquidTarget in _liquidTargets)
+            foreach(var liquidTarget in TransferGroup.Transfers)
             {
-                volumeUsagePerLiquid[liquidTarget.Liquid.AssignedId] += liquidTarget.Volume;
+                volumeUsagePerLiquid[liquidTarget.Source.AssignedId] += liquidTarget.Target.Volume;
             }
             
             var transferTargets = new List<TransferTarget>();
-            foreach (var liquidTarget in _liquidTargets)
+            foreach (var liquidTarget in TransferGroup.Transfers)
             {
                 //First we need to make sure there's enough liquid in the container to complete the transfer
-                var transferTarget = liquidManager.RequestLiquid(liquidTarget.Liquid, volumeUsagePerLiquid[liquidTarget.Liquid.AssignedId]);
+                var transferTarget = liquidManager.RequestLiquid(liquidTarget.Source, volumeUsagePerLiquid[liquidTarget.Source.AssignedId]);
                 //If this happens then there's not enough liquid
                 if(transferTarget.IsFailure)
                 {
                     return Result.Failure<List<TransferTarget>>(transferTarget.Error);
                 }
 
-                transferTarget.Value.Volume = liquidTarget.Volume;
+                transferTarget.Value.Volume = liquidTarget.Target.Volume;
                 transferTargets.Add(transferTarget.Value);
             }
             
