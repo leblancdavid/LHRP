@@ -77,7 +77,7 @@ namespace LHRP.Api.Protocol.Steps
         }
 
         private Result<IEnumerable<IRunnableCommand>> GetMultiDispenseCommandsWithTipReuse(
-            List<TransferGroup<ITransfer>> liquidTransferGroups,
+            List<TransferGroup<LiquidToOneTransfer>> liquidTransferGroups,
             IRuntimeEngine engine)
         {
             if(!liquidTransferGroups.Any())
@@ -123,7 +123,7 @@ namespace LHRP.Api.Protocol.Steps
             return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
         }
 
-        private ChannelPattern GetOverallChannelPattern(List<TransferGroup<ITransfer>> liquidTransferGroups)
+        private ChannelPattern GetOverallChannelPattern(List<TransferGroup<LiquidToOneTransfer>> liquidTransferGroups)
         {
             if(!liquidTransferGroups.Any())
             {
