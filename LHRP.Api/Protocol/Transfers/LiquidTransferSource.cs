@@ -2,12 +2,12 @@
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class LiquidSource
+    public class LiquidTransferSource
     {
         public Liquids.Liquid Liquid { get; private set; }
         public double Volume { get; set; }
 
-        public LiquidSource(Liquids.Liquid liquid, double volume)
+        public LiquidTransferSource(Liquids.Liquid liquid, double volume)
         {
             this.Volume = volume;
             this.Liquid = liquid;

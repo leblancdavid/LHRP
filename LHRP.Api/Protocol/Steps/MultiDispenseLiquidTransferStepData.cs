@@ -31,15 +31,13 @@ namespace LHRP.Api.Protocol.Steps
                 _postAliquotVolume = value;
             }
         }
-
-        public Liquids.Liquid Liquid { get; private set; }
-        public TransferPattern<LiquidToOneTransfer> Pattern { get; private set; }
+        
+        public TransferPattern<LiquidToManyTransfer> Pattern { get; private set; }
         public int TipTypeId { get; private set; }
         public bool ReturnTipsToSource { get; private set; }
         public bool ReuseTips { get; private set; }
 
-        public MultiDispenseLiquidTransferStepData(TransferPattern<LiquidToOneTransfer> pattern,
-            Liquids.Liquid liquid,
+        public MultiDispenseLiquidTransferStepData(TransferPattern<LiquidToManyTransfer> pattern,
             int tipTypeId,
             bool returnTipsToSource,
             bool reuseTips,
@@ -49,7 +47,6 @@ namespace LHRP.Api.Protocol.Steps
             double postAliquotVolume)
         {
             Pattern = pattern;
-            Liquid = liquid;
             TipTypeId = tipTypeId;
             ReuseTips = reuseTips;
             ReturnTipsToSource = returnTipsToSource;

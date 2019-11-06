@@ -2,7 +2,7 @@ using LHRP.Api.Labware;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class TransferTarget
+    public class TransferTarget : ITransfer
     {
         public LabwareAddress Address { get; private set; }
         public double Volume { get; set; }
