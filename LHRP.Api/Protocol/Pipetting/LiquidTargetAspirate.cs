@@ -14,18 +14,19 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         public Guid CommandId { get; private set; }
         private AspirateParameters _parameters;
-        private List<LiquidTarget> _targets;
-        public IEnumerable<LiquidTarget> Targets => _targets;
+        private List<LiquidTarget> _liquidTargets;
+        public IEnumerable<LiquidTarget> LiquidTargets => _liquidTargets;
+        public double Volume { get; set; }
         public ChannelPattern Pattern { get; set; }
         public int RetryCount { get; private set; }
 
         public LiquidTargetAspirate(AspirateParameters parameters,
-            List<LiquidTarget> targets,
+            List<LiquidTarget> liquidTargets,
             ChannelPattern pattern,
             int retryAttempt = 0)
         {
             _parameters = parameters;
-            _targets = targets;
+            _liquidTargets = liquidTargets;
             Pattern = pattern;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
@@ -68,7 +69,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Schedule Schedule(IRuntimeEngine runtimeEngine)
         {
             var schedule = new Schedule();
-            foreach (var target in _targets)
+            foreach (var target in _liquidTargets)
             {
                 schedule.ResourcesUsage.AddConsumableLiquidUsage(target.Liquid, target.Volume);
             }
@@ -82,13 +83,13 @@ namespace LHRP.Api.Protocol.Pipetting
         private Result<List<TransferTarget>> GetTransferTargets(ILiquidManager liquidManager)
         {
             var volumeUsagePerLiquid = new Dictionary<string, double>();
-            foreach(var liquidTarget in _targets)
+            foreach(var liquidTarget in _liquidTargets)
             {
                 volumeUsagePerLiquid[liquidTarget.Liquid.AssignedId] += liquidTarget.Volume;
             }
             
             var transferTargets = new List<TransferTarget>();
-            foreach (var liquidTarget in _targets)
+            foreach (var liquidTarget in _liquidTargets)
             {
                 //First we need to make sure there's enough liquid in the container to complete the transfer
                 var transferTarget = liquidManager.RequestLiquid(liquidTarget.Liquid, volumeUsagePerLiquid[liquidTarget.Liquid.AssignedId]);
