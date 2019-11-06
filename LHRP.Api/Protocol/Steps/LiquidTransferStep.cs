@@ -2,7 +2,7 @@
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
-using LHRP.Api.Protocol.Transfers.Liquid;
+using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling.Errors;
 using LHRP.Api.Runtime.Scheduling;
@@ -14,13 +14,13 @@ namespace LHRP.Api.Protocol.Steps
     public class LiquidTransferStep : IRunnable
     {
         private LiquidTransferStepData _stepData;
-        private ITransferOptimizer<Transfer> _transferOptimizer;
-        public LiquidTransferStep(LiquidTransferStepData stepData, ITransferOptimizer<Transfer> optimizer = null)
+        private ITransferOptimizer<LiquidToOneTransfer> _transferOptimizer;
+        public LiquidTransferStep(LiquidTransferStepData stepData, ITransferOptimizer<LiquidToOneTransfer> optimizer = null)
         {
             _stepData = stepData;
             if (optimizer == null)
             {
-                optimizer = new DefaultTargetTransferOptimizer<Transfer>();
+                optimizer = new DefaultLiquidToOneTransferOptimizer();
             }
             _transferOptimizer = optimizer;
         }
@@ -71,13 +71,13 @@ namespace LHRP.Api.Protocol.Steps
             {
                 return Result.Failure<IEnumerable<IRunnableCommand>>(tranfersResult.Error);
             }
-
-          
+            
+            var commands = new List<IRunnableCommand>();
             return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
         }
 
         private Result<IEnumerable<IRunnableCommand>> GetMultiDispenseCommandsWithTipReuse(
-            List<TransferGroup<Transfer>> liquidTransferGroups,
+            List<TransferGroup<ITransfer>> liquidTransferGroups,
             IRuntimeEngine engine)
         {
             if(!liquidTransferGroups.Any())
@@ -101,6 +101,14 @@ namespace LHRP.Api.Protocol.Steps
             for (int i = 0; i < liquidTransferGroups.Count; ++i)
             {
                 var liquidTargets = new List<LiquidTarget>();
+                int numTransfers = 0;
+                for(int j = i; j < liquidTransferGroups.Count; ++j)
+                {
+                    for(int channel = 0; channel < numChannels; ++channel)
+                    {
+                        //if(liquidTransferGroups[j].ChannelPattern[channel] &&)
+                    }
+                }
             }
             commands.Add(new DropTips(_stepData.ReturnTipsToSource));
 
@@ -115,7 +123,7 @@ namespace LHRP.Api.Protocol.Steps
             return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
         }
 
-        private ChannelPattern GetOverallChannelPattern(List<TransferGroup<Transfer>> liquidTransferGroups)
+        private ChannelPattern GetOverallChannelPattern(List<TransferGroup<ITransfer>> liquidTransferGroups)
         {
             if(!liquidTransferGroups.Any())
             {

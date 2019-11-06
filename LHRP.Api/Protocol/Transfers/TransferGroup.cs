@@ -4,7 +4,7 @@ using LHRP.Api.Devices.Pipettor;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class TransferGroup<T> where T : Transfer
+    public class TransferGroup<T> where T : ITransfer
     {
         public ChannelPattern ChannelPattern { get; private set; }
 
