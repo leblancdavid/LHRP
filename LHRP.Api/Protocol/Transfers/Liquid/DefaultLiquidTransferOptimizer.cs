@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 
@@ -31,8 +32,9 @@ namespace LHRP.Api.Protocol.Transfers.Liquid
                     transferGroups.Add(newGroup);
                 }
             }
-
-            return Result.Ok<IEnumerable<TransferGroup<LiquidTransfer>>>(transferGroups);
+            
+            return Result.Ok<IEnumerable<TransferGroup<LiquidTransfer>>>(
+                transferGroups.OrderBy(x => x.Transfers.FirstOrDefault(t => t != null).Liquid.AssignedId));
         }
 
         private bool TryAssignTransferToGroup(LiquidTransfer transfer, TransferGroup<LiquidTransfer> group, IInstrument instrument)
@@ -40,11 +42,17 @@ namespace LHRP.Api.Protocol.Transfers.Liquid
             var pipettor = instrument.Pipettor;
             var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.Address);
 
-
             if (group.ChannelPattern.IsFull())
             {
                 return false;
             }
+            
+            var assignedTransfer = group.Transfers.FirstOrDefault(x => x != null);
+            if(assignedTransfer != null && assignedTransfer.Liquid != transfer.Liquid)
+            {
+                return false;
+            }
+
             int channelIndex = 0;
             for (channelIndex = 0; channelIndex < pipettor.Specification.NumChannels; ++channelIndex)
             {
