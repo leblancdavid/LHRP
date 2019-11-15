@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
@@ -14,8 +16,8 @@ namespace LHRP.Api.Protocol.Steps
     public class MultiDispenseLiquidTransferStep : IRunnable
     {
         private MultiDispenseLiquidTransferStepData _stepData;
-        private ITransferOptimizer<LiquidToManyTransfer> _transferOptimizer;
-        public MultiDispenseLiquidTransferStep(MultiDispenseLiquidTransferStepData stepData, ITransferOptimizer<LiquidToManyTransfer> optimizer = null)
+        private ITransferOptimizer<LiquidToOneTransfer> _transferOptimizer;
+        public MultiDispenseLiquidTransferStep(MultiDispenseLiquidTransferStepData stepData, ITransferOptimizer<LiquidToOneTransfer> optimizer = null)
         {
             _stepData = stepData;
             if (optimizer == null)
@@ -105,6 +107,7 @@ namespace LHRP.Api.Protocol.Steps
                 commands.Add(new PickupTips(ChannelPattern.Full(liquidTransferGroups.First().ChannelPattern.NumChannels), _stepData.TipTypeId));
                 foreach (var transferGroup in multiDispenseTransferGroups.Value)
                 {
+              
                     //commands.Add(new LiquidToOneAspirate(new AspirateParameters(), transferGroup ))
                 }
             }

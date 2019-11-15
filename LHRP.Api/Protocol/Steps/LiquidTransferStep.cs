@@ -73,43 +73,27 @@ namespace LHRP.Api.Protocol.Steps
             }
             
             var commands = new List<IRunnableCommand>();
+            if(_stepData.ReuseTips)
+            {
+                commands.Add(new PickupTips(ChannelPattern.Full(tranfersResult.Value.First().ChannelPattern.NumChannels), _stepData.TipTypeId));
+                foreach(var transferGroup in tranfersResult.Value)
+                {
+                    commands.Add(new LiquidToOneAspirate(new AspirateParameters(), transferGroup));
+                    commands.Add(new Dispense(new DispenseParameters(), transferGroup.Transfers.Select(x => x.Target).ToList(), transferGroup.ChannelPattern));
+                }
+                commands.Add(new DropTips(_stepData.ReturnTipsToSource));
+            }
+            else
+            {
+                foreach (var transferGroup in tranfersResult.Value)
+                {
+                    commands.Add(new PickupTips(transferGroup.ChannelPattern, _stepData.TipTypeId));
+                    commands.Add(new LiquidToOneAspirate(new AspirateParameters(), transferGroup));
+                    commands.Add(new Dispense(new DispenseParameters(), transferGroup.Transfers.Select(x => x.Target).ToList(), transferGroup.ChannelPattern));
+                    commands.Add(new DropTips(_stepData.ReturnTipsToSource));
+                }
+            }
             return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
         }
-
-        //private Result<IEnumerable<IRunnableCommand>> GetMultiDispenseCommands(
-        //    List<TransferGroup<LiquidToOneTransfer>> liquidTransferGroups,
-        //    IRuntimeEngine engine)
-        //{
-        //    if(!liquidTransferGroups.Any())
-        //    {
-        //        return Result.Failure<IEnumerable<IRunnableCommand>>("No liquid transfer groups to process for liquid transfer");
-        //    }
-            
-        //    var prePostVolume = _stepData.PreAliquotVolume + _stepData.PostAliquotVolume;
-        //    var workingVolume = engine.Instrument.TipManager.GetTipCapacity(_stepData.TipTypeId) - prePostVolume;
-
-        //    if(workingVolume < 0.0)
-        //    {
-        //        return Result.Failure<IEnumerable<IRunnableCommand>>("Insufficient tip capacity to handle liquid transfer with pre/post aliquots");
-        //    }
-
-        //    var multiDispenseTransferGroups = _stepData.Pattern.GetMultiDispenseTransferGroups(engine.Instrument, _transferOptimizer, workingVolume);
-        //    if(multiDispenseTransferGroups.IsFailure)
-        //    {
-        //        return Result.Failure<IEnumerable<IRunnableCommand>>(multiDispenseTransferGroups.Error);
-        //    }
-
-        //    var commands = new List<IRunnableCommand>();
-        //    if(_stepData.ReuseTips)
-        //    {
-        //        commands.Add(new PickupTips(ChannelPattern.Full(liquidTransferGroups.First().ChannelPattern.NumChannels), _stepData.TipTypeId));
-        //        foreach(var transferGroup in multiDispenseTransferGroups.Value)
-        //        {
-        //            //commands.Add(new LiquidToOneAspirate(new AspirateParameters(), transferGroup ))
-        //        }
-        //    }
-
-        //    return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
-        //}
     }
 }

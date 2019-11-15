@@ -105,7 +105,7 @@ namespace LHRP.Api.Instrument.LiquidManagement
                 {
                     if(container.Volume > desiredVolume)
                     {
-                        return Result.Ok(new TransferTarget(container.Address, liquid, desiredVolume, TransferType.Aspirate));
+                        return Result.Ok(new TransferTarget(container.Address, desiredVolume, TransferType.Aspirate));
                     }
                 }
             }
