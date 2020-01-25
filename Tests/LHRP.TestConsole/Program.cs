@@ -29,10 +29,10 @@ namespace LHRP.TestConsole
                 new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(2, 3, 50.0), 
                 0, false));
             protocol.AddStep(transferSampleStep);
-            var transferSampleBackStep = new OneToOneTransferStep(
-                new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(3, 2, 45.0),
-                0, false));
-            protocol.AddStep(transferSampleBackStep);
+            //var transferSampleBackStep = new OneToOneTransferStep(
+            //    new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(3, 2, 45.0),
+            //    0, false));
+            //protocol.AddStep(transferSampleBackStep);
             
             var schedule = protocol.Schedule(simplePipettorSimulation);
             PrintSchedule(schedule);

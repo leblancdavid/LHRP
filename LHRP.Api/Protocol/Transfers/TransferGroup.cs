@@ -52,7 +52,7 @@ namespace LHRP.Api.Protocol.Transfers
 
         public TransferGroup(int numChannels)
         {
-            ChannelPattern = ChannelPattern.Empty(numChannels);
+            _channelPattern = ChannelPattern.Empty(numChannels);
             _transfers = new T[numChannels];
         }
     }
