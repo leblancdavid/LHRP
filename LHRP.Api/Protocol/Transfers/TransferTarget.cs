@@ -11,6 +11,8 @@ namespace LHRP.Api.Protocol.Transfers
         public TransferTarget(LabwareAddress address, double volume, TransferType transferType)
         {
             this.Address = address;
+            this.Volume = volume;
+            TransferType = transferType;
         }
     }
 }
