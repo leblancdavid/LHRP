@@ -27,7 +27,7 @@ namespace LHRP.TestConsole
             var protocol = new Protocol();
             var transferSampleStep = new OneToOneTransferStep(
                 new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(2, 3, 50.0), 
-                0, false));
+                300, false));
             protocol.AddStep(transferSampleStep);
             //var transferSampleBackStep = new OneToOneTransferStep(
             //    new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(3, 2, 45.0),
