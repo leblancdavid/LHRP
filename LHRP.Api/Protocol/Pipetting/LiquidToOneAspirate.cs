@@ -81,6 +81,11 @@ namespace LHRP.Api.Protocol.Pipetting
             var volumeUsagePerLiquid = new Dictionary<string, double>();
             foreach(var liquidTarget in TransferGroup.Transfers)
             {
+                if(!volumeUsagePerLiquid.ContainsKey(liquidTarget.Source.AssignedId))
+                {
+                    volumeUsagePerLiquid[liquidTarget.Source.AssignedId] = 0.0;
+                }
+
                 volumeUsagePerLiquid[liquidTarget.Source.AssignedId] += liquidTarget.Target.Volume;
             }
             

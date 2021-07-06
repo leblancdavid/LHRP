@@ -56,7 +56,7 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
 
             for (channelIndex = 0; channelIndex < pipettor.Specification.NumChannels; ++channelIndex)
             {
-                if (pipettor.Specification[channelIndex].CanReach(destinationCoordinates.Value))
+                if (pipettor.Specification[channelIndex].CanReach(destinationCoordinates.Value) && !group.ChannelPattern[channelIndex])
                 {
                     group[channelIndex] = transfer;
                     channelIndex++;

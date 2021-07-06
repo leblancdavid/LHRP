@@ -55,7 +55,14 @@ namespace LHRP.Api.Runtime.Resources
 
         public Result AddConsumableLiquidUsage(Liquids.Liquid liquid, double volume)
         {
-            _consumableLiquidUsages[liquid] += volume;
+            if(!_consumableLiquidUsages.ContainsKey(liquid))
+            {
+                _consumableLiquidUsages.Add(liquid, volume);
+            }
+            else
+            {
+                _consumableLiquidUsages[liquid] += volume;
+            }
             return Result.Ok();
         }
 

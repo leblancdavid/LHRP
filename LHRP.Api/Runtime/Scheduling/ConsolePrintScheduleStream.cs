@@ -18,7 +18,7 @@ namespace LHRP.Api.Runtime.Scheduling
             Console.WriteLine("Tip usage:");
             foreach (var tipUsage in schedule.ResourcesUsage.TipUsages)
             {
-                Console.WriteLine($"Total tips ({tipUsage.TipTypeId}) used: {tipUsage.ExpectedTotalTipUsage}");
+                Console.WriteLine($"Tip Type: ({tipUsage.TipTypeId}) used: {tipUsage.ExpectedTotalTipUsage}");
             }
 
             Console.WriteLine("Liquid usage:");

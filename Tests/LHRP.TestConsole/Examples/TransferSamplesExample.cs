@@ -13,10 +13,10 @@ using System;
 
 namespace LHRP.TestConsole
 {
-    public class AddReagentExample : IProtocolExampleRunner
+    public class TransferSamplesExample : IProtocolExampleRunner
     {
         private IScheduleStream _scheduleStream;
-        public AddReagentExample(IScheduleStream scheduleStream)
+        public TransferSamplesExample(IScheduleStream scheduleStream)
         {
             _scheduleStream = scheduleStream;
         }
@@ -50,7 +50,6 @@ namespace LHRP.TestConsole
             {
                 for (int j = 1; j <= cols; ++j)
                 {
-                    var liquid = new Liquid();
                     var sourceTarget = new TransferTarget(new LabwareAddress(i, j, sourcePositionId), volume, TransferType.Aspirate);
                     var destinationTarget = new TransferTarget(new LabwareAddress(i, j, destinationPositionId), volume, TransferType.Dispense);
                     tp.AddTransfer(new OneToOneTransfer(sourceTarget, destinationTarget));
