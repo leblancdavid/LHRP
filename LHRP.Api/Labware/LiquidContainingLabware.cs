@@ -7,11 +7,12 @@ using System.Text;
 
 namespace LHRP.Api.Labware
 {
-    public class LiquidContainingLabware<T> : Labware where T : LiquidContainer
+    public class LiquidContainingLabware : Labware
     {
 
-        protected Dictionary<LabwareAddress, T> _containers = new Dictionary<LabwareAddress, T>();
+        protected Dictionary<LabwareAddress, LiquidContainer> _containers = new Dictionary<LabwareAddress, LiquidContainer>();
 
+        public IEnumerable<LiquidContainer> GetContainers() => _containers.Values;
         public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
         {
             if (!_containers.ContainsKey(address))

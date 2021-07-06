@@ -7,7 +7,7 @@ using LHRP.Api.Liquids;
 
 namespace LHRP.Api.Labware.Plates
 {
-    public class Plate : LiquidContainingLabware<Well>
+    public class Plate : LiquidContainingLabware
     {
         public int NumWells 
         {
@@ -68,12 +68,12 @@ namespace LHRP.Api.Labware.Plates
                 return Result.Failure<Well>("Invalid plate address");
             }
 
-            return Result.Ok(_containers[address]);
+            return Result.Ok(_containers[address] as Well);
         }
 
         public IEnumerable<Well> GetWellsWithLiquid(Liquid liquid)
         {
-            return _containers.Values.Where(w => w.ContainsLiquid(liquid));
+            return _containers.Values.Where(w => w.ContainsLiquid(liquid)).Select(x => x as Well);
         }
 
         private void InitializeWells(PlateDefinition definition)

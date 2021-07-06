@@ -94,5 +94,20 @@ namespace LHRP.Api.Instrument
             }
             return plates;
         }
-  }
+
+        public IEnumerable<LiquidContainer> GetLiquidContainers()
+        {
+            var liquidContainers = new List<LiquidContainer>();
+            foreach (var position in _deckPositions.Values)
+            {
+                if (position.IsOccupied && position.AssignedLabware is LiquidContainingLabware)
+                {
+                    var containerLabware = position.AssignedLabware as LiquidContainingLabware;
+                    liquidContainers.AddRange(containerLabware.GetContainers());
+                }
+            }
+
+            return liquidContainers;
+        }
+    }
 }

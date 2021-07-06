@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
@@ -84,11 +85,13 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
 
         public void InitializeResources(ResourcesUsage resources)
         {
-            foreach(var liquid in resources.LiquidContainerUsages)
+            var liquidContainers = _deck.GetLiquidContainers();
+            foreach (var liquid in resources.ConsumableLiquidUsages)
             {
-                if(liquid.RequiresLiquidAtStart)
+                var container = liquidContainers.FirstOrDefault(x => x.IsPure && x.ContainsLiquid(liquid.Key));
+                if(container != null)
                 {
-                    //_deck.
+                    container.AddLiquid(liquid.Key, liquid.Value);
                 }
             }
         }

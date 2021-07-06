@@ -17,6 +17,7 @@ namespace LHRP.Api.Instrument
         Result<Labware.Labware> GetLabware(int positionId);
         IEnumerable<TipRack> GetTipRacks();
         IEnumerable<Plate> GetPlates();
+        IEnumerable<LiquidContainer> GetLiquidContainers();
         Result<Coordinates> GetCoordinates(LabwareAddress address);
         
     }
