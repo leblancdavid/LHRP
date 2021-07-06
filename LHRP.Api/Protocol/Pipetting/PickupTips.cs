@@ -75,7 +75,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return commandResult;
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
+        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
             schedule.ResourcesUsage.AddTipUsage(_tipTypeId, _pattern.GetNumberActiveChannels());
@@ -83,7 +83,7 @@ namespace LHRP.Api.Protocol.Pipetting
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 4);
 
-            return schedule;
+            return Result.Success(schedule);
         }
     }
 }

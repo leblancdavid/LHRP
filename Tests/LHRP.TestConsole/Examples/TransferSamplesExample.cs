@@ -37,7 +37,7 @@ namespace LHRP.TestConsole
             protocol.AddStep(transferSampleStep);
 
             var schedule = protocol.Schedule(simplePipettorSimulation, true);
-            _scheduleStream.Send(schedule);
+            _scheduleStream.Send(schedule.Value);
 
             return protocol.Run(simplePipettorSimulation);
         }

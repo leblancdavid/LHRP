@@ -7,7 +7,7 @@ namespace LHRP.Api.Runtime.Scheduling
 {
     public interface ISchedulable
     {
-        Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources);
+        Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources);
         Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine);
     }
 }

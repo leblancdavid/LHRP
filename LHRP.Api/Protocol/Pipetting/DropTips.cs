@@ -64,14 +64,14 @@ namespace LHRP.Api.Protocol.Pipetting
             return pipettor.DropTips(parameters);
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
+        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
 
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 3);
             //TODO
-            return schedule;
+            return Result.Success(schedule);
         }
     }
 }

@@ -47,22 +47,22 @@ namespace LHRP.Api.Protocol.Steps
             return engine.Run();
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
+        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
             var commands = GetCommands(runtimeEngine);
             if (commands.IsFailure)
             {
-                return schedule;
+                return Result.Failure<Schedule>(commands.Error);
             }
 
             foreach (var command in commands.Value)
             {
                 var commandSchedule = command.Schedule(runtimeEngine, false);
-                schedule.Combine(commandSchedule);
+                schedule.Combine(commandSchedule.Value);
             }
 
-            return schedule;
+            return Result.Success(schedule);
         }
 
         public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
