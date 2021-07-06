@@ -16,7 +16,6 @@ namespace LHRP.Api.Protocol.Transfers.OneToOne
         {
             var pipettor = instrument.Pipettor;
             var transferGroups = new List<TransferGroup<OneToOneTransfer>>();
-            var currentTransferGroup = new TransferGroup<OneToOneTransfer>(pipettor.Specification.NumChannels);
 
             foreach(var transfer in transfers)
             {
