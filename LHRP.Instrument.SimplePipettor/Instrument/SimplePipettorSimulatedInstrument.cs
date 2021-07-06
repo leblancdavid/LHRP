@@ -7,83 +7,95 @@ using LHRP.Api.Instrument;
 using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Resources;
 using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
 {
-  public class SimplePipettorSimulatedInstrument : IInstrument, ISimulation
-  {
-    IndependentChannelSimulatedPipettor _pipettor;
-
-    private uint _simulationSpeedFactor;
-    public uint SimulationSpeedFactor
+    public class SimplePipettorSimulatedInstrument : IInstrument, ISimulation
     {
-      get
-      {
-        return _simulationSpeedFactor;
-      }
-      set
-      {
-        _simulationSpeedFactor = value;
-        _pipettor.SimulationSpeedFactor = value;
-      }
-    }
+        IndependentChannelSimulatedPipettor _pipettor;
 
-    private IDeck _deck;
-    public IDeck Deck
-    {
-      get
-      {
-        return _deck;
-      }
-    }
-    private TipManager _tipManager;
-    public ITipManager TipManager => _tipManager;
-    
-    private LiquidManager _liquidManager;
-    public ILiquidManager LiquidManager => _liquidManager;
-    private Coordinates _wastePosition = new Coordinates(0.0, 0.0, 0.0);
-    public Coordinates WastePosition
-    {
-      get
-      {
-        return _wastePosition;
-      }
-    }
+        private uint _simulationSpeedFactor;
+        public uint SimulationSpeedFactor
+        {
+            get
+            {
+                return _simulationSpeedFactor;
+            }
+            set
+            {
+                _simulationSpeedFactor = value;
+                _pipettor.SimulationSpeedFactor = value;
+            }
+        }
 
-    public double FailureRate { get; set; }
-    public SimplePipettorSimulatedInstrument()
-    {
-      _pipettor = new IndependentChannelSimulatedPipettor();
+        private IDeck _deck;
+        public IDeck Deck
+        {
+            get
+            {
+                return _deck;
+            }
+        }
+        private TipManager _tipManager;
+        public ITipManager TipManager => _tipManager;
 
-      var deckPositions = new List<DeckPosition>();
-      int numPositions = 8;
-      for (int i = 0; i < numPositions; ++i)
-      {
-        //just temporary position assignement
-        deckPositions.Add(new DeckPosition(i + 1,
-            new Coordinates(1.0, 1.0, 1.0),
-            new Coordinates(i, i, i)));
-      }
+        private LiquidManager _liquidManager;
+        public ILiquidManager LiquidManager => _liquidManager;
+        private Coordinates _wastePosition = new Coordinates(0.0, 0.0, 0.0);
+        public Coordinates WastePosition
+        {
+            get
+            {
+                return _wastePosition;
+            }
+        }
 
-       InitializeDeck(new Deck(deckPositions));
+        public double FailureRate { get; set; }
+        public SimplePipettorSimulatedInstrument()
+        {
+            _pipettor = new IndependentChannelSimulatedPipettor();
+
+            var deckPositions = new List<DeckPosition>();
+            int numPositions = 8;
+            for (int i = 0; i < numPositions; ++i)
+            {
+                //just temporary position assignement
+                deckPositions.Add(new DeckPosition(i + 1,
+                    new Coordinates(1.0, 1.0, 1.0),
+                    new Coordinates(i, i, i)));
+            }
+
+            InitializeDeck(new Deck(deckPositions));
+        }
+
+        public IDevice GetDevice(Guid id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void InitializeDeck(IDeck deck)
+        {
+            _deck = deck;
+            _tipManager = new TipManager(_deck);
+            _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
+        }
+
+        public void InitializeResources(ResourcesUsage resources)
+        {
+            foreach(var liquid in resources.LiquidContainerUsages)
+            {
+                if(liquid.RequiresLiquidAtStart)
+                {
+                    //_deck.
+                }
+            }
+        }
+
+        public IPipettor Pipettor
+        {
+            get { return _pipettor; }
+        }
     }
-
-    public IDevice GetDevice(Guid id)
-    {
-      throw new System.NotImplementedException();
-    }
-
-    private void InitializeDeck(IDeck deck)
-    {
-        _deck = deck;
-        _tipManager = new TipManager(_deck);
-        _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
-    }
-
-    public IPipettor Pipettor
-    {
-      get { return _pipettor; }
-    }
-  }
 }

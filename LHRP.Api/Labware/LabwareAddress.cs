@@ -10,6 +10,13 @@ namespace LHRP.Api.Labware
         public int Column { get; private set; }
         public int PositionId { get; set; }
 
+        public LabwareAddress(int row, int column)
+        {
+            Row = row;
+            Column = column;
+            PositionId = 0;
+        }
+
         public LabwareAddress(int row, int column, int positionId)
         {
             Row = row;

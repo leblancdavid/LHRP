@@ -7,7 +7,7 @@ using LHRP.Api.Liquids;
 
 namespace LHRP.Api.Labware.Plates
 {
-    public class Plate : Labware
+    public class Plate : LiquidContainingLabware<Well>
     {
         public int NumWells 
         {
@@ -27,7 +27,7 @@ namespace LHRP.Api.Labware.Plates
             set
             {
                 //Before we update the absolute position, move all the tips along with the rack.
-                foreach(var well in _wells.Values)
+                foreach(var well in _containers.Values)
                 {
                     well.AbsolutePosition.X = value.X - _absolutePosition.X;
                     well.AbsolutePosition.Y = value.Y - _absolutePosition.Y;
@@ -46,51 +46,39 @@ namespace LHRP.Api.Labware.Plates
             protected set
             {
                 _positionId = value;
-                foreach (var well in _wells)
+                foreach (var well in _containers)
                 {
                     well.Key.PositionId = value;
                     well.Value.Address.PositionId = value;
                 }
             }
         }
-        
-        private Dictionary<LabwareAddress, Well> _wells = new Dictionary<LabwareAddress, Well>();
 
         public Plate(PlateDefinition definition)
         {
             Definition = definition;
             InitializeWells(definition);
         }
-        
-        public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
-        {
-            if(!_wells.ContainsKey(address))
-            {
-                return Result.Failure<Coordinates>("Invalid plate address");
-            }
-
-            return Result.Ok(_wells[address].AbsolutePosition);
-        }
 
         public Result<Well> GetWell(LabwareAddress address)
         {
-            if(!_wells.ContainsKey(address))
+            if(!_containers.ContainsKey(address))
             {
                 // return Result.Failure<Well>("Sorry! Hope you feel better soon!!!");
                 return Result.Failure<Well>("Invalid plate address");
             }
 
-            return Result.Ok(_wells[address]);
+            return Result.Ok(_containers[address]);
         }
 
         public IEnumerable<Well> GetWellsWithLiquid(Liquid liquid)
         {
-            return _wells.Values.Where(w => w.ContainsLiquid(liquid));
+            return _containers.Values.Where(w => w.ContainsLiquid(liquid));
         }
 
         private void InitializeWells(PlateDefinition definition)
         {
-            _wells.Clear();
+            _containers.Clear();
             for(int i = 0; i < definition.Rows; ++i)
             {
                 for(int j = 0; j < definition.Columns; ++j)
@@ -103,8 +91,8 @@ namespace LHRP.Api.Labware.Plates
                     };
 
                     var labwareAddress = new LabwareAddress(i + 1, j + 1, _positionId);
-                    
-                    _wells.Add(labwareAddress, new Well(labwareAddress, absolutePosition, definition.WellDefinition));
+
+                    _containers.Add(labwareAddress, new Well(labwareAddress, absolutePosition, definition.WellDefinition));
                 }
             }
         }

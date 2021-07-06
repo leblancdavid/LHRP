@@ -47,7 +47,7 @@ namespace LHRP.Api.Protocol.Steps
             return engine.Run();
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        public Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
             var commands = GetCommands(runtimeEngine);
@@ -58,7 +58,7 @@ namespace LHRP.Api.Protocol.Steps
 
             foreach (var command in commands.Value)
             {
-                var commandSchedule = command.Schedule(runtimeEngine);
+                var commandSchedule = command.Schedule(runtimeEngine, false);
                 schedule.Combine(commandSchedule);
             }
 

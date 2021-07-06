@@ -1,7 +1,9 @@
+using LHRP.Api.CoordinateSystem;
+using LHRP.Api.Liquids;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LHRP.Api.Liquids
+namespace LHRP.Api.Labware
 {
     public class LiquidContainer
     {
@@ -35,18 +37,23 @@ namespace LHRP.Api.Liquids
             }
         }
 
-        public bool IsEmpty
+        public bool IsAssigned
         {
             get
             {
-                return _liquids.Count == 0;
+                return _liquids.Count > 0;
             }
         }
+        public Coordinates AbsolutePosition { get; protected set; }
+        public LabwareAddress Address { get; protected set; }
 
-        public LiquidContainer(double maxVolume)
+        public LiquidContainer(LabwareAddress address, Coordinates absolutePosition, double maxVolume)
         {
+            Address = address;
+            AbsolutePosition = absolutePosition;
             MaxVolume = maxVolume;
         }
+
 
         public void AddLiquid(Liquid liquid, double volume)
         {

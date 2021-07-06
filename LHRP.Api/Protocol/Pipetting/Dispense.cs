@@ -56,7 +56,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return processResult;
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        public Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
             foreach (var target in _targets)

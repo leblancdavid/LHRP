@@ -32,7 +32,7 @@ namespace LHRP.TestConsole
             var reagent = new Liquid();
 
             var reagentTrough = ExampleLabwareCreator.GetReagentPlate1();
-            reagentTrough.GetWell(new LabwareAddress(1, 1, 0)).Value.AssignLiquid(reagent);
+            reagentTrough.GetWell(new LabwareAddress(1, 1)).Value.AssignLiquid(reagent);
 
             deck.AssignLabware(1, ExampleLabwareCreator.GetTipRack());
             deck.AssignLabware(2, reagentTrough);
@@ -44,7 +44,7 @@ namespace LHRP.TestConsole
                 300, false, true));
             protocol.AddStep(addReagent);
 
-            var schedule = protocol.Schedule(simplePipettorSimulation);
+            var schedule = protocol.Schedule(simplePipettorSimulation, true);
             _scheduleStream.Send(schedule);
 
             return protocol.Run(simplePipettorSimulation);

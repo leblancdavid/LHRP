@@ -50,12 +50,12 @@ namespace LHRP.Api.Protocol
             return runtime.Run();
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        public Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
             foreach(var step in _steps)
             {
-                var stepSchedule = step.Schedule(runtimeEngine);
+                var stepSchedule = step.Schedule(runtimeEngine, false);
                 schedule.Combine(stepSchedule);
             }
 

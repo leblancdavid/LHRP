@@ -9,14 +9,11 @@ namespace LHRP.Api.Labware.Plates
     public class Well : LiquidContainer
     {
         public WellDefinition Definition { get; private set; }
-        public LabwareAddress Address { get; private set; }
-        public Coordinates AbsolutePosition { get; private set; }
 
         public Well(LabwareAddress address, Coordinates absolutePosition, WellDefinition definition)
-            : base(definition.WellCapacity)
+            : base(address, absolutePosition, definition.WellCapacity)
         {
-            Address = address;
-            AbsolutePosition = absolutePosition;
+            
             Definition = definition;
         }
     }

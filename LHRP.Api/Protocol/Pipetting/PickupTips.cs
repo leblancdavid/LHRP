@@ -75,7 +75,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return commandResult;
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        public Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
             schedule.ResourcesUsage.AddTipUsage(_tipTypeId, _pattern.GetNumberActiveChannels());

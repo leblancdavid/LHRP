@@ -6,6 +6,7 @@ using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Instrument.TipManagement;
+using LHRP.Api.Runtime.Resources;
 using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
@@ -65,6 +66,11 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             _deck = deck;
             _tipManager = new TipManager(_deck);
             _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
+        }
+
+        public void InitializeResources(ResourcesUsage resources)
+        {
+            throw new NotImplementedException();
         }
 
         public IPipettor Pipettor 

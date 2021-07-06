@@ -64,7 +64,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return pipettor.DropTips(parameters);
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        public Schedule Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
 

@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentAssertions;
+using LHRP.Api.Labware;
 using LHRP.Api.Liquids;
 using Xunit;
 
@@ -11,20 +12,20 @@ namespace LHRP.Domain.Tests.Liquids
 
         public LiquidContainerShould()
         {
-            _liquidContainer = new LiquidContainer(9999);
+            _liquidContainer = new LiquidContainer(new LabwareAddress(1,1), new Api.CoordinateSystem.Coordinates(0,0 ,0), 9999);
         }
 
         [Fact]
         public void BeEmpty_WhenNoLiquidHasBeenAdded()
         {
-            _liquidContainer.IsEmpty.Should().BeTrue();
+            _liquidContainer.IsAssigned.Should().BeFalse();
         }
 
         [Fact]
         public void NotBeEmpty_WhenLiquidHasBeenAdded()
         {
             _liquidContainer.AddLiquid(new Liquid(LiquidType.Water), 100);
-            _liquidContainer.IsEmpty.Should().BeFalse();
+            _liquidContainer.IsAssigned.Should().BeTrue();
         }
 
         [Fact]

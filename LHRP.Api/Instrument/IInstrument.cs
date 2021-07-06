@@ -6,6 +6,7 @@ using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Protocol;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Resources;
 
 namespace LHRP.Api.Instrument
 {
@@ -17,5 +18,7 @@ namespace LHRP.Api.Instrument
         IPipettor Pipettor { get; }
         IDevice GetDevice(Guid id);
         Coordinates WastePosition { get; }
+
+        void InitializeResources(ResourcesUsage resources);
     }
 }
