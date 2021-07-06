@@ -16,7 +16,6 @@ namespace LHRP.Api.Instrument
         ILiquidManager LiquidManager { get; }
         IPipettor Pipettor { get; }
         IDevice GetDevice(Guid id);
-
         Coordinates WastePosition { get; }
     }
 }

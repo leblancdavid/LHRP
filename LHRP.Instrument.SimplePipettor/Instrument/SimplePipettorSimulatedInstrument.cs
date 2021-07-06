@@ -66,14 +66,19 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             new Coordinates(i, i, i)));
       }
 
-      _deck = new Deck(deckPositions);
-      _tipManager = new TipManager(_deck);
-      _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
+       InitializeDeck(new Deck(deckPositions));
     }
 
     public IDevice GetDevice(Guid id)
     {
       throw new System.NotImplementedException();
+    }
+
+    private void InitializeDeck(IDeck deck)
+    {
+        _deck = deck;
+        _tipManager = new TipManager(_deck);
+        _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
     }
 
     public IPipettor Pipettor
