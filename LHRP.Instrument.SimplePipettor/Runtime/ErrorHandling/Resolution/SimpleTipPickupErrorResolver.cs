@@ -42,7 +42,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 
             if (!containers.Any())
             {
-                return Result.Failure($"No containers have been assigned to liquid {error.RequestedLiquid.AssignedId}");
+                return Result.Failure($"No containers have been assigned to liquid {error.RequestedLiquid.GetId()}");
             }
 
             double volume = error.RemainingVolumeNeeded;

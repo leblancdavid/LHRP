@@ -22,7 +22,7 @@ namespace LHRP.Api.Runtime.ErrorHandling
 
             if (!containers.Any())
             {
-                return Result.Failure($"No containers have been assigned to liquid {insuffientLiquidError.RequestedLiquid.AssignedId}");
+                return Result.Failure($"No containers have been assigned to liquid {insuffientLiquidError.RequestedLiquid.GetId()}");
             }
 
             double volume = insuffientLiquidError.RemainingVolumeNeeded;

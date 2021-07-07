@@ -91,7 +91,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
                 var containers = liquidContainers.Where(x => x.ContainsLiquid(liquid.Key)).ToList();
                 if(!containers.Any())
                 {
-                    Result.Combine(result, Result.Failure($"Unable to initialize liquid resource {liquid.Key.AssignedId}, no container has been assigned for this liquid"));
+                    Result.Combine(result, Result.Failure($"Unable to initialize liquid resource {liquid.Key.GetId()}, no container has been assigned for this liquid"));
                     continue;
                 }
 

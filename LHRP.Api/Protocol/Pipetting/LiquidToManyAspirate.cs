@@ -91,14 +91,14 @@ namespace LHRP.Api.Protocol.Pipetting
             var volumeUsagePerLiquid = new Dictionary<string, double>();
             foreach (var liquidTarget in TransferGroup.Transfers)
             {
-                volumeUsagePerLiquid[liquidTarget.Source.AssignedId] += liquidTarget.GetTotalTransferVolume() + AdditionalAspirateVolume;
+                volumeUsagePerLiquid[liquidTarget.Source.GetId()] += liquidTarget.GetTotalTransferVolume() + AdditionalAspirateVolume;
             }
 
             var transferTargets = new List<TransferTarget>();
             foreach (var liquidTarget in TransferGroup.Transfers)
             {
                 //First we need to make sure there's enough liquid in the container to complete the transfer
-                var transferTarget = liquidManager.RequestLiquid(liquidTarget.Source, volumeUsagePerLiquid[liquidTarget.Source.AssignedId]);
+                var transferTarget = liquidManager.RequestLiquid(liquidTarget.Source, volumeUsagePerLiquid[liquidTarget.Source.GetId()]);
                 //If this happens then there's not enough liquid
                 if (transferTarget.IsFailure)
                 {

@@ -2,6 +2,7 @@ using FluentAssertions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Labware;
+using LHRP.Api.Liquids;
 using Xunit;
 
 namespace LHRP.Domain.Tests.Devices.Pipettor
@@ -47,7 +48,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
                 new Coordinates(1,1,1),
                 50, false, 0));
 
-            channelStatus.OnAspiratedVolume(20);
+            channelStatus.OnAspiratedVolume(new Liquid(), 20);
 
             channelStatus.CurrentVolume.Should().Be(20);
             channelStatus.HasErrors.Should().BeFalse();
@@ -62,7 +63,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
                 new Coordinates(1,1,1),
                 50, false, 0));
 
-            channelStatus.OnAspiratedVolume(999);
+            channelStatus.OnAspiratedVolume(new Liquid(), 999);
 
             channelStatus.HasErrors.Should().BeTrue();
         }
@@ -71,7 +72,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
         public void HaveErrorsWhenAspiratingWhenNoTipIsPresent()
         {
             var channelStatus = new ChannelStatus();
-            channelStatus.OnAspiratedVolume(999);
+            channelStatus.OnAspiratedVolume(new Liquid(), 999);
             channelStatus.HasErrors.Should().BeTrue();
         }
 
@@ -84,7 +85,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor
                 new Coordinates(1,1,1),
                 50, false, 0));
 
-            channelStatus.OnAspiratedVolume(50);
+            channelStatus.OnAspiratedVolume(new Liquid(), 50);
             channelStatus.OnDispensedVolume(25);
 
             channelStatus.CurrentVolume.Should().Be(25);

@@ -57,15 +57,11 @@ namespace LHRP.Api.Protocol.Pipetting
             {
                 for(int i = 0; i < _targets.Count; ++i)
                 {
-                    if(pipettorStatus[i].HasTip)
+                    if(pipettorStatus[i].HasTip && pipettorStatus[i].ContainsLiquid)
                     {
-                        //liquidManager.AddLiquidToPosition(_targets[i].Address, pipettorStatus[i].CurrentTip.Liquid, _targets[i].Volume);
+                        liquidManager.AddLiquidToPosition(_targets[i].Address, pipettorStatus[i].CurrentLiquid!, _targets[i].Volume);
                     }
                 }
-                //foreach (var target in _targets)
-                //{
-                //    liquidManager.AddLiquidToPosition(target.Address, target.Liquid, target.Volume);
-                //}
             }
             
             return processResult;

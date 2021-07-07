@@ -86,7 +86,7 @@ namespace LHRP.Api.Instrument
 
             if(liquidAssignmentFound)
             {
-                return Result.Failure($"Unable to add liquid '{liquid.AssignedId}' since no positions were assigned to the liquid");
+                return Result.Failure($"Unable to add liquid '{liquid.GetId()}' since no positions were assigned to the liquid");
             }
 
             return Result.Ok();
@@ -103,7 +103,7 @@ namespace LHRP.Api.Instrument
                 }
             }
             
-            return Result.Failure<TransferTarget>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.AssignedId}'");
+            return Result.Failure<TransferTarget>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.GetId()}'");
         }
 
         public Result ClearLiquidAtPosition(LabwareAddress address)

@@ -60,16 +60,16 @@ namespace LHRP.Api.Labware
             if(!ContainsLiquid(liquid))
             {
                 _liquids.Add(liquid);
-                _liquidVolumes[liquid.AssignedId] = 0.0;
+                _liquidVolumes[liquid.GetId()] = 0.0;
             }
 
-            if(_liquidVolumes[liquid.AssignedId] + volume > MaxVolume)
+            if(_liquidVolumes[liquid.GetId()] + volume > MaxVolume)
             {
-                _liquidVolumes[liquid.AssignedId] = MaxVolume;
+                _liquidVolumes[liquid.GetId()] = MaxVolume;
             }
             else
             {
-                _liquidVolumes[liquid.AssignedId] += volume;
+                _liquidVolumes[liquid.GetId()] += volume;
             }
         }
 
@@ -78,7 +78,7 @@ namespace LHRP.Api.Labware
             _liquids.Clear();
             _liquidVolumes.Clear();
             _liquids.Add(liquid);
-            _liquidVolumes[liquid.AssignedId] = 0.0;
+            _liquidVolumes[liquid.GetId()] = 0.0;
         }
 
         public void Remove(double volume)
@@ -98,7 +98,7 @@ namespace LHRP.Api.Labware
 
         public bool ContainsLiquid(Liquid liquid)
         {
-            return _liquids.Any(l => l.AssignedId == liquid.AssignedId);
+            return _liquids.Any(l => l.GetId() == liquid.GetId());
         }
 
         public void Clear()
