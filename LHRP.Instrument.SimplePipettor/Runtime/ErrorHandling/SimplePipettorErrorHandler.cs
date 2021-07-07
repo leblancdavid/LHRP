@@ -13,6 +13,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
         {
             ConfigureResolution<InsuffientTipsRuntimeError>(new SimpleTipRackReloadRequest());
             ConfigureResolution<TipPickupRuntimeError>(new SimpleTipPickupErrorResolver());
+            ConfigureResolution<InsufficientLiquidRuntimeError>(new SimpleLiquidRefillErrorResolver());
         }
     }
 }

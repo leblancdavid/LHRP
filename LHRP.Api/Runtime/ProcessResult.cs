@@ -61,6 +61,14 @@ namespace LHRP.Api.Runtime
             ProcessId = Guid.NewGuid();
         }
 
+        public ProcessResult(params RuntimeError[] errors)
+        {
+            Duration = new TimeSpan(0);
+            EstimatedDuration = new TimeSpan(0);
+            ProcessId = Guid.NewGuid();
+            _errors.AddRange(errors);
+        }
+
         public ProcessResult(TimeSpan estimate, TimeSpan duration)
         {
             Duration = duration;
