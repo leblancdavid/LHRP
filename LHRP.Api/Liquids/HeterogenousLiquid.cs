@@ -62,5 +62,9 @@ namespace LHRP.Api.Liquids
             return this;
         }
 
+        public override string GetId()
+        {
+            return String.Join('-', _liquidParts.Select(x => x.GetId()));
+        }
     }
 }

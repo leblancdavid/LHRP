@@ -24,7 +24,10 @@ namespace LHRP.Api.Liquids
 
         public override string GetId()
         {
-            return $"{_assignedId}({Math.Round(Concentration, ConcentrationPrecision)})";
+            if (Math.Round(Concentration, ConcentrationPrecision) < 1.0)
+                return $"{_assignedId}({Math.Round(Concentration, ConcentrationPrecision)})";
+
+            return _assignedId;
         }
 
         public override string ToString()

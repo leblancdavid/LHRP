@@ -47,11 +47,19 @@ namespace LHRP.Api.Liquids
                 ratio = 1.0;
             }
 
+            if(liquid is HeterogeneousLiquid)
+            {
+                var hLiquid = liquid as HeterogeneousLiquid;
+                return hLiquid!.Mix(this, 1.0 - ratio);
+            }
+
             var outputLiquid = new HeterogeneousLiquid();
-            outputLiquid.Mix(this, 1.0 - ratio);
+            outputLiquid.Mix(this, 1.0);
             outputLiquid.Mix(liquid, ratio);
 
             return outputLiquid;
         }
+
+        
     }
 }
