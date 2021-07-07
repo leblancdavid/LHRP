@@ -4,7 +4,7 @@ using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Pipetting

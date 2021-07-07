@@ -2,7 +2,6 @@
 using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
 using System;
 using System.Linq;
 

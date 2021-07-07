@@ -1,4 +1,4 @@
-namespace LHRP.Api.Runtime.ErrorHandling.Errors
+namespace LHRP.Api.Runtime.ErrorHandling
 {
     public class InsuffientTipsRuntimeError : RuntimeError
     {

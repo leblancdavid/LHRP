@@ -1,5 +1,4 @@
 using LHRP.Api.Runtime.ErrorHandling;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 {

@@ -4,7 +4,7 @@ using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Scheduling;
 using System.Collections.Generic;
 using System.Linq;

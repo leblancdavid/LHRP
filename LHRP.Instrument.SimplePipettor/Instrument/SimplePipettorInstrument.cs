@@ -8,6 +8,7 @@ using LHRP.Api.Instrument;
 using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Runtime.Resources;
+using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
@@ -69,7 +70,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
         }
 
-        public Result InitializeResources(ResourcesUsage resources)
+        public Result<Schedule> InitializeResources(Schedule schedule)
         {
             throw new NotImplementedException();
         }

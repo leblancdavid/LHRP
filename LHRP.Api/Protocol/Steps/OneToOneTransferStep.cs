@@ -6,7 +6,7 @@ using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Steps

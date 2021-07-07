@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol
