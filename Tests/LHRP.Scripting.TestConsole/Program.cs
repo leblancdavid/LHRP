@@ -1,7 +1,6 @@
 ﻿using LHRP.Api.Runtime;
 using LHRP.Instrument.SimplePipettor.Runtime;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
 using System;
 using System.IO;
 

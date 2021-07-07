@@ -4,7 +4,8 @@ using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
+using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Pipetting
@@ -13,6 +14,8 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         private ChannelPattern _pattern;
         private int _tipTypeId;
+        public ResourcesUsage ResourcesUsed { get; private set; }
+
         public PickupTips(ChannelPattern pattern, 
             int tipTypeId,
             int retryAttempt = 0)
@@ -21,6 +24,9 @@ namespace LHRP.Api.Protocol.Pipetting
             _tipTypeId = tipTypeId;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
+
+            ResourcesUsed = new ResourcesUsage();
+            ResourcesUsed.AddTipUsage(_tipTypeId, _pattern.GetNumberActiveChannels());
         }
         public Guid CommandId { get; private set; }
         public int RetryCount { get; private set; }
@@ -75,15 +81,18 @@ namespace LHRP.Api.Protocol.Pipetting
             return commandResult;
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
-            schedule.ResourcesUsage.AddTipUsage(_tipTypeId, _pattern.GetNumberActiveChannels());
+            schedule.ResourcesUsage.Combine(ResourcesUsed);
 
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 4);
-
-            return schedule;
+            if (initializeResources)
+            {
+                return runtimeEngine.Instrument.InitializeResources(schedule);
+            }
+            return Result.Success(schedule);
         }
     }
 }

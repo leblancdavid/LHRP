@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using CSharpFunctionalExtensions;
+using LHRP.Api.Runtime.Resources;
 
 namespace LHRP.Api.Runtime
 {
@@ -83,10 +85,24 @@ namespace LHRP.Api.Runtime
         {
             if(index < 0 || index >= _queue.Count)
             {
-                return Result.Fail<IRunnableCommand>($"Invalid command index '{index}'");
+                return Result.Failure<IRunnableCommand>($"Invalid command index '{index}'");
             }
 
             return Result.Ok(_queue[index]);
+        }
+
+        public ResourcesUsage GetTotalResources()
+        {
+            var resources = new ResourcesUsage();
+            resources.Combine(_queue.Select(x => x.ResourcesUsed).ToArray());
+            return resources;
+        }
+
+        public ResourcesUsage GetRemainingResources()
+        {
+            var resources = new ResourcesUsage();
+            resources.Combine(_queue.Skip(CurrentCommandIndex).Select(x => x.ResourcesUsed).ToArray());
+            return resources;
         }
     }
 }

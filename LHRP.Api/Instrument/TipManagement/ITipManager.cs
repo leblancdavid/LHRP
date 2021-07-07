@@ -13,5 +13,6 @@ namespace LHRP.Api.Instrument.TipManagement
 
         Result ReloadTips(int tipTypeId);
         int GetTotalTipCount(int tipTypeId);
+        double GetTipCapacity(int tipTypeId);
     }
 }

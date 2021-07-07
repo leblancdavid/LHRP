@@ -2,6 +2,7 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,15 @@ namespace LHRP.Api.Protocol.Pipetting
     public class DropTips : IPipettingCommand
     {
         private bool _returnToSource;
+        public ResourcesUsage ResourcesUsed { get; private set; }
         public DropTips(bool returnToSource=false,
             int retryAttempt = 0)
         {
             _returnToSource = returnToSource;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
+
+            ResourcesUsed = new ResourcesUsage();
         }
 
         public Guid CommandId { get; private set; }
@@ -64,14 +68,19 @@ namespace LHRP.Api.Protocol.Pipetting
             return pipettor.DropTips(parameters);
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
-
+            schedule.ResourcesUsage.Combine(ResourcesUsed);
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 3);
-            //TODO
-            return schedule;
+
+            if (initializeResources)
+            {
+                return runtimeEngine.Instrument.InitializeResources(schedule);
+            }
+
+            return Result.Success(schedule);
         }
     }
 }

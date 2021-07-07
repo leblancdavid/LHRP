@@ -16,10 +16,12 @@ namespace LHRP.Api.Liquids
             }
         }
         public LiquidType LiquidType { get; private set; }
+        public bool IsUnknown { get; private set; }
 
-        public Liquid(LiquidType type = LiquidType.Default)
+        public Liquid(LiquidType type = LiquidType.Default, bool isUnknown = true)
         {
             LiquidType = type;
+            IsUnknown = isUnknown;
             _assignedId = "";
             UniqueId = Guid.NewGuid();
         }

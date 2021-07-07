@@ -6,7 +6,7 @@ using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
+using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Steps
@@ -15,6 +15,7 @@ namespace LHRP.Api.Protocol.Steps
     {
         private OneToOneTransferStepData _stepData;
         private ITransferOptimizer<OneToOneTransfer> _transferOptimizer;
+
         public OneToOneTransferStep(OneToOneTransferStepData stepData, ITransferOptimizer<OneToOneTransfer> optimizer = null)
         {
             _stepData = stepData;
@@ -44,22 +45,26 @@ namespace LHRP.Api.Protocol.Steps
             return engine.Run();
         }
 
-        public Schedule Schedule(IRuntimeEngine runtimeEngine)
+        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
             var commands = GetCommands(runtimeEngine);
             if (commands.IsFailure)
             {
-                return schedule;
+                return Result.Failure<Schedule>(commands.Error);
             }
 
             foreach (var command in commands.Value)
             {
-                var commandSchedule = command.Schedule(runtimeEngine);
-                schedule.Combine(commandSchedule);
+                var commandSchedule = command.Schedule(runtimeEngine, false);
+                schedule.Combine(commandSchedule.Value);
+            }
+            if (initializeResources)
+            {
+                return runtimeEngine.Instrument.InitializeResources(schedule);
             }
 
-            return schedule;
+            return Result.Success(schedule);
         }
 
         public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
@@ -68,7 +73,7 @@ namespace LHRP.Api.Protocol.Steps
             var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
             if (tranfersResult.IsFailure)
             {
-                return Result.Fail<IEnumerable<IRunnableCommand>>(tranfersResult.Error);
+                return Result.Failure<IEnumerable<IRunnableCommand>>(tranfersResult.Error);
             }
 
             var commands = new List<IRunnableCommand>();

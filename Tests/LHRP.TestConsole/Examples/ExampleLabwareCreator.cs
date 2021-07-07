@@ -3,9 +3,9 @@ using LHRP.Api.Devices;
 using LHRP.Api.Labware.Plates;
 using LHRP.Api.Labware.Tips;
 
-namespace LHRP.TestConsole
+namespace LHRP.TestConsole.Examples
 {
-    public static class LabwareCreator
+    public static class ExampleLabwareCreator
     {
         public static TipRack GetTipRack()
         {
@@ -24,6 +24,11 @@ namespace LHRP.TestConsole
         public static Plate GetPlate()
         {
             return new Plate(new PlateDefinition("Costar 96", new WellDefinition(), 8, 12, new Coordinates(86, 127, 14), 9.0));
+        }
+
+        public static Plate GetReagentPlate1()
+        {
+            return new Plate(new PlateDefinition("Trough 1", new WellDefinition(5000), 1, 1, new Coordinates(86, 127, 14), 9.0));
         }
     }
 }

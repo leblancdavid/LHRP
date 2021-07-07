@@ -1,5 +1,4 @@
 using LHRP.Api.Runtime.ErrorHandling;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 {
@@ -14,6 +13,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
         {
             ConfigureResolution<InsuffientTipsRuntimeError>(new SimpleTipRackReloadRequest());
             ConfigureResolution<TipPickupRuntimeError>(new SimpleTipPickupErrorResolver());
+            ConfigureResolution<InsufficientLiquidRuntimeError>(new SimpleLiquidRefillErrorResolver());
         }
     }
 }

@@ -1,3 +1,4 @@
+using LHRP.Api.Runtime.Resources;
 using System;
 
 namespace LHRP.Api.Runtime
@@ -6,5 +7,6 @@ namespace LHRP.Api.Runtime
     {
         Guid CommandId { get; }
         int RetryCount { get; }
+        ResourcesUsage ResourcesUsed { get; }
     }
 }

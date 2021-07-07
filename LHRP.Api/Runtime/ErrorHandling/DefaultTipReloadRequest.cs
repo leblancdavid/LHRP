@@ -1,8 +1,6 @@
-using System.Linq;
 using CSharpFunctionalExtensions;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
 
-namespace LHRP.Api.Runtime.ErrorHandling.Resolution
+namespace LHRP.Api.Runtime.ErrorHandling
 {
     public class DefaultTipReloadRequest : IErrorResolver
     {
@@ -11,7 +9,7 @@ namespace LHRP.Api.Runtime.ErrorHandling.Resolution
             var insuffientTipsError = error as InsuffientTipsRuntimeError;
             if(insuffientTipsError == null)
             {
-                return Result.Fail($"Invalid error type {error.GetType()}");
+                return Result.Failure($"Invalid error type {error.GetType()}");
             }
 
             //Add the tip reloading logic here, logic could vary based on the instrument

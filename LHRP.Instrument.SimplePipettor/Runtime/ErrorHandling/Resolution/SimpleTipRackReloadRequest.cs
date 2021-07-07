@@ -2,7 +2,6 @@ using System;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 {
@@ -15,7 +14,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             {
                 var errorMsg = $"Invalid error type {error.GetType()}";
                 Console.WriteLine(errorMsg);
-                return Result.Fail(errorMsg);
+                return Result.Failure(errorMsg);
             }
 
             Console.WriteLine(insuffientTipsError.Message);

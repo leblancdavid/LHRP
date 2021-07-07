@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
-using LHRP.Api.Instrument;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
-using LHRP.Api.Runtime.ErrorHandling.Resolution;
 
 namespace LHRP.Api.Runtime.ErrorHandling
 {
@@ -27,7 +24,7 @@ namespace LHRP.Api.Runtime.ErrorHandling
             var errorType = error.GetType();
             if(!ResolutionTable.ContainsKey(errorType))
             {
-                return Result.Fail($"No resolution found for error type '{errorType.ToString()}'");
+                return Result.Failure($"No resolution found for error type '{errorType.ToString()}'");
             }
 
             return ResolutionTable[errorType].Resolve(engine, error);

@@ -3,7 +3,6 @@ using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Labware;
 using LHRP.Api.Labware.Plates;
 using LHRP.Api.Labware.Tips;
-using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
@@ -49,7 +48,7 @@ namespace LHRP.Scripting
                     return null;
                 }
 
-                return new TransferTarget(new LabwareAddress(x, positionId), new Liquid(), volume, TransferType.Aspirate);
+                return new TransferTarget(new LabwareAddress(x, positionId), volume, TransferType.Aspirate);
             }).ToList();
 
             _runtimeEngine.Commands.Add(new TransferTargetAspirate(new AspirateParameters(), transferTargets, new ChannelPattern(channelPattern)));
@@ -66,7 +65,7 @@ namespace LHRP.Scripting
                     return null;
                 }
 
-                return new TransferTarget(new LabwareAddress(x, positionId), new Liquid(), volume, TransferType.Dispense);
+                return new TransferTarget(new LabwareAddress(x, positionId), volume, TransferType.Dispense);
             }).ToList();
 
             _runtimeEngine.Commands.Add(new Dispense(new DispenseParameters(), transferTargets, new ChannelPattern(channelPattern)));

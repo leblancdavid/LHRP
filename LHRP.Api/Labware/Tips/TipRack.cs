@@ -99,7 +99,7 @@ namespace LHRP.Api.Labware.Tips
         {
             if (!_tips.Remove(address))
             {
-                return Result.Fail("Tip-rack does not contain a tip at address '" + address.ToString() + "'.");
+                return Result.Failure("Tip-rack does not contain a tip at address '" + address.ToString() + "'.");
             }
 
             return Result.Ok();
@@ -109,7 +109,7 @@ namespace LHRP.Api.Labware.Tips
         {
             if (RemainingTips == 0)
             {
-                return Result.Fail<Tip>("Tip-rack is empty.");
+                return Result.Failure<Tip>("Tip-rack is empty.");
             }
 
             LabwareAddress nextAddress = _tips.Keys.FirstOrDefault();
@@ -132,7 +132,7 @@ namespace LHRP.Api.Labware.Tips
         {
             if (RemainingTips < numberTips)
             {
-                return Result.Fail<Tip[]>($"Insufficient tips on tip-rack at position {PositionId}");
+                return Result.Failure<Tip[]>($"Insufficient tips on tip-rack at position {PositionId}");
             }
 
             //TODO This will need to be optimized, but for now just grab the first N tips you find...
@@ -150,7 +150,7 @@ namespace LHRP.Api.Labware.Tips
         {
             if (!_tips.ContainsKey(address))
             {
-                return Result.Fail<Coordinates>("Invalid labware address");
+                return Result.Failure<Coordinates>("Invalid labware address");
             }
 
             return Result.Ok(_tips[address].AbsolutePosition);

@@ -1,18 +1,24 @@
-﻿using System.Collections.Generic;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace LHRP.Api.Protocol.Transfers.Liquid
+namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
 {
-    public class DefaultLiquidTransferOptimizer : ITransferOptimizer<LiquidTransfer>
+    public class DefaultLiquidToOneTransferOptimizer : ITransferOptimizer<LiquidToOneTransfer>
     {
-        public Result<IEnumerable<TransferGroup<LiquidTransfer>>> OptimizeTransfers(
-            IEnumerable<LiquidTransfer> transfers,
+        public DefaultLiquidToOneTransferOptimizer()
+        {
+
+        }
+        public Result<IEnumerable<TransferGroup<LiquidToOneTransfer>>> OptimizeTransfers(
+            IEnumerable<LiquidToOneTransfer> transfers,
             IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
-            var transferGroups = new List<TransferGroup<LiquidTransfer>>();
-            var currentTransferGroup = new TransferGroup<LiquidTransfer>(pipettor.Specification.NumChannels);
+            var transferGroups = new List<TransferGroup<LiquidToOneTransfer>>();
+            var currentTransferGroup = new TransferGroup<LiquidToOneTransfer>(pipettor.Specification.NumChannels);
 
             foreach (var transfer in transfers)
             {
@@ -23,19 +29,19 @@ namespace LHRP.Api.Protocol.Transfers.Liquid
                 }
                 if (!assigned)
                 {
-                    var newGroup = new TransferGroup<LiquidTransfer>(pipettor.Specification.NumChannels);
+                    var newGroup = new TransferGroup<LiquidToOneTransfer>(pipettor.Specification.NumChannels);
                     if (!TryAssignTransferToGroup(transfer, newGroup, instrument))
                     {
-                        return Result.Fail<IEnumerable<TransferGroup<LiquidTransfer>>>("Unable to assign a transfer to a transfer group");
+                        return Result.Failure<IEnumerable<TransferGroup<LiquidToOneTransfer>>>("Unable to assign a transfer to a transfer group");
                     }
                     transferGroups.Add(newGroup);
                 }
             }
 
-            return Result.Ok<IEnumerable<TransferGroup<LiquidTransfer>>>(transferGroups);
+            return Result.Ok<IEnumerable<TransferGroup<LiquidToOneTransfer>>>(transferGroups);
         }
 
-        private bool TryAssignTransferToGroup(LiquidTransfer transfer, TransferGroup<LiquidTransfer> group, IInstrument instrument)
+        private bool TryAssignTransferToGroup(LiquidToOneTransfer transfer, TransferGroup<LiquidToOneTransfer> group, IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
             var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.Address);
@@ -45,11 +51,12 @@ namespace LHRP.Api.Protocol.Transfers.Liquid
             {
                 return false;
             }
+
             int channelIndex = 0;
+
             for (channelIndex = 0; channelIndex < pipettor.Specification.NumChannels; ++channelIndex)
             {
-                if (pipettor.Specification[channelIndex].CanReach(destinationCoordinates.Value) &&
-                    !group.ChannelPattern[channelIndex])
+                if (pipettor.Specification[channelIndex].CanReach(destinationCoordinates.Value) && !group.ChannelPattern[channelIndex])
                 {
                     group[channelIndex] = transfer;
                     channelIndex++;

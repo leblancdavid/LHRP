@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Instrument.TipManagement;
+using LHRP.Api.Runtime.Resources;
+using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
@@ -28,9 +31,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
                     new Coordinates(i, i, i)));
             }
             
-            _deck = new Deck(deckPositions);
-            _tipManager = new TipManager(_deck);
-            _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
+            InitializeDeck(new Deck(deckPositions));
         }
 
         private IDeck _deck;
@@ -60,6 +61,18 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
         public IDevice GetDevice(Guid id)
         {
             throw new System.NotImplementedException();
+        }
+
+        private void InitializeDeck(IDeck deck)
+        {
+            _deck = deck;
+            _tipManager = new TipManager(_deck);
+            _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
+        }
+
+        public Result<Schedule> InitializeResources(Schedule schedule)
+        {
+            throw new NotImplementedException();
         }
 
         public IPipettor Pipettor 

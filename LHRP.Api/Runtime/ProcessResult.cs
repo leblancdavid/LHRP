@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LHRP.Api.Runtime.ErrorHandling;
-using LHRP.Api.Runtime.ErrorHandling.Errors;
 
 namespace LHRP.Api.Runtime
 {
@@ -60,6 +59,14 @@ namespace LHRP.Api.Runtime
             Duration = new TimeSpan(0);
             EstimatedDuration = new TimeSpan(0);
             ProcessId = Guid.NewGuid();
+        }
+
+        public ProcessResult(params RuntimeError[] errors)
+        {
+            Duration = new TimeSpan(0);
+            EstimatedDuration = new TimeSpan(0);
+            ProcessId = Guid.NewGuid();
+            _errors.AddRange(errors);
         }
 
         public ProcessResult(TimeSpan estimate, TimeSpan duration)

@@ -4,9 +4,9 @@ using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class TransferPattern<T> where T : Transfer
+    public class TransferPattern<T> where T : ITransfer
     {
-        private List<T> _transfers = new List<T>();
+        protected List<T> _transfers = new List<T>();
         public IEnumerable<T> Transfers => _transfers;
 
         public TransferPattern()
@@ -19,9 +19,10 @@ namespace LHRP.Api.Protocol.Transfers
             _transfers = transfers;
         }
 
-        public void AddTransfer(T tranfer)
+        virtual public Result AddTransfer(T tranfer)
         {
             _transfers.Add(tranfer);
+            return Result.Ok();
         }
         
         public Result<IEnumerable<TransferGroup<T>>> GetTransferGroups(IInstrument instrument, ITransferOptimizer<T> optimizer)
