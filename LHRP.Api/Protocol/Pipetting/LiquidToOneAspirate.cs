@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Instrument.LiquidManagement;
+using LHRP.Api.Instrument;
 using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;

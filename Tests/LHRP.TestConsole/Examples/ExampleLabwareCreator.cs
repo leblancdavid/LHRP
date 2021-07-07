@@ -1,7 +1,5 @@
 using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
-using LHRP.Api.Labware.Plates;
-using LHRP.Api.Labware.Tips;
+using LHRP.Api.Labware;
 
 namespace LHRP.TestConsole.Examples
 {

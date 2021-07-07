@@ -5,8 +5,6 @@ using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
-using LHRP.Api.Instrument.LiquidManagement;
-using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Devices.Pipettor;

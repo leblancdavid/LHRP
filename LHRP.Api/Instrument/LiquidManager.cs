@@ -4,7 +4,7 @@ using LHRP.Api.Labware;
 using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Transfers;
 
-namespace LHRP.Api.Instrument.LiquidManagement
+namespace LHRP.Api.Instrument
 {
     public class LiquidManager : ILiquidManager
     {

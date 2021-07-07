@@ -1,4 +1,4 @@
-namespace LHRP.Api.Instrument.LiquidManagement
+namespace LHRP.Api.Instrument
 {
     public class LiquidManagerConfiguration
     {

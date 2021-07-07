@@ -2,7 +2,6 @@ using FluentAssertions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Labware;
-using LHRP.Api.Labware.Tips;
 using Xunit;
 
 namespace LHRP.Domain.Tests.Devices.Pipettor
