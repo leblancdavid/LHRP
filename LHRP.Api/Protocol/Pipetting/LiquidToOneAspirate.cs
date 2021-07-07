@@ -5,6 +5,7 @@ using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
+using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace LHRP.Api.Protocol.Pipetting
         private AspirateParameters _parameters;
         public TransferGroup<LiquidToOneTransfer> TransferGroup { get; private set; }
         public int RetryCount { get; private set; }
+        public ResourcesUsage ResourcesUsed { get; private set; }
 
         public LiquidToOneAspirate(AspirateParameters parameters,
             TransferGroup<LiquidToOneTransfer> transferGroup,
@@ -27,6 +29,12 @@ namespace LHRP.Api.Protocol.Pipetting
             TransferGroup = transferGroup;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
+
+            ResourcesUsed = new ResourcesUsage();
+            foreach (var target in TransferGroup.Transfers)
+            {
+                ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.Target.Volume);
+            }
         }
 
 
@@ -67,10 +75,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
-            foreach (var target in TransferGroup.Transfers)
-            {
-                schedule.ResourcesUsage.AddConsumableLiquidUsage(target.Source, target.Target.Volume);
-            }
+            schedule.ResourcesUsage.Combine(ResourcesUsed);
 
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 5);

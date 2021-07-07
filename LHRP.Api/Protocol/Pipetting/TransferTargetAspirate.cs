@@ -5,6 +5,7 @@ using System;
 using CSharpFunctionalExtensions;
 using System.Collections.Generic;
 using LHRP.Api.Protocol.Transfers;
+using LHRP.Api.Runtime.Resources;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -17,6 +18,8 @@ namespace LHRP.Api.Protocol.Pipetting
         public ChannelPattern Pattern { get; set; }
         public int RetryCount { get; private set; }
 
+        public ResourcesUsage ResourcesUsed { get; private set; }
+
         public TransferTargetAspirate(AspirateParameters parameters, 
             List<TransferTarget> targets, 
             ChannelPattern pattern,
@@ -27,6 +30,12 @@ namespace LHRP.Api.Protocol.Pipetting
             Pattern = pattern;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
+
+            ResourcesUsed = new ResourcesUsage();
+            foreach (var target in _targets)
+            {
+                ResourcesUsed.AddTransfer(target);
+            }
         }
 
 
@@ -60,10 +69,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
-            foreach(var target in _targets)
-            {
-                schedule.ResourcesUsage.AddTransfer(target);
-            }
+            schedule.ResourcesUsage.Combine(ResourcesUsed);
 
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 5);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
+using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol
@@ -10,6 +11,12 @@ namespace LHRP.Api.Protocol
     {
         private List<IRunnable> _steps = new List<IRunnable>();
         public IEnumerable<IRunnable> Steps => _steps;
+
+
+        public Protocol()
+        {
+        }
+
         public void AddStep(IRunnable step)
         {
             _steps.Add(step);
@@ -58,6 +65,7 @@ namespace LHRP.Api.Protocol
                 var stepSchedule = step.Schedule(runtimeEngine, false);
                 schedule.Combine(stepSchedule.Value);
             }
+
             if (initializeResources)
             {
                 return runtimeEngine.Instrument.InitializeResources(schedule);

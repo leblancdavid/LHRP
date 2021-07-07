@@ -4,6 +4,7 @@ using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public TransferGroup<LiquidToManyTransfer> TransferGroup { get; private set; }
         public double AdditionalAspirateVolume { get; set; }
         public int RetryCount { get; private set; }
+        public ResourcesUsage ResourcesUsed { get; private set; }
 
         public LiquidToManyAspirate(AspirateParameters parameters,
             TransferGroup<LiquidToManyTransfer> transferGroup,
@@ -29,6 +31,11 @@ namespace LHRP.Api.Protocol.Pipetting
             AdditionalAspirateVolume = additionalAspirateVolume;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
+            ResourcesUsed = new ResourcesUsage(); 
+            foreach (var target in TransferGroup.Transfers)
+            {
+                ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.GetTotalTransferVolume());
+            }
         }
 
 
@@ -68,10 +75,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
-            foreach (var target in TransferGroup.Transfers)
-            {
-                schedule.ResourcesUsage.AddConsumableLiquidUsage(target.Source, target.GetTotalTransferVolume());
-            }
+            schedule.ResourcesUsage.Combine(ResourcesUsed);
 
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 5);

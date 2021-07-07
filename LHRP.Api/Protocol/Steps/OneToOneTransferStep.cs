@@ -15,6 +15,7 @@ namespace LHRP.Api.Protocol.Steps
     {
         private OneToOneTransferStepData _stepData;
         private ITransferOptimizer<OneToOneTransfer> _transferOptimizer;
+
         public OneToOneTransferStep(OneToOneTransferStepData stepData, ITransferOptimizer<OneToOneTransfer> optimizer = null)
         {
             _stepData = stepData;
@@ -62,6 +63,7 @@ namespace LHRP.Api.Protocol.Steps
             {
                 return runtimeEngine.Instrument.InitializeResources(schedule);
             }
+
             return Result.Success(schedule);
         }
 

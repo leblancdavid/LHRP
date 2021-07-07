@@ -2,6 +2,7 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace LHRP.Api.Protocol.Pipetting
         private List<TransferTarget> _targets;
         public IEnumerable<TransferTarget> Targets => _targets;
         public ChannelPattern Pattern { get; set; }
+        public ResourcesUsage ResourcesUsed { get; private set; }
         public Dispense(DispenseParameters parameters,
             List<TransferTarget> targets,
             ChannelPattern pattern,
@@ -26,6 +28,12 @@ namespace LHRP.Api.Protocol.Pipetting
             Pattern = pattern;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
+
+            ResourcesUsed = new ResourcesUsage();
+            foreach (var target in _targets)
+            {
+                ResourcesUsed.AddTransfer(target);
+            }
         }
 
         public void ApplyChannelMask(ChannelPattern channelPattern)
@@ -46,8 +54,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var processResult = pipettor.Dispense(_parameters, _targets, Pattern);
             if(!processResult.ContainsErrors)
             {
-                //For now we'll comment this out
-                //foreach(var target in _targets)
+                //foreach (var target in _targets)
                 //{
                 //    liquidManager.AddLiquidToPosition(target.Address, target.Liquid, target.Volume);
                 //}
@@ -59,10 +66,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
-            foreach (var target in _targets)
-            {
-                schedule.ResourcesUsage.AddTransfer(target);
-            }
+            schedule.ResourcesUsage.Combine(ResourcesUsed);
 
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 5);
