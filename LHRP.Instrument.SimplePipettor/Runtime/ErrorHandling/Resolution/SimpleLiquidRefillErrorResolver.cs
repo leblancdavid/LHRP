@@ -118,12 +118,12 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             
             var newChannelPattern = error.RequestedPattern - error.ChannelErrors;
             int index = engine.Commands.CurrentCommandIndex;
-            Result<IRunnableCommand> nextCommand = engine.Commands.GetCommandAt(index);
-            while (nextCommand.IsSuccess && 
-                nextCommand.Value is IPipettingCommand &&
-                !(nextCommand.Value is PickupTips))
+            var nextCommand = engine.Commands.GetCommandAt(index);
+            while (nextCommand != null && 
+                nextCommand is IPipettingCommand &&
+                !(nextCommand is PickupTips))
             {
-                (nextCommand.Value as IPipettingCommand).ApplyChannelMask(newChannelPattern);
+                (nextCommand as IPipettingCommand).ApplyChannelMask(newChannelPattern);
                 index++;
                 nextCommand = engine.Commands.GetCommandAt(index);
             }

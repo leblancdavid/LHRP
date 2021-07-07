@@ -21,7 +21,7 @@ namespace LHRP.Api.Runtime
         void Insert(int index, IRunnableCommand command);
         void Remove(int index);
 
-        Result<IRunnableCommand> GetCommandAt(int index);
+        IRunnableCommand? GetCommandAt(int index);
 
         ResourcesUsage GetTotalResources();
         ResourcesUsage GetRemainingResources();
