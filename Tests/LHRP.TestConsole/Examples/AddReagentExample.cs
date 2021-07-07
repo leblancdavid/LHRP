@@ -40,7 +40,7 @@ namespace LHRP.TestConsole
             //Setup protocol and steps
             var protocol = new Protocol();
             var addReagent = new LiquidTransferStep(
-                new LiquidTransferStepData(GetLiquidTransferFor96Wells(reagent, 3, 100.0), reagent,
+                new LiquidTransferStepData(GetLiquidTransferFor96Wells(reagent, 3, 50.0), reagent,
                 300, false, true));
             protocol.AddStep(addReagent);
 

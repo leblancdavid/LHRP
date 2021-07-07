@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument.LiquidManagement;
+using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
@@ -54,7 +55,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var liquidManager = engine.Instrument.LiquidManager;
 
             RuntimeError error;
-            var transferTargets = GetTransferTargets(liquidManager, out error);
+            var transferTargets = GetTransferTargets(engine, liquidManager, out error);
             if(transferTargets.IsFailure)
             {
                 return new ProcessResult(error);
@@ -86,7 +87,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Success(schedule);
         }
 
-        private Result<List<TransferTarget>> GetTransferTargets(ILiquidManager liquidManager, out RuntimeError error)
+        private Result<List<TransferTarget>> GetTransferTargets(IRuntimeEngine engine, ILiquidManager liquidManager, out RuntimeError error)
         {
             var volumeUsagePerLiquid = new Dictionary<string, double>();
             foreach(var liquidTarget in TransferGroup.Transfers)
@@ -107,7 +108,8 @@ namespace LHRP.Api.Protocol.Pipetting
                 //If this happens then there's not enough liquid
                 if(transferTarget.IsFailure)
                 {
-                    error = new InsufficientLiquidRuntimeError(transferTarget.Error, liquidTarget.Source, volumeUsagePerLiquid[liquidTarget.Source.AssignedId]);
+                    error = new InsufficientLiquidRuntimeError(transferTarget.Error, liquidTarget.Source,
+                        GetRemainingRequiredLiquidVolume(engine, liquidTarget.Source));
                     return Result.Failure<List<TransferTarget>>(transferTarget.Error);
                 }
 
@@ -118,5 +120,12 @@ namespace LHRP.Api.Protocol.Pipetting
             error = null;
             return Result.Ok(transferTargets);
         }
+        private double GetRemainingRequiredLiquidVolume(IRuntimeEngine engine, Liquid liquid)
+        {
+            var resources = engine.Commands.GetRemainingResources();
+            return resources.ConsumableLiquidUsages[liquid];
+        }
     }
+
+    
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Protocol;
+using LHRP.Api.Runtime.Resources;
 
 namespace LHRP.Api.Runtime
 {
@@ -20,7 +21,11 @@ namespace LHRP.Api.Runtime
         void Insert(int index, IRunnableCommand command);
         void Remove(int index);
 
-        Result<IRunnableCommand> GetCommandAt(int index); 
+        Result<IRunnableCommand> GetCommandAt(int index);
+
+        ResourcesUsage GetTotalResources();
+        ResourcesUsage GetRemainingResources();
+
 
 
     }
