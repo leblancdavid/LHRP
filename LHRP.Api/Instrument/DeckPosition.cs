@@ -1,7 +1,5 @@
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
-using LHRP.Api.Labware.Tips;
 
 namespace LHRP.Api.Instrument
 {

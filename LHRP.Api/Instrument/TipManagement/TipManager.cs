@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Labware;
-using LHRP.Api.Labware.Tips;
 
-namespace LHRP.Api.Instrument.TipManagement 
+namespace LHRP.Api.Instrument.TipManagement
 {
     public class TipManager : ITipManager
     {

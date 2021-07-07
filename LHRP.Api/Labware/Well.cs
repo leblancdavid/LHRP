@@ -4,7 +4,7 @@ using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Liquids;
 
-namespace LHRP.Api.Labware.Plates
+namespace LHRP.Api.Labware
 {
     public class Well : LiquidContainer
     {

@@ -2,7 +2,6 @@ using System.Linq;
 using FluentAssertions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Labware;
-using LHRP.Api.Labware.Plates;
 using LHRP.Api.Liquids;
 using Xunit;
 

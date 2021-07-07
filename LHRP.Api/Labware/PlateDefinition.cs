@@ -1,6 +1,6 @@
 using LHRP.Api.CoordinateSystem;
 
-namespace LHRP.Api.Labware.Plates
+namespace LHRP.Api.Labware
 {
     public class PlateDefinition
     {

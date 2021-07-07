@@ -1,7 +1,5 @@
+using LHRP.Api.Labware;
 using System;
-using System.Collections.Generic;
-using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Labware.Tips;
 
 namespace LHRP.Api.Devices.Pipettor
 {

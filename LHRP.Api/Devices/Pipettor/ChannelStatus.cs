@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Labware.Tips;
+using LHRP.Api.Labware;
 
 namespace LHRP.Api.Devices.Pipettor
 {

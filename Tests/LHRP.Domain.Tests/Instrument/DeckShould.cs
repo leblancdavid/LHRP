@@ -5,8 +5,6 @@ using FluentAssertions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Instrument;
 using LHRP.Api.Labware;
-using LHRP.Api.Labware.Plates;
-using LHRP.Api.Labware.Tips;
 using Xunit;
 
 namespace LHRP.Domain.Tests.Instrument

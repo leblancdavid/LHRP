@@ -4,7 +4,7 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 
-namespace LHRP.Api.Labware.Tips
+namespace LHRP.Api.Labware
 {
     public class TipRack : Labware
     {
