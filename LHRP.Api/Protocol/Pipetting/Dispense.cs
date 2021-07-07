@@ -50,10 +50,18 @@ namespace LHRP.Api.Protocol.Pipetting
         {
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;
+            var pipettorStatus = pipettor.PipettorStatus;
 
             var processResult = pipettor.Dispense(_parameters, _targets, Pattern);
             if(!processResult.ContainsErrors)
             {
+                for(int i = 0; i < _targets.Count; ++i)
+                {
+                    if(pipettorStatus[i].HasTip)
+                    {
+                        //liquidManager.AddLiquidToPosition(_targets[i].Address, pipettorStatus[i].CurrentTip.Liquid, _targets[i].Volume);
+                    }
+                }
                 //foreach (var target in _targets)
                 //{
                 //    liquidManager.AddLiquidToPosition(target.Address, target.Liquid, target.Volume);
