@@ -23,6 +23,15 @@ namespace LHRP.Api.Liquids
             _assignedId = UniqueId.ToString();
         }
 
+        public bool Match(Liquid liquidPart)
+        {
+            if (liquidPart.GetId() == GetId())
+            {
+                return true;
+            }
+            return false;
+        }
+
         public Liquid(string name, LiquidType type = LiquidType.Default, bool isUnknown = true)
         {
             LiquidType = type;
@@ -33,7 +42,16 @@ namespace LHRP.Api.Liquids
 
         public virtual HeterogeneousLiquid Mix(Liquid liquid, double ratio)
         {
-            return new HeterogeneousLiquid();
+            if(ratio > 1.0)
+            {
+                ratio = 1.0;
+            }
+
+            var outputLiquid = new HeterogeneousLiquid();
+            outputLiquid.Mix(this, 1.0 - ratio);
+            outputLiquid.Mix(liquid, ratio);
+
+            return outputLiquid;
         }
     }
 }

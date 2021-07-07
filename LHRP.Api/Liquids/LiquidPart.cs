@@ -5,7 +5,7 @@ namespace LHRP.Api.Liquids
     public class LiquidPart : Liquid
     {
         public const int DEFAULT_CONCENTRATION_PRECISION = 3;   
-        public double Concentration { get; private set; }
+        public double Concentration { get; set; }
         public int ConcentrationPrecision { get; private set; }
         public LiquidPart()
         {
@@ -20,15 +20,7 @@ namespace LHRP.Api.Liquids
             ConcentrationPrecision = precision;
         }
 
-        public bool Match(LiquidPart liquidPart)
-        {
-            if(liquidPart.GetId() == GetId() && 
-                Math.Round(Concentration, ConcentrationPrecision) == Math.Round(liquidPart.Concentration, ConcentrationPrecision))
-            {
-                return true;
-            }
-            return false;
-        }
+        
 
         public override string GetId()
         {
@@ -37,7 +29,7 @@ namespace LHRP.Api.Liquids
 
         public override string ToString()
         {
-            return this.GetId() + Math.Round(Concentration, ConcentrationPrecision);
+            return GetId();
         }
     }
 }
