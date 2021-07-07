@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
@@ -9,6 +10,7 @@ using LHRP.Api.Instrument.LiquidManagement;
 using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.Resources;
+using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
@@ -83,17 +85,54 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
         }
 
-        public void InitializeResources(ResourcesUsage resources)
+        public Result<Schedule> InitializeResources(Schedule schedule)
         {
+            var result = Result.Success(schedule);
             var liquidContainers = _deck.GetLiquidContainers();
-            foreach (var liquid in resources.ConsumableLiquidUsages)
+            foreach (var liquid in schedule.ResourcesUsage.ConsumableLiquidUsages)
             {
-                var container = liquidContainers.FirstOrDefault(x => x.IsPure && x.ContainsLiquid(liquid.Key));
-                if(container != null)
+                var containers = liquidContainers.Where(x => x.ContainsLiquid(liquid.Key)).ToList();
+                if(!containers.Any())
                 {
-                    container.AddLiquid(liquid.Key, liquid.Value);
+                    Result.Combine(result, Result.Failure($"Unable to initialize liquid resource {liquid.Key.AssignedId}, no container has been assigned for this liquid"));
+                    continue;
+                }
+
+                double volume = liquid.Value;
+                int containerIndex = 0;
+                while (containerIndex < containers.Count())
+                {
+                    var c = containers[containerIndex];
+                    if (c.MaxVolume < volume)
+                    {
+                        volume -= c.MaxVolume;
+                        c.AddLiquid(liquid.Key, c.MaxVolume);
+                    } else
+                    {
+                        c.AddLiquid(liquid.Key, volume);
+                        break;
+                    }
+                    containerIndex++;
                 }
             }
+
+            var tipRacks = _deck.GetTipRacks();
+            foreach(var tip in schedule.ResourcesUsage.TipUsages)
+            {
+                var tr = tipRacks.FirstOrDefault(x => x.Definition.Id == tip.TipTypeId);
+                if (tr != null)
+                {
+                    if(tr.RemainingTips < tip.ExpectedTotalTipUsage)
+                    {
+                        tr.Refill();
+                    }
+                }
+                else
+                {
+                    Result.Combine(result, Result.Failure($"Unable to initialize tip resource {tip.TipTypeId}, tip rack not found"));
+                }
+            }
+            return result;
         }
 
         public IPipettor Pipettor

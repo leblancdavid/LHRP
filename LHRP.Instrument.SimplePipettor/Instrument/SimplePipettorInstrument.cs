@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
@@ -68,7 +69,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
         }
 
-        public void InitializeResources(ResourcesUsage resources)
+        public Result InitializeResources(ResourcesUsage resources)
         {
             throw new NotImplementedException();
         }

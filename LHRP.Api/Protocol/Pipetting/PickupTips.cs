@@ -82,7 +82,10 @@ namespace LHRP.Api.Protocol.Pipetting
 
             //Todo: come up with a way to calculate time
             schedule.ExpectedDuration = new TimeSpan(0, 0, 4);
-
+            if (initializeResources)
+            {
+                return runtimeEngine.Instrument.InitializeResources(schedule);
+            }
             return Result.Success(schedule);
         }
     }

@@ -59,7 +59,10 @@ namespace LHRP.Api.Protocol.Steps
                 var commandSchedule = command.Schedule(runtimeEngine, false);
                 schedule.Combine(commandSchedule.Value);
             }
-
+            if (initializeResources)
+            {
+                return runtimeEngine.Instrument.InitializeResources(schedule);
+            }
             return Result.Success(schedule);
         }
 

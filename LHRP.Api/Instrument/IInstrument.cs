@@ -1,4 +1,5 @@
 using System;
+using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
@@ -7,6 +8,7 @@ using LHRP.Api.Instrument.TipManagement;
 using LHRP.Api.Protocol;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.Resources;
+using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Instrument
 {
@@ -19,6 +21,6 @@ namespace LHRP.Api.Instrument
         IDevice GetDevice(Guid id);
         Coordinates WastePosition { get; }
 
-        void InitializeResources(ResourcesUsage resources);
+        Result<Schedule> InitializeResources(Schedule schedule);
     }
 }
