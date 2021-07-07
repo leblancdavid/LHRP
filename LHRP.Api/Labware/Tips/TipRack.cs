@@ -146,14 +146,14 @@ namespace LHRP.Api.Labware.Tips
             return Result.Ok<Tip[]>(availableTips);
         }
 
-        public override Result<Coordinates> GetRealCoordinates(LabwareAddress address)
+        public override Coordinates? GetRealCoordinates(LabwareAddress address)
         {
             if (!_tips.ContainsKey(address))
             {
-                return Result.Failure<Coordinates>("Invalid labware address");
+                return null;
             }
 
-            return Result.Ok(_tips[address].AbsolutePosition);
+            return _tips[address].AbsolutePosition;
         }
 
     }

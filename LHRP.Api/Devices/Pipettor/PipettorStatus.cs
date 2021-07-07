@@ -27,7 +27,7 @@ namespace LHRP.Api.Devices.Pipettor
                 return errors;
             }
         }
-        public Coordinates CurrentPosition { get; set; }
+        public Coordinates? CurrentPosition { get; set; }
         
         private ChannelStatus[] _channelStatus;
         public IEnumerable<ChannelStatus> ChannelStatus => _channelStatus.ToList();

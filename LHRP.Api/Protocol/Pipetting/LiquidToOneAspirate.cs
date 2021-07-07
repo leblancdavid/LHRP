@@ -54,11 +54,11 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;
 
-            RuntimeError error;
+            RuntimeError? error;
             var transferTargets = GetTransferTargets(engine, liquidManager, out error);
             if(transferTargets.IsFailure)
             {
-                return new ProcessResult(error);
+                return new ProcessResult(error!);
             }
 
             var processResult = pipettor.Aspirate(_parameters, transferTargets.Value, TransferGroup.ChannelPattern);
@@ -87,7 +87,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Success(schedule);
         }
 
-        private Result<List<TransferTarget>> GetTransferTargets(IRuntimeEngine engine, ILiquidManager liquidManager, out RuntimeError error)
+        private Result<List<TransferTarget>> GetTransferTargets(IRuntimeEngine engine, ILiquidManager liquidManager, out RuntimeError? error)
         {
             var volumeUsagePerLiquid = new Dictionary<string, double>();
             foreach(var liquidTarget in TransferGroup.Transfers)

@@ -10,7 +10,7 @@ namespace LHRP.Api.Runtime
         private List<IRunnableCommand> _queue;
         public IEnumerable<IRunnableCommand> Queue => _queue;
         public int CurrentCommandIndex { get; private set; }
-        public IRunnableCommand CurrentCommand
+        public IRunnableCommand? CurrentCommand
         {
             get
             {

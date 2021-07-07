@@ -13,12 +13,12 @@ namespace LHRP.Api.Instrument
     {
         IEnumerable<DeckPosition> Positions { get; }
         Result AssignLabware(int positionId, Labware.Labware labware);
-        Result<DeckPosition> GetDeckPosition(int positionId);
-        Result<Labware.Labware> GetLabware(int positionId);
+        DeckPosition? GetDeckPosition(int positionId);
+        Labware.Labware? GetLabware(int positionId);
         IEnumerable<TipRack> GetTipRacks();
         IEnumerable<Plate> GetPlates();
         IEnumerable<LiquidContainer> GetLiquidContainers();
-        Result<Coordinates> GetCoordinates(LabwareAddress address);
+        Coordinates? GetCoordinates(LabwareAddress address);
         
     }
 }

@@ -4,7 +4,7 @@ using LHRP.Api.Devices.Pipettor;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class TransferGroup<T> where T : ITransfer
+    public class TransferGroup<T> where T : ITransfer?
     {
         private ChannelPattern _channelPattern;
         public ChannelPattern ChannelPattern
@@ -21,7 +21,9 @@ namespace LHRP.Api.Protocol.Transfers
                 {
                     if(!_channelPattern[i])
                     {
+#pragma warning disable CS8601 // Possible null reference assignment.
                         _transfers[i] = default(T);
+#pragma warning restore CS8601 // Possible null reference assignment.
                     }
                 }
             }

@@ -27,17 +27,17 @@ namespace LHRP.Api.Instrument.LiquidManagement
             }
             
             var well = targetPlate.GetWell(address);
-            if(well.IsFailure)
+            if(well == null)
             {
-                return well;
+                return Result.Failure($"No well found at address {address.ToAlphaAddress()}");
             }
 
-            if(well.Value.Volume < volume)
+            if(well.Volume < volume)
             {
-                return Result.Failure($"Insufficient liquid found in well({well.Value.Address.Row},{well.Value.Address.Column})");
+                return Result.Failure($"Insufficient liquid found in well({well.Address.Row},{well.Address.Column})");
             }
             
-            well.Value.Remove(volume);
+            well.Remove(volume);
 
             return Result.Ok();
         }
@@ -52,12 +52,12 @@ namespace LHRP.Api.Instrument.LiquidManagement
             }
             
             var well = targetPlate.GetWell(address);
-            if(well.IsFailure)
+            if(well == null)
             {
-                return well;
+                return Result.Failure($"No well found at address {address.ToAlphaAddress()}");
             }
 
-            well.Value.AddLiquid(liquidToAssign, volume);
+            well.AddLiquid(liquidToAssign, volume);
 
             return Result.Ok();
         }
@@ -118,12 +118,12 @@ namespace LHRP.Api.Instrument.LiquidManagement
             }
 
             var well = targetPlate.GetWell(address);
-            if (well.IsFailure)
+            if (well == null)
             {
-                return well;
+                return Result.Failure($"No well found at address {address.ToAlphaAddress()}"); ;
             }
 
-            well.Value.Clear();
+            well.Clear();
             return Result.Ok();
         }
 

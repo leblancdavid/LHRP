@@ -7,13 +7,13 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public class TipChannelPattern : ChannelPattern
     {
-        private Tip[] _tips;
+        private Tip?[] _tips;
         public TipChannelPattern(int numChannels) : base(numChannels)
         {
-            _tips = new Tip[numChannels];
+            _tips = new Tip?[numChannels];
         }
 
-        public Tip GetTip(int channelIndex)
+        public Tip? GetTip(int channelIndex)
         {
             if(channelIndex < 0 || channelIndex >= NumChannels)
             {

@@ -44,6 +44,10 @@ namespace LHRP.Api.Protocol.Transfers.OneToOne
             var sourceCoordinates = instrument.Deck.GetCoordinates(transfer.Source.Address);
             var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.Address);
             
+            if(sourceCoordinates == null || destinationCoordinates == null)
+            {
+                return false;
+            }
 
             if(group.ChannelPattern.IsFull())
             {
@@ -52,8 +56,8 @@ namespace LHRP.Api.Protocol.Transfers.OneToOne
             int channelIndex = 0;
             for(channelIndex = 0; channelIndex < pipettor.Specification.NumChannels; ++channelIndex)
             {
-                if(pipettor.Specification[channelIndex].CanReach(sourceCoordinates.Value) &&
-                    pipettor.Specification[channelIndex].CanReach(destinationCoordinates.Value) &&
+                if(pipettor.Specification[channelIndex].CanReach(sourceCoordinates) &&
+                    pipettor.Specification[channelIndex].CanReach(destinationCoordinates) &&
                     !group.ChannelPattern[channelIndex])
                 {
                     group[channelIndex] = transfer;

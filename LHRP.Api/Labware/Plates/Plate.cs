@@ -60,20 +60,20 @@ namespace LHRP.Api.Labware.Plates
             InitializeWells(definition);
         }
 
-        public Result<Well> GetWell(LabwareAddress address)
+        public Well? GetWell(LabwareAddress address)
         {
             if(!_containers.ContainsKey(address))
             {
                 // return Result.Failure<Well>("Sorry! Hope you feel better soon!!!");
-                return Result.Failure<Well>("Invalid plate address");
+                return null;
             }
 
-            return Result.Ok(_containers[address] as Well);
+            return _containers[address] as Well;
         }
 
         public IEnumerable<Well> GetWellsWithLiquid(Liquid liquid)
         {
-            return _containers.Values.Where(w => w.ContainsLiquid(liquid)).Select(x => x as Well);
+            return _containers.Values.Where(w => w.ContainsLiquid(liquid)).Select(x => (x as Well)!);
         }
 
         private void InitializeWells(PlateDefinition definition)

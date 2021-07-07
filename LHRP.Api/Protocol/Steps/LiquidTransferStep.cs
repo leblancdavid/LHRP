@@ -15,7 +15,7 @@ namespace LHRP.Api.Protocol.Steps
     {
         private LiquidTransferStepData _stepData;
         private ITransferOptimizer<LiquidToOneTransfer> _transferOptimizer;
-        public LiquidTransferStep(LiquidTransferStepData stepData, ITransferOptimizer<LiquidToOneTransfer> optimizer = null)
+        public LiquidTransferStep(LiquidTransferStepData stepData, ITransferOptimizer<LiquidToOneTransfer>? optimizer = null)
         {
             _stepData = stepData;
             if (optimizer == null)

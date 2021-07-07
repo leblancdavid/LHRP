@@ -23,13 +23,13 @@ namespace LHRP.Api.Instrument
             }
         }
 
-        public Result<DeckPosition> GetDeckPosition(int positionId)
+        public DeckPosition? GetDeckPosition(int positionId)
         {
             if(!_deckPositions.ContainsKey(positionId))
             {
-                return Result.Failure<DeckPosition>($"Invalid deck position {positionId}");
+                return null;
             }
-            return Result.Ok(_deckPositions[positionId]);
+            return _deckPositions[positionId];
         }
 
         public Result AssignLabware(int positionId, Labware.Labware labware)
@@ -42,31 +42,31 @@ namespace LHRP.Api.Instrument
             return _deckPositions[positionId].Assign(labware);
         }
 
-        public Result<Labware.Labware> GetLabware(int positionId)
+        public Labware.Labware? GetLabware(int positionId)
         {
             if(!_deckPositions.ContainsKey(positionId))
             {
-                return Result.Failure<Labware.Labware>("Invalid deck position ID");
+                return null;
             }
             if(!_deckPositions[positionId].IsOccupied)
             {
-                return Result.Failure<Labware.Labware>($"No labware found in position {positionId}");
+                return null;
             }
-            return Result.Ok(_deckPositions[positionId].AssignedLabware);
+            return _deckPositions[positionId].AssignedLabware;
         }
 
-        public Result<Coordinates> GetCoordinates(LabwareAddress address)
+        public Coordinates? GetCoordinates(LabwareAddress address)
         {
              if(!_deckPositions.ContainsKey(address.PositionId))
             {
-                return Result.Failure<Coordinates>("Invalid deck position ID");
+                return null;
             }
             if(!_deckPositions[address.PositionId].IsOccupied)
             {
-               return Result.Failure<Coordinates>($"No labware found in position {address.PositionId}");
+               return null;
             }
 
-            return _deckPositions[address.PositionId].AssignedLabware.GetRealCoordinates(address);
+            return _deckPositions[address.PositionId].AssignedLabware!.GetRealCoordinates(address);
         }
 
         public IEnumerable<TipRack> GetTipRacks()
@@ -74,9 +74,10 @@ namespace LHRP.Api.Instrument
             var tipRacks = new List<TipRack>();
             foreach(var position in _deckPositions.Values)
             {
-                if(position.IsOccupied && position.AssignedLabware is TipRack)
+                var tipRack = position.AssignedLabware as TipRack;
+                if (tipRack != null)
                 {
-                    tipRacks.Add(position.AssignedLabware as TipRack);
+                    tipRacks.Add(tipRack);
                 }
             }
             return tipRacks;
@@ -87,9 +88,10 @@ namespace LHRP.Api.Instrument
             var plates = new List<Plate>();
             foreach(var position in _deckPositions.Values)
             {
-                if(position.IsOccupied && position.AssignedLabware is Plate)
+                var plate = position.AssignedLabware as Plate;
+                if (plate != null)
                 {
-                    plates.Add(position.AssignedLabware as Plate);
+                    plates.Add(plate);
                 }
             }
             return plates;
@@ -100,10 +102,10 @@ namespace LHRP.Api.Instrument
             var liquidContainers = new List<LiquidContainer>();
             foreach (var position in _deckPositions.Values)
             {
-                if (position.IsOccupied && position.AssignedLabware is LiquidContainingLabware)
+                var liquidContainer = position.AssignedLabware as LiquidContainingLabware;
+                if (liquidContainer != null)
                 {
-                    var containerLabware = position.AssignedLabware as LiquidContainingLabware;
-                    liquidContainers.AddRange(containerLabware.GetContainers());
+                    liquidContainers.AddRange(liquidContainer.GetContainers());
                 }
             }
 

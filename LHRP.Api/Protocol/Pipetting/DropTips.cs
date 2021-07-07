@@ -50,7 +50,7 @@ namespace LHRP.Api.Protocol.Pipetting
                 {
                     if(pipettorStatus[i].HasTip)
                     {
-                        tipPattern.SetTip(i, pipettorStatus[i].CurrentTip);
+                        tipPattern.SetTip(i, pipettorStatus[i].CurrentTip!);
                     }
                     else
                     {

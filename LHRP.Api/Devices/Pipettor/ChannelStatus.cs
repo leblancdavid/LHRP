@@ -13,7 +13,7 @@ namespace LHRP.Api.Devices.Pipettor
                 return CurrentTip != null;
             } 
         }
-        public Tip CurrentTip { get; private set; }
+        public Tip? CurrentTip { get; private set; }
         public double CurrentVolume { get; private set; }
         public bool HasErrors 
         { 
@@ -25,7 +25,7 @@ namespace LHRP.Api.Devices.Pipettor
 
         private List<string> _errorMessages = new List<string>();
         public IEnumerable<string> ErrorMessages => _errorMessages;
-        public Coordinates CurrentPosition { get; set; }
+        public Coordinates? CurrentPosition { get; set; }
 
         public void OnAspiratedVolume(double volume)
         {
@@ -36,7 +36,7 @@ namespace LHRP.Api.Devices.Pipettor
             }
 
             CurrentVolume += volume;
-            if(CurrentVolume > CurrentTip.TipVolume)
+            if(CurrentVolume > CurrentTip!.TipVolume)
             {
                 _errorMessages.Add($"Current volume of {CurrentVolume} exceeds maximum tip capacity");
             }

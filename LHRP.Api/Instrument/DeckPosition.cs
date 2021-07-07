@@ -19,7 +19,7 @@ namespace LHRP.Api.Instrument
         public int PositionId { get; private set; }
         public Coordinates Dimensions { get; private set; }
         public Coordinates Position { get; private set; }
-        public Labware.Labware AssignedLabware { get; private set; }
+        public Labware.Labware? AssignedLabware { get; private set; }
 
         public bool IsOccupied
         {

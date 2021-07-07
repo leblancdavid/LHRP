@@ -53,14 +53,14 @@ namespace LHRP.Api.Labware
             PositionId = positionId;
         }
 
-        public bool Equals(LabwareAddress other)
+        public bool Equals(LabwareAddress? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return other.Row == Row && other.Column == Column && other.PositionId == PositionId;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;

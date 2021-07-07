@@ -7,6 +7,6 @@ namespace LHRP.Api.Devices
     {
         bool HasErrors { get; }
         IEnumerable<string> ErrorMessages { get; }
-        Coordinates CurrentPosition { get; set; }
+        Coordinates? CurrentPosition { get; set; }
     }
 }

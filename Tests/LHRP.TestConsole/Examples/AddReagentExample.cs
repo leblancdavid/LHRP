@@ -32,7 +32,7 @@ namespace LHRP.TestConsole
             var reagent = new Liquid();
 
             var reagentTrough = ExampleLabwareCreator.GetReagentPlate1();
-            reagentTrough.GetWell(new LabwareAddress(1, 1)).Value.AssignLiquid(reagent);
+            reagentTrough.GetWell(new LabwareAddress(1, 1))?.AssignLiquid(reagent);
 
             deck.AssignLabware(1, ExampleLabwareCreator.GetTipRack());
             deck.AssignLabware(2, reagentTrough);

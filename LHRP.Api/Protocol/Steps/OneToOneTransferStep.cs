@@ -16,7 +16,7 @@ namespace LHRP.Api.Protocol.Steps
         private OneToOneTransferStepData _stepData;
         private ITransferOptimizer<OneToOneTransfer> _transferOptimizer;
 
-        public OneToOneTransferStep(OneToOneTransferStepData stepData, ITransferOptimizer<OneToOneTransfer> optimizer = null)
+        public OneToOneTransferStep(OneToOneTransferStepData stepData, ITransferOptimizer<OneToOneTransfer>? optimizer = null)
         {
             _stepData = stepData;
             if(optimizer == null)
