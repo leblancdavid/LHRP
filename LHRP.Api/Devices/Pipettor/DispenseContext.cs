@@ -4,10 +4,10 @@ using LHRP.Api.Protocol.Transfers;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class DispenseParameters
+    public class DispenseContext
     {
         //TODO define dispense parameters
-        public  DispenseParameters()
+        public  DispenseContext()
         {
         }
     }

@@ -13,12 +13,12 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         public Guid CommandId { get; private set; }
         public int RetryCount { get; private set; }
-        private DispenseParameters _parameters;
+        private DispenseContext _parameters;
         private List<TransferTarget> _targets;
         public IEnumerable<TransferTarget> Targets => _targets;
         public ChannelPattern Pattern { get; set; }
         public ResourcesUsage ResourcesUsed { get; private set; }
-        public Dispense(DispenseParameters parameters,
+        public Dispense(DispenseContext parameters,
             List<TransferTarget> targets,
             ChannelPattern pattern,
             int retryAttempt = 0)

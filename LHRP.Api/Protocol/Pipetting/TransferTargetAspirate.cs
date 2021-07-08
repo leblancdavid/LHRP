@@ -12,7 +12,7 @@ namespace LHRP.Api.Protocol.Pipetting
     public class TransferTargetAspirate : IPipettingCommand
     {
         public Guid CommandId { get; private set; }
-        private AspirateParameters _parameters;
+        private AspirateContext _parameters;
         private List<TransferTarget> _targets;
         public IEnumerable<TransferTarget> Targets => _targets;
         public ChannelPattern Pattern { get; set; }
@@ -20,7 +20,7 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public TransferTargetAspirate(AspirateParameters parameters, 
+        public TransferTargetAspirate(AspirateContext parameters, 
             List<TransferTarget> targets, 
             ChannelPattern pattern,
             int retryAttempt = 0)

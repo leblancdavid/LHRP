@@ -15,13 +15,13 @@ namespace LHRP.Api.Protocol.Pipetting
     public class LiquidToManyAspirate : IPipettingCommand
     {
         public Guid CommandId { get; private set; }
-        private AspirateParameters _parameters;
+        private AspirateContext _parameters;
         public TransferGroup<LiquidToManyTransfer> TransferGroup { get; private set; }
         public double AdditionalAspirateVolume { get; set; }
         public int RetryCount { get; private set; }
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public LiquidToManyAspirate(AspirateParameters parameters,
+        public LiquidToManyAspirate(AspirateContext parameters,
             TransferGroup<LiquidToManyTransfer> transferGroup,
             double additionalAspirateVolume,
             int retryAttempt = 0)

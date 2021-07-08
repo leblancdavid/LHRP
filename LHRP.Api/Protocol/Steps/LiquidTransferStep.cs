@@ -81,8 +81,8 @@ namespace LHRP.Api.Protocol.Steps
                 commands.Add(new PickupTips(ChannelPattern.Full(tranfersResult.Value.First().ChannelPattern.NumChannels), _stepData.TipTypeId));
                 foreach(var transferGroup in tranfersResult.Value)
                 {
-                    commands.Add(new LiquidToOneAspirate(new AspirateParameters(), transferGroup));
-                    commands.Add(new Dispense(new DispenseParameters(), transferGroup.Transfers.Select(x => x.Target).ToList(), transferGroup.ChannelPattern));
+                    commands.Add(new LiquidToOneAspirate(new AspirateContext(), transferGroup));
+                    commands.Add(new Dispense(new DispenseContext(), transferGroup.Transfers.Select(x => x.Target).ToList(), transferGroup.ChannelPattern));
                 }
                 commands.Add(new DropTips(_stepData.ReturnTipsToSource));
             }
@@ -91,8 +91,8 @@ namespace LHRP.Api.Protocol.Steps
                 foreach (var transferGroup in tranfersResult.Value)
                 {
                     commands.Add(new PickupTips(transferGroup.ChannelPattern, _stepData.TipTypeId));
-                    commands.Add(new LiquidToOneAspirate(new AspirateParameters(), transferGroup));
-                    commands.Add(new Dispense(new DispenseParameters(), transferGroup.Transfers.Select(x => x.Target).ToList(), transferGroup.ChannelPattern));
+                    commands.Add(new LiquidToOneAspirate(new AspirateContext(), transferGroup));
+                    commands.Add(new Dispense(new DispenseContext(), transferGroup.Transfers.Select(x => x.Target).ToList(), transferGroup.ChannelPattern));
                     commands.Add(new DropTips(_stepData.ReturnTipsToSource));
                 }
             }

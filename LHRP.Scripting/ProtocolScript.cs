@@ -49,7 +49,7 @@ namespace LHRP.Scripting
                 return new TransferTarget(new LabwareAddress(x, positionId), volume, TransferType.Aspirate);
             }).ToList();
 
-            _runtimeEngine.Commands.Add(new TransferTargetAspirate(new AspirateParameters(), transferTargets, new ChannelPattern(channelPattern)));
+            _runtimeEngine.Commands.Add(new TransferTargetAspirate(new AspirateContext(), transferTargets, new ChannelPattern(channelPattern)));
         }
 
         public void Dispense(int positionId, string addresses, string channelPattern, double volume, string liquid)
@@ -66,7 +66,7 @@ namespace LHRP.Scripting
                 return new TransferTarget(new LabwareAddress(x, positionId), volume, TransferType.Dispense);
             }).ToList();
 
-            _runtimeEngine.Commands.Add(new Dispense(new DispenseParameters(), transferTargets, new ChannelPattern(channelPattern)));
+            _runtimeEngine.Commands.Add(new Dispense(new DispenseContext(), transferTargets, new ChannelPattern(channelPattern)));
 
         }
 
