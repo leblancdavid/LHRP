@@ -20,7 +20,14 @@ namespace LHRP.Api.Liquids
             ConcentrationPrecision = precision;
         }
 
-        
+        public LiquidPart(Liquid liquid, double concentration = 1.0, int precision = DEFAULT_CONCENTRATION_PRECISION)
+        {
+            _assignedId = liquid.GetId();
+            Concentration = concentration;
+            ConcentrationPrecision = precision;
+        }
+
+
 
         public override string GetId()
         {

@@ -42,6 +42,13 @@ namespace LHRP.Api.Liquids
 
         public virtual HeterogeneousLiquid Mix(Liquid liquid, double ratio)
         {
+            if(Match(liquid))
+            {
+                var sameLiquid = new HeterogeneousLiquid();
+                sameLiquid.Mix(this, 1.0);
+                return sameLiquid;
+            }
+
             if(ratio > 1.0)
             {
                 ratio = 1.0;

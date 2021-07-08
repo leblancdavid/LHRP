@@ -16,8 +16,25 @@ namespace LHRP.Api.Liquids
             _liquidParts = new List<LiquidPart>();
         }
 
+        public HeterogeneousLiquid(string name)
+        {
+            _liquidParts = new List<LiquidPart>();
+            _liquidParts.Add(new LiquidPart(name));
+        }
+
+        public HeterogeneousLiquid(Liquid initialLiquid)
+        {
+            _liquidParts = new List<LiquidPart>();
+            Mix(initialLiquid, 1.0);
+        }
+
         public override HeterogeneousLiquid Mix(Liquid liquid, double ratio)
         {
+            if(Match(liquid))
+            {
+                return this;
+            }
+
             if (ratio > 1.0)
             {
                 ratio = 1.0;

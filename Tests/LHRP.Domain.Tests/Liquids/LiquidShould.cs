@@ -19,6 +19,15 @@ namespace LHRP.Domain.Tests.Liquids
         }
 
         [Fact]
+        public void MatchToOtherIdenticalHeterogeneousLiquids()
+        {
+            var liquid1 = new Liquid("TestLiquid");
+            var liquid2 = new HeterogeneousLiquid();
+            liquid2.Mix(new Liquid("TestLiquid"), 1.0);
+            liquid1.Match(liquid2).Should().BeTrue();
+        }
+
+        [Fact]
         public void NotMatchToOtherLiquids()
         {
             var liquid1 = new Liquid("TestLiquid");
@@ -35,6 +44,17 @@ namespace LHRP.Domain.Tests.Liquids
             mixedLiquid.LiquidParts.Count().Should().Be(2);
             mixedLiquid.LiquidParts.ToArray()[0].Concentration.Should().BeApproximately(0.5, 0.00001);
             mixedLiquid.LiquidParts.ToArray()[1].Concentration.Should().BeApproximately(0.5, 0.00001);
+        }
+
+        [Fact]
+        public void ResultInTheSameLiquidWhenMixedWithItself()
+        {
+            var liquid1 = new Liquid("Liquid1");
+            var mixedLiquid = liquid1.Mix(new Liquid("Liquid1"), 0.5);
+
+            mixedLiquid.LiquidParts.Count().Should().Be(1);
+            mixedLiquid.LiquidParts.ToArray()[0].Concentration.Should().BeApproximately(1.0, 0.00001);
+            liquid1.Match(mixedLiquid).Should().BeTrue();
         }
 
         [Fact]
