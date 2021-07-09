@@ -30,7 +30,7 @@ namespace LHRP.Api.Instrument
             return tipRack.Consume(tip);
         }
 
-        public Result<TipChannelPattern> RequestTips(ChannelPattern pattern, int tipTypeId)
+        public Result<TipChannelPattern> RequestTips(ChannelPattern<bool> pattern, int tipTypeId)
         {
             var tipRacks = _deck.GetTipRacks();
             TipRack? availableTipRack = null;

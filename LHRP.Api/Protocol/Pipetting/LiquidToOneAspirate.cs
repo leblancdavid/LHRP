@@ -18,12 +18,12 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         public Guid CommandId { get; private set; }
         private AspirateContext _parameters;
-        public TransferGroup<LiquidToOneTransfer> TransferGroup { get; private set; }
+        public ChannelPattern<LiquidToOneTransfer> TransferGroup { get; private set; }
         public int RetryCount { get; private set; }
         public ResourcesUsage ResourcesUsed { get; private set; }
 
         public LiquidToOneAspirate(AspirateContext parameters,
-            TransferGroup<LiquidToOneTransfer> transferGroup,
+            ChannelPattern<LiquidToOneTransfer> transferGroup,
             int retryAttempt = 0)
         {
             _parameters = parameters;
@@ -32,14 +32,14 @@ namespace LHRP.Api.Protocol.Pipetting
             RetryCount = retryAttempt;
 
             ResourcesUsed = new ResourcesUsage();
-            foreach (var target in TransferGroup.Transfers)
-            {
-                ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.Target.Volume);
-            }
+            //foreach (var target in TransferGroup.Transfers)
+            //{
+            //    ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.Target.Volume);
+            //}
         }
 
 
-        public void ApplyChannelMask(ChannelPattern channelPattern)
+        public void ApplyChannelMask(ChannelPattern<bool> channelPattern)
         {
             TransferGroup.ChannelPattern = channelPattern;
         }

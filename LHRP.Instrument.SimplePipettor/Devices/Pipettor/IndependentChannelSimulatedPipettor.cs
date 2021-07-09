@@ -54,8 +54,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         }
 
         public ProcessResult Aspirate(AspirateContext parameters,
-            List<TransferTarget> targets,
-            ChannelPattern pattern)
+            ChannelPattern<TransferTarget> targets)
         {
            var sb = new StringBuilder();
             sb.Append("Aspirating with channels pattern '");
@@ -90,19 +89,18 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         }
 
         public ProcessResult Dispense(DispenseContext parameters,
-            List<TransferTarget> targets,
-            ChannelPattern pattern)
+            ChannelPattern<TransferTarget> targets)
         {
             var sb = new StringBuilder();
             sb.Append("Dispensing with channels pattern '");
-            sb.Append(pattern.GetChannelString());
+            sb.Append(targets.GetChannelString());
             sb.Append("' to: ");
 
             Coordinates position = new Coordinates();
             int t = 0;
-            for(int i = 0; i < pattern.NumChannels; ++i)
+            for(int i = 0; i < targets.NumChannels; ++i)
             {
-                if(pattern[i])
+                if(targets[i])
                 {
                     var target = targets.ToArray()[t];
                     sb.Append($"Pos{target.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
@@ -134,7 +132,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Coordinates position = new Coordinates();
             Random random = new Random();
-            var errorPattern = ChannelPattern.Empty(parameters.Pattern.NumChannels);
+            var errorPattern = ChannelPattern<bool>.Empty(parameters.Pattern.NumChannels);
             for (int i = 0; i < parameters.Pattern.NumChannels; ++i)
             {
                 if(parameters.Pattern[i])

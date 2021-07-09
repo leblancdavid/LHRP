@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers
@@ -25,7 +26,7 @@ namespace LHRP.Api.Protocol.Transfers
             return Result.Ok();
         }
         
-        public Result<IEnumerable<TransferGroup<T>>> GetTransferGroups(IInstrument instrument, ITransferOptimizer<T> optimizer)
+        public Result<IEnumerable<ChannelPattern<T>>> GetTransferGroups(IInstrument instrument, ITransferOptimizer<T> optimizer)
         {
             var transferGroups = optimizer.OptimizeTransfers(_transfers, instrument);
             return transferGroups;

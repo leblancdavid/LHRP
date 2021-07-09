@@ -3,7 +3,7 @@ using System;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class TipChannelPattern : ChannelPattern
+    public class TipChannelPattern : ChannelPattern<Tip?>
     {
         private Tip?[] _tips;
         public TipChannelPattern(int numChannels) : base(numChannels)
@@ -28,7 +28,6 @@ namespace LHRP.Api.Devices.Pipettor
                 throw new Exception($"Invalid channel index {channelIndex}");
             }
 
-            _activeChannels[channelIndex] = true;
             _tips[channelIndex] = tip;
         }
 
@@ -39,7 +38,6 @@ namespace LHRP.Api.Devices.Pipettor
                 throw new Exception($"Invalid channel index {channelIndex}");
             }
 
-            _activeChannels[channelIndex] = false;
             _tips[channelIndex] = null;
         }
     }

@@ -37,16 +37,14 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         }
 
         public ProcessResult Aspirate(AspirateContext parameters,
-            List<TransferTarget> targets,
-            ChannelPattern pattern)
+            ChannelPattern<TransferTarget> targets)
         {
             Console.WriteLine(parameters);
             return new ProcessResult(new TimeSpan(), new TimeSpan());
         }
 
         public ProcessResult Dispense(DispenseContext parameters,
-            List<TransferTarget> targets,
-            ChannelPattern pattern)
+            ChannelPattern<TransferTarget> targets)
         {
             Console.WriteLine(parameters);
             return new ProcessResult(new TimeSpan(), new TimeSpan());

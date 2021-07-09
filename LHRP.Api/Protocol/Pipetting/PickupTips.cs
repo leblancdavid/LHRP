@@ -12,11 +12,11 @@ namespace LHRP.Api.Protocol.Pipetting
 {
     public class PickupTips : IPipettingCommand
     {
-        private ChannelPattern _pattern;
+        private ChannelPattern<bool> _pattern;
         private int _tipTypeId;
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public PickupTips(ChannelPattern pattern, 
+        public PickupTips(ChannelPattern<bool> pattern, 
             int tipTypeId,
             int retryAttempt = 0)
         {
@@ -31,7 +31,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Guid CommandId { get; private set; }
         public int RetryCount { get; private set; }
 
-        public void ApplyChannelMask(ChannelPattern channelPattern)
+        public void ApplyChannelMask(ChannelPattern<bool> channelPattern)
         {
             _pattern = channelPattern;
         }

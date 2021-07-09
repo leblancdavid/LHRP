@@ -16,13 +16,13 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         public Guid CommandId { get; private set; }
         private AspirateContext _parameters;
-        public TransferGroup<LiquidToManyTransfer> TransferGroup { get; private set; }
+        public ChannelPattern<LiquidToManyTransfer> TransferGroup { get; private set; }
         public double AdditionalAspirateVolume { get; set; }
         public int RetryCount { get; private set; }
         public ResourcesUsage ResourcesUsed { get; private set; }
 
         public LiquidToManyAspirate(AspirateContext parameters,
-            TransferGroup<LiquidToManyTransfer> transferGroup,
+            ChannelPattern<LiquidToManyTransfer> transferGroup,
             double additionalAspirateVolume,
             int retryAttempt = 0)
         {
@@ -32,16 +32,16 @@ namespace LHRP.Api.Protocol.Pipetting
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
             ResourcesUsed = new ResourcesUsage(); 
-            foreach (var target in TransferGroup.Transfers)
-            {
-                ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.GetTotalTransferVolume());
-            }
+            //foreach (var target in TransferGroup.Transfers)
+            //{
+            //    ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.GetTotalTransferVolume());
+            //}
         }
 
 
-        public void ApplyChannelMask(ChannelPattern channelPattern)
+        public void ApplyChannelMask(ChannelPattern<bool> channelPattern)
         {
-            TransferGroup.ChannelPattern = channelPattern;
+            TransferGroup.Mask(channelPattern);
         }
 
         public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
@@ -60,7 +60,7 @@ namespace LHRP.Api.Protocol.Pipetting
                 //TODO Insufficient liquid error
             }
 
-            var processResult = pipettor.Aspirate(_parameters, transferTargets.Value, TransferGroup.ChannelPattern);
+            var processResult = pipettor.Aspirate(_parameters, TransferGroup);
             if (!processResult.ContainsErrors)
             {
                 foreach (var target in transferTargets.Value)

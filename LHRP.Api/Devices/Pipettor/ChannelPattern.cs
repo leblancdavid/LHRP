@@ -4,47 +4,41 @@ using System.Text;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class ChannelPattern
+    public class ChannelPattern<T> where T : struct
     {
         public ChannelPattern(int numChannels)
         {
             NumChannels = numChannels;
-            _activeChannels = new bool[numChannels];
-        }
-
-        public ChannelPattern(string channelPattern)
-        {
-            NumChannels = channelPattern.Length;
-            _activeChannels = channelPattern.Select(x => x == '1').ToArray();
+            _channels = new T?[numChannels];
         }
 
         public int NumChannels { get; private set; }
 
-        protected bool[] _activeChannels;
-        public bool this[int i]
+        protected T?[] _channels;
+        public T? this[int i]
         {
-            get { return _activeChannels[i]; }
-            set { _activeChannels[i] = value; }
+            get { return _channels[i]; }
+            set { _channels[i] = value; }
         }
 
         public int GetNumberActiveChannels()
         {
-            return _activeChannels.Where(a => a == true)
+            return _channels.Where(a => a != null)
                         .Select(a => a)
                         .Count();
         }
 
         public bool IsFull()
         {
-            if(GetNumberActiveChannels() == NumChannels)
-            return true;
+            if (GetNumberActiveChannels() == NumChannels)
+                return true;
             return false;
         }
 
         public bool IsEmpty()
         {
-            if(GetNumberActiveChannels() == 0)
-            return true;
+            if (GetNumberActiveChannels() == 0)
+                return true;
 
             return false;
         }
@@ -52,82 +46,93 @@ namespace LHRP.Api.Devices.Pipettor
         public string GetChannelString()
         {
             StringBuilder sb = new StringBuilder();
-            foreach(var channelActive in _activeChannels)
+            foreach (var channelActive in _channels)
             {
-            if(channelActive)
-            {
-                sb.Append("1");
-            }
-            else
-            {
-                sb.Append("0");
-            }
+                if (channelActive != null)
+                {
+                    sb.Append("1");
+                }
+                else
+                {
+                    sb.Append("0");
+                }
             }
 
             return sb.ToString();
         }
 
-        public static ChannelPattern Empty(int numChannels)
+        public static ChannelPattern<T> Empty(int numChannels)
         {
-            return new ChannelPattern(numChannels);
+            return new ChannelPattern<T>(numChannels);
         }
 
-        public static ChannelPattern Full(int numChannels)
+        public void Mask(ChannelPattern<bool> pattern)
         {
-            var cp = new ChannelPattern(numChannels);
-            for(int i = 0; i < numChannels; ++i)
+            for (int i = 0; i < NumChannels && i < pattern.NumChannels; ++i)
             {
-                cp[i] = true;
+                if(pattern[i] == false)
+                {
+                    _channels[i] = null;
+                }
             }
-            return cp;
         }
 
-        public static ChannelPattern operator& (ChannelPattern b, ChannelPattern c)
-        {
-            int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-            var a = new ChannelPattern(numChannels);
-            for (int i = 0; i < numChannels; ++i)
-            {
-                a[i] = b[i] && c[i];
-            }
+        //public static ChannelPattern Full(int numChannels)
+        //{
+        //    var cp = new ChannelPattern(numChannels);
+        //    for (int i = 0; i < numChannels; ++i)
+        //    {
+        //        cp[i] = true;
+        //    }
+        //    return cp;
+        //}
 
-            return a;
-        }
+        //public static ChannelPattern operator &(ChannelPattern b, ChannelPattern c)
+        //{
+        //    int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
+        //    var a = new ChannelPattern(numChannels);
+        //    for (int i = 0; i < numChannels; ++i)
+        //    {
+        //        a[i] = b[i] && c[i];
+        //    }
 
-        public static ChannelPattern operator| (ChannelPattern b, ChannelPattern c)
-        {
-            int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-            var a = new ChannelPattern(numChannels);
-            for (int i = 0; i < numChannels; ++i)
-            {
-                a[i] = b[i] || c[i];
-            }
+        //    return a;
+        //}
 
-            return a;
-        }
+        //public static ChannelPattern operator |(ChannelPattern b, ChannelPattern c)
+        //{
+        //    int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
+        //    var a = new ChannelPattern(numChannels);
+        //    for (int i = 0; i < numChannels; ++i)
+        //    {
+        //        a[i] = b[i] || c[i];
+        //    }
 
-        public static ChannelPattern operator -(ChannelPattern b, ChannelPattern c)
-        {
-            int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-            var a = new ChannelPattern(numChannels);
-            for (int i = 0; i < numChannels; ++i)
-            {
-                a[i] = c[i] ? false : b[i];
-            }
+        //    return a;
+        //}
 
-            return a;
-        }
+        //public static ChannelPattern operator -(ChannelPattern b, ChannelPattern c)
+        //{
+        //    int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
+        //    var a = new ChannelPattern(numChannels);
+        //    for (int i = 0; i < numChannels; ++i)
+        //    {
+        //        a[i] = c[i] ? false : b[i];
+        //    }
 
-        public static ChannelPattern operator +(ChannelPattern b, ChannelPattern c)
-        {
-            int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-            var a = new ChannelPattern(numChannels);
-            for (int i = 0; i < numChannels; ++i)
-            {
-                a[i] = c[i] ? true : b[i];
-            }
+        //    return a;
+        //}
 
-            return a;
-        }
+        //public static ChannelPattern operator +(ChannelPattern b, ChannelPattern c)
+        //{
+        //    int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
+        //    var a = new ChannelPattern(numChannels);
+        //    for (int i = 0; i < numChannels; ++i)
+        //    {
+        //        a[i] = c[i] ? true : b[i];
+        //    }
+
+        //    return a;
+        //}
     }
 }

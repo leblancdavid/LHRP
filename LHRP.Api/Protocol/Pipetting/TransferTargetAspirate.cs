@@ -13,35 +13,31 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         public Guid CommandId { get; private set; }
         private AspirateContext _parameters;
-        private List<TransferTarget> _targets;
-        public IEnumerable<TransferTarget> Targets => _targets;
-        public ChannelPattern Pattern { get; set; }
+        private ChannelPattern<TransferTarget> _targets;
         public int RetryCount { get; private set; }
 
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public TransferTargetAspirate(AspirateContext parameters, 
-            List<TransferTarget> targets, 
-            ChannelPattern pattern,
+        public TransferTargetAspirate(AspirateContext parameters,
+            ChannelPattern<TransferTarget> targets,
             int retryAttempt = 0)
         {
             _parameters = parameters;
             _targets = targets;
-            Pattern = pattern;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
 
             ResourcesUsed = new ResourcesUsage();
-            foreach (var target in _targets)
-            {
-                ResourcesUsed.AddTransfer(target);
-            }
+            //foreach (var target in _targets)
+            //{
+            //    ResourcesUsed.AddTransfer(target);
+            //}
         }
 
 
-        public void ApplyChannelMask(ChannelPattern channelPattern)
+        public void ApplyChannelMask(ChannelPattern<bool> channelPattern)
         {
-            Pattern = channelPattern;
+            _targets.Mask(channelPattern);
         }
 
         public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
