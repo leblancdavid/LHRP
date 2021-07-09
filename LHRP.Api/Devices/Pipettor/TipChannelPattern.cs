@@ -3,7 +3,7 @@ using System;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class TipChannelPattern : ChannelPattern<Tip?>
+    public class TipChannelPattern : ChannelPattern<Tip>
     {
         private Tip?[] _tips;
         public TipChannelPattern(int numChannels) : base(numChannels)

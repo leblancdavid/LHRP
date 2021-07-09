@@ -27,9 +27,6 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
         public PipettorSpecification Specification { get; private set; }
 
-        private double _tipPickupFailureRate = 0.0;
-
-
         public IndependentChannelSimulatedPipettor()
         {
             NumberChannels = 2;
@@ -58,18 +55,16 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         {
            var sb = new StringBuilder();
             sb.Append("Aspirating with channels pattern '");
-            sb.Append(pattern.GetChannelString());
+            //sb.Append(pattern.GetChannelString());
             sb.Append("' from: ");
 
             Coordinates position = new Coordinates();
-            int t = 0;
-            for(int i = 0; i < pattern.NumChannels; ++i)
+            for(int i = 0; i < targets.NumChannels; ++i)
             {
-                if(pattern[i])
+                if(targets[i] != null)
                 {
-                    var target = targets.ToArray()[t];
+                    var target = targets[i];
                     sb.Append($"Pos{target.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
-                    t++;
                 }
                 else
                 {
@@ -97,14 +92,12 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             sb.Append("' to: ");
 
             Coordinates position = new Coordinates();
-            int t = 0;
             for(int i = 0; i < targets.NumChannels; ++i)
             {
-                if(targets[i])
+                if(targets[i] != null)
                 {
-                    var target = targets.ToArray()[t];
+                    var target = targets[i];
                     sb.Append($"Pos{target.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
-                    t++;
                 }
                 else
                 {
@@ -132,24 +125,24 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Coordinates position = new Coordinates();
             Random random = new Random();
-            var errorPattern = ChannelPattern<bool>.Empty(parameters.Pattern.NumChannels);
+            var errorPattern = ChannelPattern.Empty(parameters.Pattern.NumChannels);
             for (int i = 0; i < parameters.Pattern.NumChannels; ++i)
             {
-                if(parameters.Pattern[i])
-                {
-                    var tip = parameters.Pattern.GetTip(i);
-                    position = tip.AbsolutePosition;
-                    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
-                    errorPattern[i] = random.NextDouble() < _tipPickupFailureRate;
-                    if(!errorPattern[i])
-                    {
-                        PipettorStatus[i].OnPickedUpTip(tip);
-                    }
-                }
-                else
-                {
-                    sb.Append($"(*,*,*); ");
-                }
+                //if(parameters.Pattern[i])
+                //{
+                //    var tip = parameters.Pattern.GetTip(i);
+                //    position = tip.AbsolutePosition;
+                //    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
+                //    errorPattern[i] = random.NextDouble() < _tipPickupFailureRate;
+                //    if(!errorPattern[i])
+                //    {
+                //        PipettorStatus[i].OnPickedUpTip(tip);
+                //    }
+                //}
+                //else
+                //{
+                //    sb.Append($"(*,*,*); ");
+                //}
             }
 
             //takes 3 seconds to pickup tips
@@ -182,17 +175,17 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 Coordinates position = new Coordinates();
                 for(int i = 0; i < parameters.Pattern.NumChannels; ++i)
                 {
-                    if(parameters.Pattern[i])
-                    {
-                        var tip = parameters.Pattern.GetTip(i);
-                        position = tip.AbsolutePosition;
-                        sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
-                        PipettorStatus[i].OnDroppedTip();
-                    }
-                    else
-                    {
-                        sb.Append($"(*,*,*); ");
-                    }
+                    //if(parameters.Pattern[i])
+                    //{
+                    //    var tip = parameters.Pattern.GetTip(i);
+                    //    position = tip.AbsolutePosition;
+                    //    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
+                    //    PipettorStatus[i].OnDroppedTip();
+                    //}
+                    //else
+                    //{
+                    //    sb.Append($"(*,*,*); ");
+                    //}
                 }
 
                 //takes 3 seconds to pickup tips

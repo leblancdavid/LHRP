@@ -5,6 +5,6 @@ namespace LHRP.Api.Protocol.Pipetting
 {
     public interface IPipettingCommand : IRunnableCommand
     {
-        void ApplyChannelMask(ChannelPattern<bool> channelPattern);
+        void ApplyChannelMask(ChannelPattern channelPattern);
     }
 }

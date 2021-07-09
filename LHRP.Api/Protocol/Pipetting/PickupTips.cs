@@ -12,11 +12,11 @@ namespace LHRP.Api.Protocol.Pipetting
 {
     public class PickupTips : IPipettingCommand
     {
-        private ChannelPattern<bool> _pattern;
+        private ChannelPattern _pattern;
         private int _tipTypeId;
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public PickupTips(ChannelPattern<bool> pattern, 
+        public PickupTips(ChannelPattern pattern, 
             int tipTypeId,
             int retryAttempt = 0)
         {
@@ -31,7 +31,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Guid CommandId { get; private set; }
         public int RetryCount { get; private set; }
 
-        public void ApplyChannelMask(ChannelPattern<bool> channelPattern)
+        public void ApplyChannelMask(ChannelPattern channelPattern)
         {
             _pattern = channelPattern;
         }
@@ -66,7 +66,7 @@ namespace LHRP.Api.Protocol.Pipetting
 
             for(int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
-                if(tipsResult.Value[channel] && pipettor.PipettorStatus[channel].HasTip)
+                if(tipsResult.Value.IsInUse(channel) && pipettor.PipettorStatus[channel].HasTip)
                 {
                     var consumeResult = tipManager.ConsumeTip(tipsResult.Value.GetTip(channel)!);
                     if(consumeResult.IsFailure)

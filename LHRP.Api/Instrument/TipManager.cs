@@ -30,7 +30,7 @@ namespace LHRP.Api.Instrument
             return tipRack.Consume(tip);
         }
 
-        public Result<TipChannelPattern> RequestTips(ChannelPattern<bool> pattern, int tipTypeId)
+        public Result<TipChannelPattern> RequestTips(ChannelPattern pattern, int tipTypeId)
         {
             var tipRacks = _deck.GetTipRacks();
             TipRack? availableTipRack = null;
@@ -59,7 +59,7 @@ namespace LHRP.Api.Instrument
             int t = 0;
             for(int i = 0; i < pattern.NumChannels; ++i)
             {
-                if(pattern[i])
+                if(pattern.IsInUse(i))
                 {
                     tipChannelPattern.SetTip(i, availableTips.Value[t]);
                     ++t;

@@ -41,20 +41,20 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
                 {
                     for (int channel = 0; channel < numChannels; ++channel)
                     {
-                        if(transferList[j].ChannelPattern[channel])
+                        if(transferList[j].IsInUse(channel))
                         {
                             continue;
                         }
 
                         if(mdTransferGroup[channel] == null)
                         {
-                            mdTransferGroup[channel] = new LiquidToManyTransfer(transferList[j].Transfers[channel].Source);
+                            mdTransferGroup[channel] = new LiquidToManyTransfer(transferList[j][channel]!.Source);
                         }
 
                         double currentTotal = mdTransferGroup[channel]!.GetTotalTransferVolume();
-                        if(transferList[j].Transfers[channel].Target.Volume + currentTotal < maxUsableVolume)
+                        if(transferList[j][channel]!.Target.Volume + currentTotal < maxUsableVolume)
                         {
-                            mdTransferGroup[channel]!.AddTransferTarget(transferList[j].Transfers[channel].Target);
+                            mdTransferGroup[channel]!.AddTransferTarget(transferList[j][channel]!.Target);
                         }
                     }
                 }
@@ -77,17 +77,17 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             return Result.Ok<IEnumerable<ChannelPattern<LiquidToManyTransfer?>>>(multiDispenseTransferGroups);
         }
 
-        private static ChannelPattern<bool> GetOverallChannelPattern(List<ChannelPattern<LiquidToOneTransfer>> liquidTransferGroups)
+        private static ChannelPattern GetOverallChannelPattern(List<ChannelPattern<LiquidToOneTransfer>> liquidTransferGroups)
         {
             if (!liquidTransferGroups.Any())
             {
-                return ChannelPattern<bool>.Empty(0);
+                return ChannelPattern.Empty(0);
             }
 
-            var overallChannelPattern = ChannelPattern<bool>.Empty(liquidTransferGroups.First().ChannelPattern.NumChannels);
+            var overallChannelPattern = ChannelPattern.Empty(liquidTransferGroups.First().NumChannels);
             foreach (var transfer in liquidTransferGroups)
             {
-                overallChannelPattern = overallChannelPattern + transfer.ChannelPattern;
+                //overallChannelPattern = overallChannelPattern + transfer;
             }
 
             return overallChannelPattern;
@@ -100,8 +100,8 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             {
                 if(transferGroup[i] != null)
                 {
-                    liquidTargets.Add(new LiquidTransferSource(transferGroup[i].Source,
-                        transferGroup[i].GetTotalTransferVolume() + additionalVolume));
+                    liquidTargets.Add(new LiquidTransferSource(transferGroup[i]!.Source,
+                        transferGroup[i]!.GetTotalTransferVolume() + additionalVolume));
                 }
                 else
                 {

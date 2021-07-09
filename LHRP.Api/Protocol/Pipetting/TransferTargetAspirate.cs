@@ -35,7 +35,7 @@ namespace LHRP.Api.Protocol.Pipetting
         }
 
 
-        public void ApplyChannelMask(ChannelPattern<bool> channelPattern)
+        public void ApplyChannelMask(ChannelPattern channelPattern)
         {
             _targets.Mask(channelPattern);
         }
@@ -50,13 +50,13 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;
 
-            var processResult = pipettor.Aspirate(_parameters, _targets, Pattern);
+            var processResult = pipettor.Aspirate(_parameters, _targets);
             if(!processResult.ContainsErrors)
             {
-                foreach(var target in _targets)
-                {
-                    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
-                }
+                //foreach(var target in _targets)
+                //{
+                //    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
+                //}
             }
             
             return processResult;

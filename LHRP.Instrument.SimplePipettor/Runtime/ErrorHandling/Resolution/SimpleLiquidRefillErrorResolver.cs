@@ -55,7 +55,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
-                if (error.RequestedPattern[channel] && pipettor.PipettorStatus[channel].HasTip)
+                if (error.RequestedPattern.IsInUse(channel) && pipettor.PipettorStatus[channel].HasTip)
                 {
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
@@ -81,7 +81,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
-                if (error.RequestedPattern[channel])
+                if (error.RequestedPattern.IsInUse(channel))
                 {
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
@@ -106,7 +106,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
-                if (error.RequestedPattern[channel])
+                if (error.RequestedPattern.IsInUse(channel))
                 {
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)

@@ -79,9 +79,9 @@ namespace LHRP.Api.Protocol.Steps
             var commands = new List<IRunnableCommand>();
             foreach (var transfer in tranfersResult.Value)
             {
-                commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.TipTypeId));
-                commands.Add(new TransferTargetAspirate(new AspirateContext(), transfer.Transfers.Select(x => x.Source).ToList(), transfer.ChannelPattern));
-                commands.Add(new Dispense(new DispenseContext(), transfer.Transfers.Select(x => x.Target).ToList(), transfer.ChannelPattern));
+                commands.Add(new PickupTips(transfer, _stepData.TipTypeId));
+                //commands.Add(new TransferTargetAspirate(new AspirateContext(), transfer));
+                //commands.Add(new Dispense(new DispenseContext(), transfer));
                 commands.Add(new DropTips(_stepData.ReturnTipsToSource));
             }
 

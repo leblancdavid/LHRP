@@ -5,7 +5,7 @@ using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers
 {
-    public class TransferPattern<T> where T : ITransfer
+    public class TransferPattern<T> where T : class, ITransfer
     {
         protected List<T> _transfers = new List<T>();
         public IEnumerable<T> Transfers => _transfers;

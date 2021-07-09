@@ -4,26 +4,42 @@ using System.Text;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class ChannelPattern<T> where T : struct
+    public class ChannelPattern
     {
+        public int NumChannels { get; private set; }
+        protected bool[] _active;
+
         public ChannelPattern(int numChannels)
         {
             NumChannels = numChannels;
-            _channels = new T?[numChannels];
+            _active = new bool[numChannels];
         }
 
-        public int NumChannels { get; private set; }
-
-        protected T?[] _channels;
-        public T? this[int i]
+        public ChannelPattern(string pattern)
         {
-            get { return _channels[i]; }
-            set { _channels[i] = value; }
+            
+        }
+
+        public bool IsInUse(int index)
+        {
+            if(index < 0 || index >= NumChannels)
+            {
+                return false;
+            }
+            return _active[index];
+        }
+
+        public void SetInUse(int index, bool active)
+        {
+            if (index >= 0 && index < NumChannels)
+            {
+                _active[index] = active;
+            }
         }
 
         public int GetNumberActiveChannels()
         {
-            return _channels.Where(a => a != null)
+            return _active.Where(a => a)
                         .Select(a => a)
                         .Count();
         }
@@ -46,9 +62,9 @@ namespace LHRP.Api.Devices.Pipettor
         public string GetChannelString()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var channelActive in _channels)
+            foreach (var channelActive in _active)
             {
-                if (channelActive != null)
+                if (channelActive)
                 {
                     sb.Append("1");
                 }
@@ -61,20 +77,70 @@ namespace LHRP.Api.Devices.Pipettor
             return sb.ToString();
         }
 
-        public static ChannelPattern<T> Empty(int numChannels)
+        public static ChannelPattern Empty(int numChannels)
         {
-            return new ChannelPattern<T>(numChannels);
+            return new ChannelPattern(numChannels);
         }
 
-        public void Mask(ChannelPattern<bool> pattern)
+        public static ChannelPattern Full(int numChannels)
+        {
+            var cp = new ChannelPattern(numChannels);
+            for (int i = 0; i < numChannels; ++i)
+            {
+                cp.SetInUse(i, true);
+            }
+            return cp;
+        }
+
+
+        public void Mask(ChannelPattern pattern)
         {
             for (int i = 0; i < NumChannels && i < pattern.NumChannels; ++i)
             {
-                if(pattern[i] == false)
+                if (!pattern.IsInUse(i))
                 {
-                    _channels[i] = null;
+                    _active[i] = false;
                 }
             }
+        }
+
+        public static ChannelPattern operator &(ChannelPattern b, ChannelPattern c)
+        {
+            int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
+            var a = new ChannelPattern(numChannels);
+            for (int i = 0; i < numChannels; ++i)
+            {
+                a.SetInUse(i, b.IsInUse(i) && c.IsInUse(i));
+            }
+
+            return a;
+        }
+    }
+
+    public class ChannelPattern<T> : ChannelPattern where T : class?
+    {
+        public ChannelPattern(int numChannels)
+            :base(numChannels)
+        {
+            _channels = new T?[numChannels];
+        }
+
+        protected T?[] _channels;
+        public T? this[int i]
+        {
+            get 
+            {
+                if (i < 0 || i >= NumChannels)
+                    return null;
+
+                return _channels[i]; 
+            }
+            set { _channels[i] = value; }
+        }
+
+        public IEnumerable<T> GetActiveChannels()
+        {
+            return _channels.Where(x => x != null).Select(x => x!);
         }
 
         //public static ChannelPattern Full(int numChannels)
@@ -111,17 +177,17 @@ namespace LHRP.Api.Devices.Pipettor
         //    return a;
         //}
 
-        //public static ChannelPattern operator -(ChannelPattern b, ChannelPattern c)
-        //{
-        //    int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-        //    var a = new ChannelPattern(numChannels);
-        //    for (int i = 0; i < numChannels; ++i)
-        //    {
-        //        a[i] = c[i] ? false : b[i];
-        //    }
+        public static ChannelPattern<T> operator -(ChannelPattern<T> b, ChannelPattern c)
+        {
+            int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
+            var a = new ChannelPattern<T>(numChannels);
+            for (int i = 0; i < numChannels; ++i)
+            {
+                a[i] = c.IsInUse(i) ? null : b[i];
+            }
 
-        //    return a;
-        //}
+            return a;
+        }
 
         //public static ChannelPattern operator +(ChannelPattern b, ChannelPattern c)
         //{

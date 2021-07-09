@@ -26,7 +26,7 @@ namespace LHRP.Api.Protocol.Pipetting
         public Guid CommandId { get; private set; }
         public int RetryCount { get; private set; }
 
-        public void ApplyChannelMask(ChannelPattern<bool> channelPattern)
+        public void ApplyChannelMask(ChannelPattern channelPattern)
         {
             //Do nothing
         }
@@ -54,7 +54,7 @@ namespace LHRP.Api.Protocol.Pipetting
                     }
                     else
                     {
-                        tipPattern[i] = false;
+                        tipPattern[i] = null;
                     }
                 }
 

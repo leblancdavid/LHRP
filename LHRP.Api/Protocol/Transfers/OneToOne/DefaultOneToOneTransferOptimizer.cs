@@ -59,7 +59,7 @@ namespace LHRP.Api.Protocol.Transfers.OneToOne
             {
                 if(pipettor.Specification[channelIndex].CanReach(sourceCoordinates) &&
                     pipettor.Specification[channelIndex].CanReach(destinationCoordinates) &&
-                    !group[channelIndex])
+                    !group.IsInUse(channelIndex))
                 {
                     group[channelIndex] = transfer;
                     channelIndex++;

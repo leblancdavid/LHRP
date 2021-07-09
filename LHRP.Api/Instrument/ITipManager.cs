@@ -7,7 +7,7 @@ namespace LHRP.Api.Instrument
 {
     public interface ITipManager
     {
-        Result<TipChannelPattern> RequestTips(ChannelPattern<bool> pattern, int tipTypeId);
+        Result<TipChannelPattern> RequestTips(ChannelPattern pattern, int tipTypeId);
         Result ConsumeTip(Tip tip);
 
         Result ReloadTips(int tipTypeId);
