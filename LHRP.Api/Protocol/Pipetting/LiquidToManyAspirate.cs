@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol.Transfers;
@@ -54,16 +55,16 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;
 
-            var transferTargets = GetTransferTargets(liquidManager);
+            var transferTargets = GetTransferContext(liquidManager);
             if (transferTargets.IsFailure)
             {
                 //TODO Insufficient liquid error
             }
 
-            var processResult = pipettor.Aspirate(_parameters);
+            var processResult = pipettor.Aspirate(new AspirateContext(transferTargets.Value, _parameters));
             if (!processResult.ContainsErrors)
             {
-                foreach (var target in transferTargets.Value)
+                foreach (var target in transferTargets.Value.GetActiveChannels())
                 {
                     liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
                 }
@@ -88,7 +89,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Success(schedule);
         }
 
-        private Result<List<TransferTarget>> GetTransferTargets(ILiquidManager liquidManager)
+        private Result<ChannelPattern<ChannelPipettingContext>> GetTransferContext(ILiquidManager liquidManager)
         {
             var volumeUsagePerLiquid = new Dictionary<string, double>();
             foreach (var liquidTarget in TransferGroup.GetActiveChannels())
@@ -96,22 +97,28 @@ namespace LHRP.Api.Protocol.Pipetting
                 volumeUsagePerLiquid[liquidTarget.Source.GetId()] += liquidTarget.GetTotalTransferVolume() + AdditionalAspirateVolume;
             }
 
-            var transferTargets = new List<TransferTarget>();
-            foreach (var liquidTarget in TransferGroup.GetActiveChannels())
+            var transferContext = new ChannelPattern<ChannelPipettingContext>(TransferGroup.NumChannels);
+            for(int i = 0; i < TransferGroup.NumChannels; ++i)
             {
-                //First we need to make sure there's enough liquid in the container to complete the transfer
-                var transferTarget = liquidManager.RequestLiquid(liquidTarget.Source, volumeUsagePerLiquid[liquidTarget.Source.GetId()]);
+                if(!TransferGroup.IsInUse(i))
+                {
+                    continue;
+                }
+
+                var transferTarget = liquidManager.RequestLiquid(TransferGroup[i]!.Source, volumeUsagePerLiquid[TransferGroup[i]!.Source.GetId()]);
                 //If this happens then there's not enough liquid
                 if (transferTarget.IsFailure)
                 {
-                    return Result.Failure<List<TransferTarget>>(transferTarget.Error);
+                    return Result.Failure<ChannelPattern<ChannelPipettingContext>>(transferTarget.Error);
                 }
 
-                transferTarget.Value.Volume = liquidTarget.GetTotalTransferVolume() + AdditionalAspirateVolume;
-                transferTargets.Add(transferTarget.Value);
+                double volume = TransferGroup[i]!.GetTotalTransferVolume() + AdditionalAspirateVolume;
+                transferContext[i] = new ChannelPipettingContext(volume, i, TransferGroup[i]!.Source,
+                    new Coordinates(), //TODO
+                    transferTarget.Value.Address);
             }
-
-            return Result.Ok(transferTargets);
+           
+            return Result.Ok(transferContext);
         }
     }
 }
