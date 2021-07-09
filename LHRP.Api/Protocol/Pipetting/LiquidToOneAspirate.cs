@@ -17,12 +17,12 @@ namespace LHRP.Api.Protocol.Pipetting
     public class LiquidToOneAspirate : IPipettingCommand
     {
         public Guid CommandId { get; private set; }
-        private AspirateContext _parameters;
+        private AspirateParameters _parameters;
         public ChannelPattern<LiquidToOneTransfer> TransferGroup { get; private set; }
         public int RetryCount { get; private set; }
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public LiquidToOneAspirate(AspirateContext parameters,
+        public LiquidToOneAspirate(AspirateParameters parameters,
             ChannelPattern<LiquidToOneTransfer> transferGroup,
             int retryAttempt = 0)
         {

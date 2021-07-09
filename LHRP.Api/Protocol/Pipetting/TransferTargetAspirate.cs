@@ -12,13 +12,13 @@ namespace LHRP.Api.Protocol.Pipetting
     public class TransferTargetAspirate : IPipettingCommand
     {
         public Guid CommandId { get; private set; }
-        private AspirateContext _parameters;
+        private AspirateParameters _parameters;
         private ChannelPattern<TransferTarget> _targets;
         public int RetryCount { get; private set; }
 
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public TransferTargetAspirate(AspirateContext parameters,
+        public TransferTargetAspirate(AspirateParameters parameters,
             ChannelPattern<TransferTarget> targets,
             int retryAttempt = 0)
         {
@@ -50,7 +50,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;
 
-            var processResult = pipettor.Aspirate(_parameters, _targets);
+            var processResult = pipettor.Aspirate(_parameters);
             if(!processResult.ContainsErrors)
             {
                 //foreach(var target in _targets)

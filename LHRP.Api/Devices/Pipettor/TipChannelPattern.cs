@@ -5,10 +5,8 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public class TipChannelPattern : ChannelPattern<Tip>
     {
-        private Tip?[] _tips;
         public TipChannelPattern(int numChannels) : base(numChannels)
         {
-            _tips = new Tip?[numChannels];
         }
 
         public Tip? GetTip(int channelIndex)
@@ -18,7 +16,7 @@ namespace LHRP.Api.Devices.Pipettor
                 throw new Exception($"Invalid channel index {channelIndex}");
             }
 
-            return _tips[channelIndex];
+            return _channels[channelIndex];
         }
 
         public void SetTip(int channelIndex, Tip tip)
@@ -28,7 +26,7 @@ namespace LHRP.Api.Devices.Pipettor
                 throw new Exception($"Invalid channel index {channelIndex}");
             }
 
-            _tips[channelIndex] = tip;
+            _channels[channelIndex] = tip;
         }
 
         public void RemoveTip(int channelIndex)
@@ -38,7 +36,7 @@ namespace LHRP.Api.Devices.Pipettor
                 throw new Exception($"Invalid channel index {channelIndex}");
             }
 
-            _tips[channelIndex] = null;
+            _channels[channelIndex] = null;
         }
     }
 }

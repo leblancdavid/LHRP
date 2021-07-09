@@ -13,10 +13,10 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         public Guid CommandId { get; private set; }
         public int RetryCount { get; private set; }
-        private DispenseContext _parameters;
+        private DispenseParameters _parameters;
         private ChannelPattern<TransferTarget> _targets;
         public ResourcesUsage ResourcesUsed { get; private set; }
-        public Dispense(DispenseContext parameters,
+        public Dispense(DispenseParameters parameters,
             ChannelPattern<TransferTarget> targets,
             int retryAttempt = 0)
         {
@@ -52,7 +52,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var liquidManager = engine.Instrument.LiquidManager;
             var pipettorStatus = pipettor.PipettorStatus;
 
-            var processResult = pipettor.Dispense(_parameters, _targets);
+            var processResult = pipettor.Dispense(_parameters);
             if(!processResult.ContainsErrors)
             {
                 for(int i = 0; i < _targets.NumChannels; ++i)

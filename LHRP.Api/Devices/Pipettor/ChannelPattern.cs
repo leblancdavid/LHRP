@@ -17,7 +17,8 @@ namespace LHRP.Api.Devices.Pipettor
 
         public ChannelPattern(string pattern)
         {
-            
+            NumChannels = pattern.Length;
+            _active = pattern.Select(x => x == '1').ToArray();
         }
 
         public bool IsInUse(int index)

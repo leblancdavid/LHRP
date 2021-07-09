@@ -3,10 +3,10 @@ using LHRP.Api.Protocol.Transfers;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class AspirateContext
+    public class AspirateParameters
     {
         //TODO Define aspirate params
-        public  AspirateContext()
+        public  AspirateParameters()
         {
         }
 

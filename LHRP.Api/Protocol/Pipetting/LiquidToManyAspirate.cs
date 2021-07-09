@@ -15,13 +15,13 @@ namespace LHRP.Api.Protocol.Pipetting
     public class LiquidToManyAspirate : IPipettingCommand
     {
         public Guid CommandId { get; private set; }
-        private AspirateContext _parameters;
+        private AspirateParameters _parameters;
         public ChannelPattern<LiquidToManyTransfer> TransferGroup { get; private set; }
         public double AdditionalAspirateVolume { get; set; }
         public int RetryCount { get; private set; }
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public LiquidToManyAspirate(AspirateContext parameters,
+        public LiquidToManyAspirate(AspirateParameters parameters,
             ChannelPattern<LiquidToManyTransfer> transferGroup,
             double additionalAspirateVolume,
             int retryAttempt = 0)
@@ -31,11 +31,11 @@ namespace LHRP.Api.Protocol.Pipetting
             AdditionalAspirateVolume = additionalAspirateVolume;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
-            ResourcesUsed = new ResourcesUsage(); 
-            //foreach (var target in TransferGroup.Transfers)
-            //{
-            //    ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.GetTotalTransferVolume());
-            //}
+            ResourcesUsed = new ResourcesUsage();
+            foreach (var target in TransferGroup.GetActiveChannels())
+            {
+                ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.GetTotalTransferVolume());
+            }
         }
 
 
@@ -60,14 +60,14 @@ namespace LHRP.Api.Protocol.Pipetting
                 //TODO Insufficient liquid error
             }
 
-            //var processResult = pipettor.Aspirate(_parameters, TransferGroup);
-            //if (!processResult.ContainsErrors)
-            //{
-            //    foreach (var target in transferTargets.Value)
-            //    {
-            //        liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
-            //    }
-            //}
+            var processResult = pipettor.Aspirate(_parameters);
+            if (!processResult.ContainsErrors)
+            {
+                foreach (var target in transferTargets.Value)
+                {
+                    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
+                }
+            }
 
             //return processResult;
 

@@ -50,9 +50,9 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true); 
         }
 
-        public ProcessResult Aspirate(AspirateContext parameters,
-            ChannelPattern<TransferTarget> targets)
+        public ProcessResult Aspirate(AspirateParameters parameters)
         {
+            ChannelPattern<TransferTarget> targets = new ChannelPattern<TransferTarget>(0);
            var sb = new StringBuilder();
             sb.Append("Aspirating with channels pattern '");
             //sb.Append(pattern.GetChannelString());
@@ -83,9 +83,9 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             return new ProcessResult(estimatedTime, estimatedTime);
         }
 
-        public ProcessResult Dispense(DispenseContext parameters,
-            ChannelPattern<TransferTarget> targets)
+        public ProcessResult Dispense(DispenseParameters parameters)
         {
+            ChannelPattern<TransferTarget> targets = new ChannelPattern<TransferTarget>(0);
             var sb = new StringBuilder();
             sb.Append("Dispensing with channels pattern '");
             sb.Append(targets.GetChannelString());
