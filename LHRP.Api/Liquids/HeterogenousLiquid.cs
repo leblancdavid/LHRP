@@ -28,6 +28,19 @@ namespace LHRP.Api.Liquids
             Mix(initialLiquid, 1.0);
         }
 
+        public bool IsPure()
+        {
+            return _liquidParts.Count <= 1;
+        }
+
+        public bool ContainsLiquid(Liquid liquid)
+        {
+            if (GetId() == liquid.GetId() || _liquidParts.Any(x => x.GetId() == liquid.GetId()))
+                return true;
+
+            return false;
+        }
+
         public override HeterogeneousLiquid Mix(Liquid liquid, double ratio)
         {
             if(Match(liquid))
@@ -81,7 +94,7 @@ namespace LHRP.Api.Liquids
 
         public override string GetId()
         {
-            return String.Join('-', _liquidParts.Select(x => x.GetId()));
+            return String.Join('-', _liquidParts.Select(x => x.GetIdWithConcentration()));
         }
     }
 }

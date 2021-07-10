@@ -22,5 +22,15 @@ namespace LHRP.Api.Labware
 
             return _containers[address].AbsolutePosition;
         }
+
+        public virtual LiquidContainer? GetContainer(LabwareAddress address)
+        {
+            if (!_containers.ContainsKey(address))
+            {
+                return null;
+            }
+
+            return _containers[address];
+        }
     }
 }

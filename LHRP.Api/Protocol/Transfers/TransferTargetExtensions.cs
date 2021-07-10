@@ -25,14 +25,27 @@ namespace LHRP.Api.Protocol.Transfers
                     continue;
                 }
 
-                var coord = instrument.Deck.GetCoordinates(transferPattern[i]!.Address);
-                if(coord == null)
+                var transfer = transferPattern[i]!;
+                var container = instrument.Deck.GetLiquidContainer(transfer.Address);
+                if(container == null)
                 {
-                    errors.Add(new RuntimeError($"Invalid transfer target address {transferPattern[i]!.Address.ToAlphaAddress()}"));
-                    
+                    errors.Add(new RuntimeError($"Invalid transfer target address {transfer.Address.ToAlphaAddress()}"));
+                    continue;
                 }
 
-                //transferPattern[i]
+                if(transfer.TransferType == TransferType.Aspirate &&
+                    container.Liquid != null && 
+                    container.Volume < transfer.Volume)
+                {
+                    errors.Add(new InsufficientSourceVolumeRuntimeError(
+                        $"Invalid transfer target address {transfer.Address.ToAlphaAddress()}",
+                        transfer.Address,
+                        container.Volume,
+                        transfer.Volume));
+                }
+
+                transferContext[i] = new ChannelPipettingContext(transfer.Volume, i, container.Liquid!,
+                    container.AbsolutePosition, transfer.Address);
             }
 
             return transferContext;

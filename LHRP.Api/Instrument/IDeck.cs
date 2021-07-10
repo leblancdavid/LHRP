@@ -14,6 +14,7 @@ namespace LHRP.Api.Instrument
         IEnumerable<TipRack> GetTipRacks();
         IEnumerable<Plate> GetPlates();
         IEnumerable<LiquidContainer> GetLiquidContainers();
+        LiquidContainer? GetLiquidContainer(LabwareAddress address);
         Coordinates? GetCoordinates(LabwareAddress address);
         
     }

@@ -13,7 +13,7 @@ namespace LHRP.Api.Instrument
 
         public Deck(List<DeckPosition> deckPositions)
         {
-            foreach(var position in deckPositions)
+            foreach (var position in deckPositions)
             {
                 _deckPositions[position.PositionId] = position;
             }
@@ -21,7 +21,7 @@ namespace LHRP.Api.Instrument
 
         public DeckPosition? GetDeckPosition(int positionId)
         {
-            if(!_deckPositions.ContainsKey(positionId))
+            if (!_deckPositions.ContainsKey(positionId))
             {
                 return null;
             }
@@ -30,7 +30,7 @@ namespace LHRP.Api.Instrument
 
         public Result AssignLabware(int positionId, Labware.Labware labware)
         {
-            if(!_deckPositions.ContainsKey(positionId))
+            if (!_deckPositions.ContainsKey(positionId))
             {
                 return Result.Failure("Invalid deck position ID");
             }
@@ -40,11 +40,11 @@ namespace LHRP.Api.Instrument
 
         public Labware.Labware? GetLabware(int positionId)
         {
-            if(!_deckPositions.ContainsKey(positionId))
+            if (!_deckPositions.ContainsKey(positionId))
             {
                 return null;
             }
-            if(!_deckPositions[positionId].IsOccupied)
+            if (!_deckPositions[positionId].IsOccupied)
             {
                 return null;
             }
@@ -53,13 +53,13 @@ namespace LHRP.Api.Instrument
 
         public Coordinates? GetCoordinates(LabwareAddress address)
         {
-             if(!_deckPositions.ContainsKey(address.PositionId))
+            if (!_deckPositions.ContainsKey(address.PositionId))
             {
                 return null;
             }
-            if(!_deckPositions[address.PositionId].IsOccupied)
+            if (!_deckPositions[address.PositionId].IsOccupied)
             {
-               return null;
+                return null;
             }
 
             return _deckPositions[address.PositionId].AssignedLabware!.GetRealCoordinates(address);
@@ -68,7 +68,7 @@ namespace LHRP.Api.Instrument
         public IEnumerable<TipRack> GetTipRacks()
         {
             var tipRacks = new List<TipRack>();
-            foreach(var position in _deckPositions.Values)
+            foreach (var position in _deckPositions.Values)
             {
                 var tipRack = position.AssignedLabware as TipRack;
                 if (tipRack != null)
@@ -82,7 +82,7 @@ namespace LHRP.Api.Instrument
         public IEnumerable<Plate> GetPlates()
         {
             var plates = new List<Plate>();
-            foreach(var position in _deckPositions.Values)
+            foreach (var position in _deckPositions.Values)
             {
                 var plate = position.AssignedLabware as Plate;
                 if (plate != null)
@@ -106,6 +106,23 @@ namespace LHRP.Api.Instrument
             }
 
             return liquidContainers;
+        }
+
+        public LiquidContainer? GetLiquidContainer(LabwareAddress address)
+        {
+            if (!_deckPositions.ContainsKey(address.PositionId) ||
+                !_deckPositions[address.PositionId].IsOccupied)
+            {
+                return null;
+            }
+
+            var liquidContainerLabware = _deckPositions[address.PositionId].AssignedLabware as LiquidContainingLabware;
+            if(liquidContainerLabware == null)
+            {
+                return null;
+            }
+
+            return liquidContainerLabware.GetContainer(address);
         }
     }
 }

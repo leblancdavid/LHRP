@@ -7,13 +7,7 @@ namespace LHRP.Api.Labware
 {
     public class LiquidContainer
     {
-        public double Volume 
-        { 
-            get
-            {
-                return _liquidVolumes.Values.Sum();
-            }
-        }
+        public double Volume { get; protected set; }
 
         public double MaxVolume { get; protected set; }
 
@@ -25,15 +19,14 @@ namespace LHRP.Api.Labware
             }
         }
 
-        private List<Liquid> _liquids = new List<Liquid>();
-        public IEnumerable<Liquid> Liquids => _liquids;
-        private Dictionary<string,double> _liquidVolumes = new Dictionary<string, double>();
+        protected HeterogeneousLiquid? _liquid = null;
+        public HeterogeneousLiquid? Liquid => _liquid;
 
         public bool IsPure
         {
             get
             {
-                return _liquids.Count <= 1;
+                return _liquid == null || _liquid.IsPure();
             }
         }
 
@@ -41,7 +34,7 @@ namespace LHRP.Api.Labware
         {
             get
             {
-                return _liquids.Count > 0;
+                return _liquid != null;
             }
         }
         public Coordinates AbsolutePosition { get; protected set; }
@@ -57,28 +50,20 @@ namespace LHRP.Api.Labware
 
         public void AddLiquid(Liquid liquid, double volume)
         {
-            if(!ContainsLiquid(liquid))
+            if(_liquid == null)
             {
-                _liquids.Add(liquid);
-                _liquidVolumes[liquid.GetId()] = 0.0;
-            }
-
-            if(_liquidVolumes[liquid.GetId()] + volume > MaxVolume)
-            {
-                _liquidVolumes[liquid.GetId()] = MaxVolume;
+                _liquid = new HeterogeneousLiquid(liquid);
             }
             else
             {
-                _liquidVolumes[liquid.GetId()] += volume;
+                _liquid.Mix(liquid, volume / (volume + Volume));
             }
+            
         }
 
         public void AssignLiquid(Liquid liquid)
         {
-            _liquids.Clear();
-            _liquidVolumes.Clear();
-            _liquids.Add(liquid);
-            _liquidVolumes[liquid.GetId()] = 0.0;
+            _liquid = new HeterogeneousLiquid(liquid);
         }
 
         public void Remove(double volume)
@@ -86,25 +71,33 @@ namespace LHRP.Api.Labware
             var totalVolume = Volume;
             if(volume > totalVolume)
             {
-                volume = totalVolume;
+                Volume = 0.0;
             }
-            
-            var volumeFactor = 1.0 - volume/totalVolume;
-            foreach(var liquid in _liquidVolumes.Keys.ToList())
+            else
             {
-                _liquidVolumes[liquid] *= volumeFactor;
+                Volume -= volume;
             }
         }
 
-        public bool ContainsLiquid(Liquid liquid)
+        public bool ContainsLiquid(Liquid liquid, bool exactMatch = false)
         {
-            return _liquids.Any(l => l.GetId() == liquid.GetId());
+            if(_liquid == null)
+            {
+                return false;
+            }
+
+            if(exactMatch)
+            {
+                return _liquid.Match(liquid);
+            }
+
+            return _liquid.ContainsLiquid(liquid);
         }
 
         public void Clear()
         {
-            _liquids.Clear();
-            _liquidVolumes.Clear();
+            _liquid = null;
+            Volume = 0.0;
         }
 
 
