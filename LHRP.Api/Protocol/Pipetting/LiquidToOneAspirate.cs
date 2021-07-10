@@ -10,6 +10,7 @@ using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LHRP.Api.Protocol.Pipetting
@@ -32,10 +33,10 @@ namespace LHRP.Api.Protocol.Pipetting
             RetryCount = retryAttempt;
 
             ResourcesUsed = new ResourcesUsage();
-            //foreach (var target in TransferGroup.Transfers)
-            //{
-            //    ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.Target.Volume);
-            //}
+            foreach (var target in TransferGroup.GetActiveChannels())
+            {
+                ResourcesUsed.AddConsumableLiquidUsage(target.Source, target.Target.Volume);
+            }
         }
 
 
@@ -54,25 +55,23 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;
 
-            RuntimeError? error;
-            var transferTargets = GetTransferTargets(engine, liquidManager, out error);
-            if(transferTargets.IsFailure)
+            List<RuntimeError> errors;
+            var transferContext = TransferGroup.ToChannelPatternPipettingContext(engine.Instrument, out errors);
+            if (errors.Any())
             {
-                return new ProcessResult(error!);
+                return new ProcessResult(errors.ToArray());
             }
 
-            //var processResult = pipettor.Aspirate(_parameters, TransferGroup);
-            //if (!processResult.ContainsErrors)
-            //{
-            //    foreach (var target in transferTargets.Value)
-            //    {
-            //        liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
-            //    }
-            //}
+            var processResult = pipettor.Aspirate(new AspirateContext(transferContext,  _parameters));
+            if (!processResult.ContainsErrors)
+            {
+                foreach (var target in transferContext.GetActiveChannels())
+                {
+                    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
+                }
+            }
 
-            //return processResult;
-
-            return new ProcessResult();
+            return processResult;
         }
 
         public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
@@ -89,39 +88,6 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Success(schedule);
         }
 
-        private Result<List<TransferTarget>> GetTransferTargets(IRuntimeEngine engine, ILiquidManager liquidManager, out RuntimeError? error)
-        {
-            var volumeUsagePerLiquid = new Dictionary<string, double>();
-            foreach(var liquidTarget in TransferGroup.GetActiveChannels())
-            {
-                if(!volumeUsagePerLiquid.ContainsKey(liquidTarget.Source.GetId()))
-                {
-                    volumeUsagePerLiquid[liquidTarget.Source.GetId()] = 0.0;
-                }
-
-                volumeUsagePerLiquid[liquidTarget.Source.GetId()] += liquidTarget.Target.Volume;
-            }
-            
-            var transferTargets = new List<TransferTarget>();
-            foreach (var liquidTarget in TransferGroup.GetActiveChannels())
-            {
-                //First we need to make sure there's enough liquid in the container to complete the transfer
-                var transferTarget = liquidManager.RequestLiquid(liquidTarget.Source, volumeUsagePerLiquid[liquidTarget.Source.GetId()]);
-                //If this happens then there's not enough liquid
-                if(transferTarget.IsFailure)
-                {
-                    error = new InsufficientLiquidRuntimeError(transferTarget.Error, liquidTarget.Source,
-                        GetRemainingRequiredLiquidVolume(engine, liquidTarget.Source));
-                    return Result.Failure<List<TransferTarget>>(transferTarget.Error);
-                }
-
-                transferTarget.Value.Volume = liquidTarget.Target.Volume;
-                transferTargets.Add(transferTarget.Value);
-            }
-
-            error = null;
-            return Result.Ok(transferTargets);
-        }
         private double GetRemainingRequiredLiquidVolume(IRuntimeEngine engine, Liquid liquid)
         {
             var resources = engine.Commands.GetRemainingResources();

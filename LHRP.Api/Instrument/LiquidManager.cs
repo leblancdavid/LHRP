@@ -92,18 +92,18 @@ namespace LHRP.Api.Instrument
             return Result.Ok();
         }
 
-        public Result<TransferTarget> RequestLiquid(Liquid liquid, double desiredVolume)
+        public Result<LiquidContainer> RequestLiquid(Liquid liquid, double desiredVolume)
         {
             var containers = _deck.GetLiquidContainers().Where(x => x.ContainsLiquid(liquid));
             foreach(var container in containers)
             {
                 if(container.Volume > desiredVolume)
                 {
-                    return Result.Ok(new TransferTarget(container.Address, desiredVolume, TransferType.Aspirate));
+                    return Result.Ok(container);
                 }
             }
             
-            return Result.Failure<TransferTarget>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.GetId()}'");
+            return Result.Failure<LiquidContainer>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.GetId()}'");
         }
 
         public Result ClearLiquidAtPosition(LabwareAddress address)

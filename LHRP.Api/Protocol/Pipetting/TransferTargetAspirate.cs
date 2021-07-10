@@ -61,10 +61,10 @@ namespace LHRP.Api.Protocol.Pipetting
             var processResult = pipettor.Aspirate(new AspirateContext(pipetteTargets, _parameters));
             if(!processResult.ContainsErrors)
             {
-                //foreach(var target in _targets)
-                //{
-                //    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
-                //}
+                foreach (var target in _targets.GetActiveChannels())
+                {
+                    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
+                }
             }
             
             return processResult;

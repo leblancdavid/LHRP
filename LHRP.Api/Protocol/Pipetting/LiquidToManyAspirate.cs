@@ -94,7 +94,8 @@ namespace LHRP.Api.Protocol.Pipetting
             var volumeUsagePerLiquid = new Dictionary<string, double>();
             foreach (var liquidTarget in TransferGroup.GetActiveChannels())
             {
-                volumeUsagePerLiquid[liquidTarget.Source.GetId()] += liquidTarget.GetTotalTransferVolume() + AdditionalAspirateVolume;
+                //TODO
+                //volumeUsagePerLiquid[liquidTarget.Source.GetId()] += liquidTarget.Target.Volume;
             }
 
             var transferContext = new ChannelPattern<ChannelPipettingContext>(TransferGroup.NumChannels);

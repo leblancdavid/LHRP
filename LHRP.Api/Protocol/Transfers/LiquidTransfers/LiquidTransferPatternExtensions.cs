@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
+using LHRP.Api.Runtime.ErrorHandling;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -75,6 +76,50 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             }
 
             return Result.Ok<IEnumerable<ChannelPattern<LiquidToManyTransfer?>>>(multiDispenseTransferGroups);
+        }
+
+        public static ChannelPattern<ChannelPipettingContext> ToChannelPatternPipettingContext(
+            this ChannelPattern<LiquidToOneTransfer> transferPattern,
+            IInstrument instrument,
+            out List<RuntimeError> errors)
+        {
+            errors = new List<RuntimeError>();
+
+            var volumeUsagePerLiquid = new Dictionary<string, double>();
+            foreach (var liquidTarget in transferPattern.GetActiveChannels())
+            {
+                volumeUsagePerLiquid[liquidTarget.Source.GetId()] += liquidTarget.Target.Volume;
+            }
+
+            var transferContext = new ChannelPattern<ChannelPipettingContext>(transferPattern.NumChannels);
+            for (int i = 0; i < transferPattern.NumChannels; ++i)
+            {
+                if (transferPattern[i] == null)
+                {
+                    continue;
+                }
+
+                var transfer = transferPattern[i]!;
+
+                var transferTarget = instrument.LiquidManager.RequestLiquid(transfer.Source, volumeUsagePerLiquid[transfer.Source.GetId()]);
+                //If this happens then there's not enough liquid
+                if (transferTarget.IsFailure)
+                {
+                    var errorMessage = transferTarget.Error;
+                    if(!errors.Any(x => x.Message == errorMessage)) //avoid duplicates
+                    {
+                        errors.Add(new InsufficientLiquidRuntimeError(
+                            errorMessage,
+                            transfer.Source,
+                            volumeUsagePerLiquid[transfer.Source.GetId()]));
+                    }
+                }
+
+                transferContext[i] = new ChannelPipettingContext(transfer.Target.Volume, i, transfer.Source,
+                    transferTarget.Value.AbsolutePosition, transferTarget.Value.Address);
+            }
+
+            return transferContext;
         }
 
         private static ChannelPattern GetOverallChannelPattern(List<ChannelPattern<LiquidToOneTransfer>> liquidTransferGroups)
