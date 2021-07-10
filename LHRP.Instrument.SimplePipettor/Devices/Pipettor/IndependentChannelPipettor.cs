@@ -36,9 +36,9 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true); 
         }
 
-        public ProcessResult Aspirate(AspirateParameters parameters)
+        public ProcessResult Aspirate(AspirateContext context)
         {
-            Console.WriteLine(parameters);
+            Console.WriteLine(context);
             return new ProcessResult(new TimeSpan(), new TimeSpan());
         }
 

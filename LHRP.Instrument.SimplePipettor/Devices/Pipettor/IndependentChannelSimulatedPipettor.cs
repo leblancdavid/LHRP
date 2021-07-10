@@ -50,9 +50,9 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true); 
         }
 
-        public ProcessResult Aspirate(AspirateParameters parameters)
+        public ProcessResult Aspirate(AspirateContext context)
         {
-            ChannelPattern<TransferTarget> targets = new ChannelPattern<TransferTarget>(0);
+           var targets = context.Targets;
            var sb = new StringBuilder();
             sb.Append("Aspirating with channels pattern '");
             //sb.Append(pattern.GetChannelString());
