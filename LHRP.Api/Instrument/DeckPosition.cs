@@ -1,9 +1,10 @@
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
+using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {
-    public class DeckPosition
+    public class DeckPosition : IStateSnapshot<DeckPosition>
     {
         public DeckPosition(int positionId,
             Coordinates dimensions,
@@ -32,6 +33,11 @@ namespace LHRP.Api.Instrument
             AssignedLabware = labware;
             AssignedLabware.UpdatePosition(Position, PositionId);
             return Result.Ok();
+        }
+
+        public DeckPosition GetSnapshot()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void RemoveLabware()

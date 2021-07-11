@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Labware;
+using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {
-    public interface IDeck
+    public interface IDeck : IStateSnapshot<IDeck>
     {
         IEnumerable<DeckPosition> Positions { get; }
         Result AssignLabware(int positionId, Labware.Labware labware);

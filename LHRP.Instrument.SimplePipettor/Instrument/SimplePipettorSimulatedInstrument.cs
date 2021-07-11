@@ -31,19 +31,10 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             }
         }
 
-        private IDeck _deck;
-        public IDeck Deck
-        {
-            get
-            {
-                return _deck;
-            }
-        }
-        private TipManager _tipManager;
-        public ITipManager TipManager => _tipManager;
-
-        private LiquidManager _liquidManager;
-        public ILiquidManager LiquidManager => _liquidManager;
+        public IPipettor Pipettor { get; private set; }
+        public IDeck Deck { get; private set; }
+        public ITipManager TipManager { get; private set; }
+        public ILiquidManager LiquidManager { get; private set; }
         private Coordinates _wastePosition = new Coordinates(0.0, 0.0, 0.0);
         public Coordinates WastePosition
         {
@@ -57,6 +48,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
         public SimplePipettorSimulatedInstrument()
         {
             _pipettor = new IndependentChannelSimulatedPipettor();
+            Pipettor = _pipettor;
 
             var deckPositions = new List<DeckPosition>();
             int numPositions = 8;
@@ -78,15 +70,15 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
 
         private void InitializeDeck(IDeck deck)
         {
-            _deck = deck;
-            _tipManager = new TipManager(_deck);
-            _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
+            Deck = deck;
+            TipManager = new TipManager(Deck);
+            LiquidManager = new LiquidManager(new LiquidManagerConfiguration(true), Deck);
         }
 
         public Result<Schedule> InitializeResources(Schedule schedule)
         {
             var result = Result.Success(schedule);
-            var liquidContainers = _deck.GetLiquidContainers();
+            var liquidContainers = Deck.GetLiquidContainers();
             foreach (var liquid in schedule.ResourcesUsage.ConsumableLiquidUsages)
             {
                 var containers = liquidContainers.Where(x => x.ContainsLiquid(liquid.Key)).ToList();
@@ -128,7 +120,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
                 }
             }
 
-            var tipRacks = _deck.GetTipRacks();
+            var tipRacks = Deck.GetTipRacks();
             foreach(var tip in schedule.ResourcesUsage.TipUsages)
             {
                 var tr = tipRacks.FirstOrDefault(x => x.Definition.Id == tip.TipTypeId);
@@ -147,9 +139,16 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             return result;
         }
 
-        public IPipettor Pipettor
+        public IInstrument GetSnapshot()
         {
-            get { return _pipettor; }
+            return new SimplePipettorSimulatedInstrument()
+            {
+                TipManager = this.TipManager.GetSnapshot(),
+                Deck = this.Deck.GetSnapshot(),
+                LiquidManager = this.LiquidManager.GetSnapshot(),
+                Pipettor = this.Pipettor
+            };
         }
+
     }
 }

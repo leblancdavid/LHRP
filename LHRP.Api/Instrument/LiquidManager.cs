@@ -125,5 +125,9 @@ namespace LHRP.Api.Instrument
             return Result.Ok();
         }
 
+        public ILiquidManager GetSnapshot()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

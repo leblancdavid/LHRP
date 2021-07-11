@@ -124,5 +124,10 @@ namespace LHRP.Api.Instrument
 
             return liquidContainerLabware.GetContainer(address);
         }
+
+        public IDeck GetSnapshot()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

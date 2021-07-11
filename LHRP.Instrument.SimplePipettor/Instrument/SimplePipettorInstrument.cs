@@ -73,6 +73,11 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             throw new NotImplementedException();
         }
 
+        public IInstrument GetSnapshot()
+        {
+            throw new NotImplementedException();
+        }
+
         public IPipettor Pipettor 
         {
             get { return _pipettor; }
