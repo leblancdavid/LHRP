@@ -136,47 +136,20 @@ namespace LHRP.Api.Devices.Pipettor
 
                 return _channels[i]; 
             }
-            set { _channels[i] = value; }
+            set
+            {
+                if (i < 0 || i >= NumChannels)
+                    return;
+
+                _channels[i] = value;
+                _active[i] = value != null;               
+            }
         }
 
         public IEnumerable<T> GetActiveChannels()
         {
             return _channels.Where(x => x != null).Select(x => x!);
         }
-
-        //public static ChannelPattern Full(int numChannels)
-        //{
-        //    var cp = new ChannelPattern(numChannels);
-        //    for (int i = 0; i < numChannels; ++i)
-        //    {
-        //        cp[i] = true;
-        //    }
-        //    return cp;
-        //}
-
-        //public static ChannelPattern operator &(ChannelPattern b, ChannelPattern c)
-        //{
-        //    int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-        //    var a = new ChannelPattern(numChannels);
-        //    for (int i = 0; i < numChannels; ++i)
-        //    {
-        //        a[i] = b[i] && c[i];
-        //    }
-
-        //    return a;
-        //}
-
-        //public static ChannelPattern operator |(ChannelPattern b, ChannelPattern c)
-        //{
-        //    int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-        //    var a = new ChannelPattern(numChannels);
-        //    for (int i = 0; i < numChannels; ++i)
-        //    {
-        //        a[i] = b[i] || c[i];
-        //    }
-
-        //    return a;
-        //}
 
         public static ChannelPattern<T> operator -(ChannelPattern<T> b, ChannelPattern c)
         {
@@ -189,17 +162,5 @@ namespace LHRP.Api.Devices.Pipettor
 
             return a;
         }
-
-        //public static ChannelPattern operator +(ChannelPattern b, ChannelPattern c)
-        //{
-        //    int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-        //    var a = new ChannelPattern(numChannels);
-        //    for (int i = 0; i < numChannels; ++i)
-        //    {
-        //        a[i] = c[i] ? true : b[i];
-        //    }
-
-        //    return a;
-        //}
     }
 }

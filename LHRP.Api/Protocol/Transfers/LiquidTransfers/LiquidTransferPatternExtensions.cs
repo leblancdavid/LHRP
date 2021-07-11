@@ -88,7 +88,13 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             var volumeUsagePerLiquid = new Dictionary<string, double>();
             foreach (var liquidTarget in transferPattern.GetActiveChannels())
             {
-                volumeUsagePerLiquid[liquidTarget.Source.GetId()] += liquidTarget.Target.Volume;
+                var id = liquidTarget.Source.GetId();
+                if(!volumeUsagePerLiquid.ContainsKey(id))
+                {
+                    volumeUsagePerLiquid[id] = 0.0;
+                }
+
+                volumeUsagePerLiquid[id] += liquidTarget.Target.Volume;
             }
 
             var transferContext = new ChannelPattern<ChannelPipettingContext>(transferPattern.NumChannels);
@@ -113,6 +119,8 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
                             transfer.Source,
                             volumeUsagePerLiquid[transfer.Source.GetId()]));
                     }
+
+                    continue;
                 }
 
                 transferContext[i] = new ChannelPipettingContext(transfer.Target.Volume, i, transfer.Source,

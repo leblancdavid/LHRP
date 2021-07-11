@@ -27,6 +27,7 @@ namespace LHRP.Api.Devices.Pipettor
             }
 
             _channels[channelIndex] = tip;
+            _active[channelIndex] = true;
         }
 
         public void RemoveTip(int channelIndex)
@@ -37,6 +38,8 @@ namespace LHRP.Api.Devices.Pipettor
             }
 
             _channels[channelIndex] = null;
+            _active[channelIndex] = false;
+
         }
     }
 }
