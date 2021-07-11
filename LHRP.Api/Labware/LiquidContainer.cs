@@ -48,6 +48,15 @@ namespace LHRP.Api.Labware
 
         public void AddLiquid(Liquid liquid, double volume)
         {
+            if (volume < 0.0)
+                return;
+
+            Volume += volume;
+            if(Volume > MaxVolume)
+            {
+                Volume = MaxVolume;
+            }
+
             if(_liquid == null)
             {
                 _liquid = new HeterogeneousLiquid(liquid);
@@ -56,6 +65,7 @@ namespace LHRP.Api.Labware
             {
                 _liquid.Mix(liquid, volume / (volume + Volume));
             }
+
             
         }
 
