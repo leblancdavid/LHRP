@@ -2,10 +2,12 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -52,7 +54,14 @@ namespace LHRP.Api.Protocol.Pipetting
             var liquidManager = engine.Instrument.LiquidManager;
             var pipettorStatus = pipettor.PipettorStatus;
 
-            var processResult = pipettor.Dispense(_parameters);
+            var errors = new List<RuntimeError>();
+            var pipetteTargets = _targets.ToChannelPatternPipettingContext(engine.Instrument, out errors);
+            if (errors.Any())
+            {
+                return new ProcessResult(errors.ToArray());
+            }
+
+            var processResult = pipettor.Dispense(new DispenseContext(pipetteTargets, _parameters));
             if(!processResult.ContainsErrors)
             {
                 for(int i = 0; i < _targets.NumChannels; ++i)
