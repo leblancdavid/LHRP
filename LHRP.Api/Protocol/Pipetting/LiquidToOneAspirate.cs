@@ -87,13 +87,5 @@ namespace LHRP.Api.Protocol.Pipetting
             }
             return Result.Success(schedule);
         }
-
-        private double GetRemainingRequiredLiquidVolume(IRuntimeEngine engine, Liquid liquid)
-        {
-            var resources = engine.Commands.GetRemainingResources();
-            return resources.ConsumableLiquidUsages[liquid];
-        }
     }
-
-    
 }

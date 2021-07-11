@@ -105,7 +105,7 @@ namespace LHRP.Api.Protocol.Steps
             var commands = new List<IRunnableCommand>();
             if (_stepData.ReuseTips)
             {
-                //commands.Add(new PickupTips(ChannelPattern.Full(liquidTransferGroups.First().ChannelPattern.NumChannels), _stepData.TipTypeId));
+                commands.Add(new PickupTips(ChannelPattern.Full(liquidTransferGroups.First().NumChannels), _stepData.TipTypeId));
                 foreach (var transferGroup in multiDispenseTransferGroups.Value)
                 {
               

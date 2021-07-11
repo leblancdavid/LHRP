@@ -122,6 +122,21 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             return transferContext;
         }
 
+        public static ChannelPattern<TransferTarget> ToTargetTransfer(
+            this ChannelPattern<LiquidToOneTransfer> channelPattern)
+        {
+            var output = new ChannelPattern<TransferTarget>(channelPattern.NumChannels);
+            for (int i = 0; i < channelPattern.NumChannels; ++i)
+            {
+                if (channelPattern[i] != null)
+                {
+                    output[i] = channelPattern[i]!.Target;
+                }
+            }
+
+            return output;
+        }
+
         private static ChannelPattern GetOverallChannelPattern(List<ChannelPattern<LiquidToOneTransfer>> liquidTransferGroups)
         {
             if (!liquidTransferGroups.Any())
@@ -138,22 +153,5 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             return overallChannelPattern;
         }
 
-        public static List<LiquidTransferSource?> GetAspirateLiquidTargets(this ChannelPattern<LiquidToManyTransfer> transferGroup, double additionalVolume = 0.0)
-        {
-            var liquidTargets = new List<LiquidTransferSource?>();
-            for(int i = 0; i < transferGroup.NumChannels; ++i)
-            {
-                if(transferGroup[i] != null)
-                {
-                    liquidTargets.Add(new LiquidTransferSource(transferGroup[i]!.Source,
-                        transferGroup[i]!.GetTotalTransferVolume() + additionalVolume));
-                }
-                else
-                {
-                    liquidTargets.Add(null);
-                }
-            }
-            return liquidTargets;
-        }
     }
 }
