@@ -34,11 +34,10 @@ namespace LHRP.Api.Protocol.Transfers
                 }
 
                 if(transfer.TransferType == TransferType.Aspirate &&
-                    container.Liquid != null && 
                     container.Volume < transfer.Volume)
                 {
                     errors.Add(new InsufficientSourceVolumeRuntimeError(
-                        $"Invalid transfer target address {transfer.Address.ToAlphaAddress()}",
+                        $"Insufficient liquid for aspirate at {transfer.Address.ToAlphaAddress()}",
                         transfer.Address,
                         container.Volume,
                         transfer.Volume));

@@ -21,7 +21,7 @@ namespace LHRP.TestConsole.Examples
 
         public static Plate GetPlate()
         {
-            return new Plate(new PlateDefinition("Costar 96", new WellDefinition(), 8, 12, new Coordinates(86, 127, 14), 9.0));
+            return new Plate(new PlateDefinition("Costar 96", new WellDefinition(250), 8, 12, new Coordinates(86, 127, 14), 9.0));
         }
 
         public static Plate GetReagentPlate1()

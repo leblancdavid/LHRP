@@ -9,9 +9,9 @@ namespace LHRP.TestConsole
         {
             var scheduleStream = new ConsolePrintScheduleStream();
 
-            var examples = new AddReagentExample(scheduleStream);
-
-            examples.RunExample();
+            //var example = new AddReagentExample(scheduleStream);
+            var example = new TransferSamplesExample(scheduleStream);
+            example.RunExample();
 
             Console.WriteLine("Done... Hit enter key to continue.");
             Console.ReadLine();
