@@ -97,7 +97,7 @@ namespace LHRP.Api.Instrument
             var containers = _deck.GetLiquidContainers().Where(x => x.ContainsLiquid(liquid));
             foreach(var container in containers)
             {
-                if(container.Volume > desiredVolume)
+                if(container.Volume >= desiredVolume)
                 {
                     return Result.Ok(container);
                 }
