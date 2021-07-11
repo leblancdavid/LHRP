@@ -1,4 +1,4 @@
-namespace LHRP.Api.Labware.Plates
+namespace LHRP.Api.Labware
 {
     public class WellDefinition
     {

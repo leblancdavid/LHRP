@@ -33,7 +33,8 @@ namespace LHRP.Domain.Tests.Liquids
         {
             var liquid = new Liquid(LiquidType.Water);
             _liquidContainer.AddLiquid(liquid, 100);
-            _liquidContainer.Liquids.Count().Should().Be(1);
+            _liquidContainer.Liquid.Should().NotBeNull();
+            _liquidContainer.Liquid.LiquidParts.Count().Should().Be(1);
             _liquidContainer.ContainsLiquid(liquid).Should().BeTrue();
             _liquidContainer.Volume.Should().Be(100);
             //should also not contain any other liquid
@@ -47,7 +48,8 @@ namespace LHRP.Domain.Tests.Liquids
             var liquid2 = new Liquid(LiquidType.Water);
             _liquidContainer.AddLiquid(liquid1, 100);
             _liquidContainer.AddLiquid(liquid2, 100);
-            _liquidContainer.Liquids.Count().Should().Be(2);
+            _liquidContainer.Liquid.Should().NotBeNull();
+            _liquidContainer.Liquid.LiquidParts.Count().Should().Be(2);
             _liquidContainer.ContainsLiquid(liquid1).Should().BeTrue();
             _liquidContainer.ContainsLiquid(liquid2).Should().BeTrue();
             _liquidContainer.Volume.Should().Be(200);

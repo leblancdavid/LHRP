@@ -55,7 +55,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
-                if (error.RequestedPattern[channel] && pipettor.PipettorStatus[channel].HasTip)
+                if (error.RequestedPattern.IsInUse(channel) && pipettor.PipettorStatus[channel].HasTip)
                 {
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
@@ -81,7 +81,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
-                if (error.RequestedPattern[channel])
+                if (error.RequestedPattern.IsInUse(channel))
                 {
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
@@ -106,7 +106,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
-                if (error.RequestedPattern[channel])
+                if (error.RequestedPattern.IsInUse(channel))
                 {
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
@@ -118,12 +118,12 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             
             var newChannelPattern = error.RequestedPattern - error.ChannelErrors;
             int index = engine.Commands.CurrentCommandIndex;
-            Result<IRunnableCommand> nextCommand = engine.Commands.GetCommandAt(index);
-            while (nextCommand.IsSuccess && 
-                nextCommand.Value is IPipettingCommand &&
-                !(nextCommand.Value is PickupTips))
+            var nextCommand = engine.Commands.GetCommandAt(index);
+            while (nextCommand != null && 
+                nextCommand is IPipettingCommand &&
+                !(nextCommand is PickupTips))
             {
-                (nextCommand.Value as IPipettingCommand).ApplyChannelMask(newChannelPattern);
+                (nextCommand as IPipettingCommand).ApplyChannelMask(newChannelPattern);
                 index++;
                 nextCommand = engine.Commands.GetCommandAt(index);
             }

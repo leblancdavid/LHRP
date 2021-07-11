@@ -1,12 +1,10 @@
-using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Labware;
-using LHRP.Api.Labware.Plates;
 using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Transfers;
 
-namespace LHRP.Api.Instrument.LiquidManagement
+namespace LHRP.Api.Instrument
 {
     public class LiquidManager : ILiquidManager
     {
@@ -27,17 +25,17 @@ namespace LHRP.Api.Instrument.LiquidManagement
             }
             
             var well = targetPlate.GetWell(address);
-            if(well.IsFailure)
+            if(well == null)
             {
-                return well;
+                return Result.Failure($"No well found at address {address.ToAlphaAddress()}");
             }
 
-            if(well.Value.Volume < volume)
+            if(well.Volume < volume)
             {
-                return Result.Failure($"Insufficient liquid found in well({well.Value.Address.Row},{well.Value.Address.Column})");
+                return Result.Failure($"Insufficient liquid found in well({well.Address.Row},{well.Address.Column})");
             }
             
-            well.Value.Remove(volume);
+            well.Remove(volume);
 
             return Result.Ok();
         }
@@ -52,12 +50,12 @@ namespace LHRP.Api.Instrument.LiquidManagement
             }
             
             var well = targetPlate.GetWell(address);
-            if(well.IsFailure)
+            if(well == null)
             {
-                return well;
+                return Result.Failure($"No well found at address {address.ToAlphaAddress()}");
             }
 
-            well.Value.AddLiquid(liquidToAssign, volume);
+            well.AddLiquid(liquidToAssign, volume);
 
             return Result.Ok();
         }
@@ -88,24 +86,24 @@ namespace LHRP.Api.Instrument.LiquidManagement
 
             if(liquidAssignmentFound)
             {
-                return Result.Failure($"Unable to add liquid '{liquid.AssignedId}' since no positions were assigned to the liquid");
+                return Result.Failure($"Unable to add liquid '{liquid.GetId()}' since no positions were assigned to the liquid");
             }
 
             return Result.Ok();
         }
 
-        public Result<TransferTarget> RequestLiquid(Liquid liquid, double desiredVolume)
+        public Result<LiquidContainer> RequestLiquid(Liquid liquid, double desiredVolume)
         {
             var containers = _deck.GetLiquidContainers().Where(x => x.ContainsLiquid(liquid));
             foreach(var container in containers)
             {
-                if(container.Volume > desiredVolume)
+                if(container.Volume >= desiredVolume)
                 {
-                    return Result.Ok(new TransferTarget(container.Address, desiredVolume, TransferType.Aspirate));
+                    return Result.Ok(container);
                 }
             }
             
-            return Result.Failure<TransferTarget>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.AssignedId}'");
+            return Result.Failure<LiquidContainer>($"Insufficient volume {desiredVolume}uL of liquid '{liquid.GetId()}'");
         }
 
         public Result ClearLiquidAtPosition(LabwareAddress address)
@@ -118,12 +116,12 @@ namespace LHRP.Api.Instrument.LiquidManagement
             }
 
             var well = targetPlate.GetWell(address);
-            if (well.IsFailure)
+            if (well == null)
             {
-                return well;
+                return Result.Failure($"No well found at address {address.ToAlphaAddress()}"); ;
             }
 
-            well.Value.Clear();
+            well.Clear();
             return Result.Ok();
         }
 

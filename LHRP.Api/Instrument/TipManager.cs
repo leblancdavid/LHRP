@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Labware;
-using LHRP.Api.Labware.Tips;
 
-namespace LHRP.Api.Instrument.TipManagement 
+namespace LHRP.Api.Instrument
 {
     public class TipManager : ITipManager
     {
@@ -19,24 +16,24 @@ namespace LHRP.Api.Instrument.TipManagement
         public Result ConsumeTip(Tip tip)
         {
             var position = _deck.GetDeckPosition(tip.Address.PositionId);
-            if(position.IsFailure)
+            if(position == null)
             {
-                return position;
+                return Result.Failure($"No deck position found at address {tip.Address.ToAlphaAddress()}");
             }
 
-            if(!position.Value.IsOccupied || !(position.Value.AssignedLabware is TipRack))
+            var tipRack = position.AssignedLabware as TipRack;
+            if (tipRack == null)
             {
                 return Result.Failure($"Position Id {tip.Address.PositionId} does not contain a tip rack");
             }
 
-            var tipRack = position.Value.AssignedLabware as TipRack;
             return tipRack.Consume(tip);
         }
 
         public Result<TipChannelPattern> RequestTips(ChannelPattern pattern, int tipTypeId)
         {
             var tipRacks = _deck.GetTipRacks();
-            TipRack availableTipRack = null;
+            TipRack? availableTipRack = null;
             foreach(var tr in tipRacks)
             {
                 //Probably will need more rules here
@@ -62,7 +59,7 @@ namespace LHRP.Api.Instrument.TipManagement
             int t = 0;
             for(int i = 0; i < pattern.NumChannels; ++i)
             {
-                if(pattern[i])
+                if(pattern.IsInUse(i))
                 {
                     tipChannelPattern.SetTip(i, availableTips.Value[t]);
                     ++t;

@@ -16,7 +16,7 @@ namespace LHRP.Api.Protocol.Steps
         private OneToOneTransferStepData _stepData;
         private ITransferOptimizer<OneToOneTransfer> _transferOptimizer;
 
-        public OneToOneTransferStep(OneToOneTransferStepData stepData, ITransferOptimizer<OneToOneTransfer> optimizer = null)
+        public OneToOneTransferStep(OneToOneTransferStepData stepData, ITransferOptimizer<OneToOneTransfer>? optimizer = null)
         {
             _stepData = stepData;
             if(optimizer == null)
@@ -79,9 +79,9 @@ namespace LHRP.Api.Protocol.Steps
             var commands = new List<IRunnableCommand>();
             foreach (var transfer in tranfersResult.Value)
             {
-                commands.Add(new PickupTips(transfer.ChannelPattern, _stepData.TipTypeId));
-                commands.Add(new TransferTargetAspirate(new AspirateParameters(), transfer.Transfers.Select(x => x.Source).ToList(), transfer.ChannelPattern));
-                commands.Add(new Dispense(new DispenseParameters(), transfer.Transfers.Select(x => x.Target).ToList(), transfer.ChannelPattern));
+                commands.Add(new PickupTips(transfer, _stepData.TipTypeId));
+                commands.Add(new TransferTargetAspirate(new AspirateParameters(), transfer.ToSourceTransfer()));
+                commands.Add(new Dispense(new DispenseParameters(), transfer.ToTargetTransfer()));
                 commands.Add(new DropTips(_stepData.ReturnTipsToSource));
             }
 

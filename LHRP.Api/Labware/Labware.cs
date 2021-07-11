@@ -36,7 +36,12 @@ namespace LHRP.Api.Labware
             }
         }
 
-        public abstract Result<Coordinates> GetRealCoordinates(LabwareAddress address);
+        public Labware()
+        {
+            Name = "";
+        }
+
+        public abstract Coordinates? GetRealCoordinates(LabwareAddress address);
         public void UpdatePosition(Coordinates position, int positionId)
         {
             AbsolutePosition = position;

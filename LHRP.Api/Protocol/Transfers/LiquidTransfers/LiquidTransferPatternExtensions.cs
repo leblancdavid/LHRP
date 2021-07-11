@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
+using LHRP.Api.Runtime.ErrorHandling;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,26 +9,26 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
 {
     public static class LiquidTransferPatternExtensions
     {
-        public static Result<IEnumerable<TransferGroup<LiquidToManyTransfer>>> GetMultiDispenseTransferGroups(
+        public static Result<IEnumerable<ChannelPattern<LiquidToManyTransfer?>>> GetMultiDispenseTransferGroups(
             this TransferPattern<LiquidToOneTransfer> transferPattern,
             IInstrument instrument, 
             ITransferOptimizer<LiquidToOneTransfer> optimizer, 
             double maxUsableVolume)
         {
-            var multiDispenseTransferGroups = new List<TransferGroup<LiquidToManyTransfer>>();
+            var multiDispenseTransferGroups = new List<ChannelPattern<LiquidToManyTransfer?>>();
 
             var liquidToOneTransferGroups = transferPattern.GetTransferGroups(instrument, optimizer);
             if (liquidToOneTransferGroups.IsFailure)
             {
-                return Result.Failure<IEnumerable<TransferGroup<LiquidToManyTransfer>>>(liquidToOneTransferGroups.Error);
+                return Result.Failure<IEnumerable<ChannelPattern<LiquidToManyTransfer?>>>(liquidToOneTransferGroups.Error);
             }
             if (!liquidToOneTransferGroups.Value.Any())
             {
-                return Result.Failure<IEnumerable<TransferGroup<LiquidToManyTransfer>>>("No liquid transfer groups to process for liquid transfer");
+                return Result.Failure<IEnumerable<ChannelPattern<LiquidToManyTransfer?>>>("No liquid transfer groups to process for liquid transfer");
             }
             if (maxUsableVolume < 0.0)
             {
-                return Result.Failure<IEnumerable<TransferGroup<LiquidToManyTransfer>>>("Insufficient volume to handle multi-dispense transfer");
+                return Result.Failure<IEnumerable<ChannelPattern<LiquidToManyTransfer?>>>("Insufficient volume to handle multi-dispense transfer");
             }
 
             var transferList = liquidToOneTransferGroups.Value.ToList();
@@ -36,25 +37,25 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
 
             for (int i = 0; i < transferList.Count; ++i)
             {
-                var mdTransferGroup = new TransferGroup<LiquidToManyTransfer>(numChannels);
+                var mdTransferGroup = new ChannelPattern<LiquidToManyTransfer?>(numChannels);
                 for (int j = i; j < transferList.Count; ++j)
                 {
                     for (int channel = 0; channel < numChannels; ++channel)
                     {
-                        if(transferList[j].ChannelPattern[channel])
+                        if(transferList[j].IsInUse(channel))
                         {
                             continue;
                         }
 
                         if(mdTransferGroup[channel] == null)
                         {
-                            mdTransferGroup[channel] = new LiquidToManyTransfer(transferList[j].Transfers[channel].Source);
+                            mdTransferGroup[channel] = new LiquidToManyTransfer(transferList[j][channel]!.Source);
                         }
 
-                        double currentTotal = mdTransferGroup[channel].GetTotalTransferVolume();
-                        if(transferList[j].Transfers[channel].Target.Volume + currentTotal < maxUsableVolume)
+                        double currentTotal = mdTransferGroup[channel]!.GetTotalTransferVolume();
+                        if(transferList[j][channel]!.Target.Volume + currentTotal < maxUsableVolume)
                         {
-                            mdTransferGroup[channel].AddTransferTarget(transferList[j].Transfers[channel].Target);
+                            mdTransferGroup[channel]!.AddTransferTarget(transferList[j][channel]!.Target);
                         }
                     }
                 }
@@ -62,53 +63,103 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
                 for(int channel = 0; channel < numChannels; ++channel)
                 {
                     //Remove channels that aren't used
-                    if(!mdTransferGroup[channel].Targets.Any())
+                    if(!mdTransferGroup[channel]!.Targets.Any())
                     {
                         mdTransferGroup[channel] = null;
                     }
                 }
 
-                if(!mdTransferGroup.ChannelPattern.IsEmpty())
+                if(!mdTransferGroup.IsEmpty())
                 {
                     multiDispenseTransferGroups.Add(mdTransferGroup);
                 }
             }
 
-            return Result.Ok<IEnumerable<TransferGroup<LiquidToManyTransfer>>>(multiDispenseTransferGroups);
+            return Result.Ok<IEnumerable<ChannelPattern<LiquidToManyTransfer?>>>(multiDispenseTransferGroups);
         }
 
-        private static ChannelPattern GetOverallChannelPattern(List<TransferGroup<LiquidToOneTransfer>> liquidTransferGroups)
+        public static ChannelPattern<ChannelPipettingContext> ToChannelPatternPipettingContext(
+            this ChannelPattern<LiquidToOneTransfer> transferPattern,
+            IInstrument instrument,
+            out List<RuntimeError> errors)
+        {
+            errors = new List<RuntimeError>();
+
+            var volumeUsagePerLiquid = new Dictionary<string, double>();
+            foreach (var liquidTarget in transferPattern.GetActiveChannels())
+            {
+                var id = liquidTarget.Source.GetId();
+                if(!volumeUsagePerLiquid.ContainsKey(id))
+                {
+                    volumeUsagePerLiquid[id] = 0.0;
+                }
+
+                volumeUsagePerLiquid[id] += liquidTarget.Target.Volume;
+            }
+
+            var transferContext = new ChannelPattern<ChannelPipettingContext>(transferPattern.NumChannels);
+            for (int i = 0; i < transferPattern.NumChannels; ++i)
+            {
+                if (transferPattern[i] == null)
+                {
+                    continue;
+                }
+
+                var transfer = transferPattern[i]!;
+
+                var transferTarget = instrument.LiquidManager.RequestLiquid(transfer.Source, volumeUsagePerLiquid[transfer.Source.GetId()]);
+                //If this happens then there's not enough liquid
+                if (transferTarget.IsFailure)
+                {
+                    var errorMessage = transferTarget.Error;
+                    if(!errors.Any(x => x.Message == errorMessage)) //avoid duplicates
+                    {
+                        errors.Add(new InsufficientLiquidRuntimeError(
+                            errorMessage,
+                            transfer.Source,
+                            volumeUsagePerLiquid[transfer.Source.GetId()]));
+                    }
+
+                    continue;
+                }
+
+                transferContext[i] = new ChannelPipettingContext(transfer.Target.Volume, i, transfer.Source,
+                    transferTarget.Value.AbsolutePosition, transferTarget.Value.Address);
+            }
+
+            return transferContext;
+        }
+
+        public static ChannelPattern<TransferTarget> ToTargetTransfer(
+            this ChannelPattern<LiquidToOneTransfer> channelPattern)
+        {
+            var output = new ChannelPattern<TransferTarget>(channelPattern.NumChannels);
+            for (int i = 0; i < channelPattern.NumChannels; ++i)
+            {
+                if (channelPattern[i] != null)
+                {
+                    output[i] = channelPattern[i]!.Target;
+                }
+            }
+
+            return output;
+        }
+
+        private static ChannelPattern GetOverallChannelPattern(List<ChannelPattern<LiquidToOneTransfer>> liquidTransferGroups)
         {
             if (!liquidTransferGroups.Any())
             {
                 return ChannelPattern.Empty(0);
             }
 
-            var overallChannelPattern = ChannelPattern.Empty(liquidTransferGroups.First().ChannelPattern.NumChannels);
+            var overallChannelPattern = ChannelPattern.Empty(liquidTransferGroups.First().NumChannels);
             foreach (var transfer in liquidTransferGroups)
             {
-                overallChannelPattern = overallChannelPattern + transfer.ChannelPattern;
+                //overallChannelPattern = overallChannelPattern + transfer;
             }
 
             return overallChannelPattern;
         }
 
-        public static List<LiquidTransferSource> GetAspirateLiquidTargets(this TransferGroup<LiquidToManyTransfer> transferGroup, double additionalVolume = 0.0)
-        {
-            var liquidTargets = new List<LiquidTransferSource>();
-            for(int i = 0; i < transferGroup.ChannelPattern.NumChannels; ++i)
-            {
-                if(transferGroup.ChannelPattern[i])
-                {
-                    liquidTargets.Add(new LiquidTransferSource(transferGroup[i].Source,
-                        transferGroup[i].GetTotalTransferVolume() + additionalVolume));
-                }
-                else
-                {
-                    liquidTargets.Add(null);
-                }
-            }
-            return liquidTargets;
-        }
     }
 }

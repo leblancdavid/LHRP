@@ -6,45 +6,56 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public class ChannelPattern
     {
+        public int NumChannels { get; private set; }
+        protected bool[] _active;
+
         public ChannelPattern(int numChannels)
         {
             NumChannels = numChannels;
-            _activeChannels = new bool[numChannels];
+            _active = new bool[numChannels];
         }
 
-        public ChannelPattern(string channelPattern)
+        public ChannelPattern(string pattern)
         {
-            NumChannels = channelPattern.Length;
-            _activeChannels = channelPattern.Select(x => x == '1').ToArray();
+            NumChannels = pattern.Length;
+            _active = pattern.Select(x => x == '1').ToArray();
         }
 
-        public int NumChannels { get; private set; }
-
-        protected bool[] _activeChannels;
-        public bool this[int i]
+        public bool IsInUse(int index)
         {
-            get { return _activeChannels[i]; }
-            set { _activeChannels[i] = value; }
+            if(index < 0 || index >= NumChannels)
+            {
+                return false;
+            }
+            return _active[index];
+        }
+
+        public void SetInUse(int index, bool active)
+        {
+            if (index >= 0 && index < NumChannels)
+            {
+                _active[index] = active;
+            }
         }
 
         public int GetNumberActiveChannels()
         {
-            return _activeChannels.Where(a => a == true)
+            return _active.Where(a => a)
                         .Select(a => a)
                         .Count();
         }
 
         public bool IsFull()
         {
-            if(GetNumberActiveChannels() == NumChannels)
-            return true;
+            if (GetNumberActiveChannels() == NumChannels)
+                return true;
             return false;
         }
 
         public bool IsEmpty()
         {
-            if(GetNumberActiveChannels() == 0)
-            return true;
+            if (GetNumberActiveChannels() == 0)
+                return true;
 
             return false;
         }
@@ -52,16 +63,16 @@ namespace LHRP.Api.Devices.Pipettor
         public string GetChannelString()
         {
             StringBuilder sb = new StringBuilder();
-            foreach(var channelActive in _activeChannels)
+            foreach (var channelActive in _active)
             {
-            if(channelActive)
-            {
-                sb.Append("1");
-            }
-            else
-            {
-                sb.Append("0");
-            }
+                if (channelActive)
+                {
+                    sb.Append("1");
+                }
+                else
+                {
+                    sb.Append("0");
+                }
             }
 
             return sb.ToString();
@@ -75,56 +86,78 @@ namespace LHRP.Api.Devices.Pipettor
         public static ChannelPattern Full(int numChannels)
         {
             var cp = new ChannelPattern(numChannels);
-            for(int i = 0; i < numChannels; ++i)
+            for (int i = 0; i < numChannels; ++i)
             {
-                cp[i] = true;
+                cp.SetInUse(i, true);
             }
             return cp;
         }
 
-        public static ChannelPattern operator& (ChannelPattern b, ChannelPattern c)
+
+        public void Mask(ChannelPattern pattern)
+        {
+            for (int i = 0; i < NumChannels && i < pattern.NumChannels; ++i)
+            {
+                if (!pattern.IsInUse(i))
+                {
+                    _active[i] = false;
+                }
+            }
+        }
+
+        public static ChannelPattern operator &(ChannelPattern b, ChannelPattern c)
         {
             int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
             var a = new ChannelPattern(numChannels);
             for (int i = 0; i < numChannels; ++i)
             {
-                a[i] = b[i] && c[i];
+                a.SetInUse(i, b.IsInUse(i) && c.IsInUse(i));
             }
 
             return a;
         }
+    }
 
-        public static ChannelPattern operator| (ChannelPattern b, ChannelPattern c)
+    public class ChannelPattern<T> : ChannelPattern where T : class?
+    {
+        public ChannelPattern(int numChannels)
+            :base(numChannels)
         {
-            int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-            var a = new ChannelPattern(numChannels);
-            for (int i = 0; i < numChannels; ++i)
-            {
-                a[i] = b[i] || c[i];
-            }
-
-            return a;
+            _channels = new T?[numChannels];
         }
 
-        public static ChannelPattern operator -(ChannelPattern b, ChannelPattern c)
+        protected T?[] _channels;
+        public T? this[int i]
         {
-            int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-            var a = new ChannelPattern(numChannels);
-            for (int i = 0; i < numChannels; ++i)
+            get 
             {
-                a[i] = c[i] ? false : b[i];
-            }
+                if (i < 0 || i >= NumChannels)
+                    return null;
 
-            return a;
+                return _channels[i]; 
+            }
+            set
+            {
+                if (i < 0 || i >= NumChannels)
+                    return;
+
+                _channels[i] = value;
+                _active[i] = value != null;               
+            }
         }
 
-        public static ChannelPattern operator +(ChannelPattern b, ChannelPattern c)
+        public IEnumerable<T> GetActiveChannels()
+        {
+            return _channels.Where(x => x != null).Select(x => x!);
+        }
+
+        public static ChannelPattern<T> operator -(ChannelPattern<T> b, ChannelPattern c)
         {
             int numChannels = b.NumChannels < c.NumChannels ? b.NumChannels : c.NumChannels;
-            var a = new ChannelPattern(numChannels);
+            var a = new ChannelPattern<T>(numChannels);
             for (int i = 0; i < numChannels; ++i)
             {
-                a[i] = c[i] ? true : b[i];
+                a[i] = c.IsInUse(i) ? null : b[i];
             }
 
             return a;

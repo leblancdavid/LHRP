@@ -24,7 +24,7 @@ namespace LHRP.Api.Runtime.Scheduling
             Console.WriteLine("Liquid usage:");
             foreach (var liquidUsage in schedule.ResourcesUsage.ConsumableLiquidUsages)
             {
-                Console.WriteLine($"Liquid '{liquidUsage.Key.LiquidType.ToString()}' ({liquidUsage.Key.AssignedId}): {liquidUsage.Value}uL");
+                Console.WriteLine($"Liquid '{liquidUsage.Key.LiquidType.ToString()}' ({liquidUsage.Key.GetId()}): {liquidUsage.Value}uL");
             }
 
             Console.WriteLine($"Estimated total run-time: {schedule.ExpectedDuration.ToString("c")}");

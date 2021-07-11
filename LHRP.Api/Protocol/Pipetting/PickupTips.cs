@@ -66,9 +66,9 @@ namespace LHRP.Api.Protocol.Pipetting
 
             for(int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
-                if(tipsResult.Value[channel] && pipettor.PipettorStatus[channel].HasTip)
+                if(tipsResult.Value.IsInUse(channel) && pipettor.PipettorStatus[channel].HasTip)
                 {
-                    var consumeResult = tipManager.ConsumeTip(tipsResult.Value.GetTip(channel));
+                    var consumeResult = tipManager.ConsumeTip(tipsResult.Value.GetTip(channel)!);
                     if(consumeResult.IsFailure)
                     {
                         process.AddError(new RuntimeError($"Unable to consume tips: '{consumeResult.Error}'"));

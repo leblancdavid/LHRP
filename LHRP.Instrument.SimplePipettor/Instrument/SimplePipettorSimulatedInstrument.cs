@@ -6,10 +6,8 @@ using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
-using LHRP.Api.Instrument.LiquidManagement;
-using LHRP.Api.Instrument.TipManagement;
+using LHRP.Api.Liquids;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
@@ -94,7 +92,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
                 var containers = liquidContainers.Where(x => x.ContainsLiquid(liquid.Key)).ToList();
                 if(!containers.Any())
                 {
-                    Result.Combine(result, Result.Failure($"Unable to initialize liquid resource {liquid.Key.AssignedId}, no container has been assigned for this liquid"));
+                    Result.Combine(result, Result.Failure($"Unable to initialize liquid resource {liquid.Key.GetId()}, no container has been assigned for this liquid"));
                     continue;
                 }
 
@@ -113,6 +111,20 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
                         break;
                     }
                     containerIndex++;
+                }
+            }
+
+            foreach(var unknownLiquid in schedule.ResourcesUsage.LiquidContainerUsages.Where(x => x.RequiresLiquidAtStart))
+            {
+                var container = liquidContainers.FirstOrDefault(x => x.Address == unknownLiquid.Address);
+                if(container == null)
+                {
+                    Result.Combine(result, Result.Failure($"Unable to initialize source liquid container at {unknownLiquid.Address}"));
+                }
+
+                if(container.Volume < unknownLiquid.RequiredLiquidVolumeAtStart)
+                {
+                    container.AddLiquid(new Liquid(), unknownLiquid.RequiredLiquidVolumeAtStart - container.Volume);
                 }
             }
 

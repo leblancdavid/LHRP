@@ -6,6 +6,8 @@ using CSharpFunctionalExtensions;
 using System.Collections.Generic;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime.Resources;
+using LHRP.Api.Runtime.ErrorHandling;
+using System.Linq;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -13,26 +15,22 @@ namespace LHRP.Api.Protocol.Pipetting
     {
         public Guid CommandId { get; private set; }
         private AspirateParameters _parameters;
-        private List<TransferTarget> _targets;
-        public IEnumerable<TransferTarget> Targets => _targets;
-        public ChannelPattern Pattern { get; set; }
+        private ChannelPattern<TransferTarget> _targets;
         public int RetryCount { get; private set; }
 
         public ResourcesUsage ResourcesUsed { get; private set; }
 
-        public TransferTargetAspirate(AspirateParameters parameters, 
-            List<TransferTarget> targets, 
-            ChannelPattern pattern,
+        public TransferTargetAspirate(AspirateParameters parameters,
+            ChannelPattern<TransferTarget> targets,
             int retryAttempt = 0)
         {
             _parameters = parameters;
             _targets = targets;
-            Pattern = pattern;
             CommandId = Guid.NewGuid();
             RetryCount = retryAttempt;
 
             ResourcesUsed = new ResourcesUsage();
-            foreach (var target in _targets)
+            foreach (var target in _targets.GetActiveChannels())
             {
                 ResourcesUsed.AddTransfer(target);
             }
@@ -41,7 +39,7 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public void ApplyChannelMask(ChannelPattern channelPattern)
         {
-            Pattern = channelPattern;
+            _targets.Mask(channelPattern);
         }
 
         public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
@@ -54,10 +52,16 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettor = engine.Instrument.Pipettor;
             var liquidManager = engine.Instrument.LiquidManager;
 
-            var processResult = pipettor.Aspirate(_parameters, _targets, Pattern);
+            var errors = new List<RuntimeError>();
+            var pipetteTargets = _targets.ToChannelPatternPipettingContext(engine.Instrument, out errors);
+            if(errors.Any())
+            {
+                return new ProcessResult(errors.ToArray());
+            }
+            var processResult = pipettor.Aspirate(new AspirateContext(pipetteTargets, _parameters));
             if(!processResult.ContainsErrors)
             {
-                foreach(var target in _targets)
+                foreach (var target in _targets.GetActiveChannels())
                 {
                     liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
                 }

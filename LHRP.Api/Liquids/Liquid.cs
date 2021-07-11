@@ -5,16 +5,13 @@ namespace LHRP.Api.Liquids
     public class Liquid
     {
         public Guid UniqueId { get; private set; }
-        private string _assignedId;
-        public string AssignedId 
+        protected string _assignedId;
+
+        public virtual string GetId() 
         { 
-            get
-            {
-                if(string.IsNullOrEmpty(_assignedId))
-                    return UniqueId.ToString();
-                return _assignedId;
-            }
+            return _assignedId;
         }
+
         public LiquidType LiquidType { get; private set; }
         public bool IsUnknown { get; private set; }
 
@@ -22,8 +19,54 @@ namespace LHRP.Api.Liquids
         {
             LiquidType = type;
             IsUnknown = isUnknown;
-            _assignedId = "";
             UniqueId = Guid.NewGuid();
+            _assignedId = UniqueId.ToString();
         }
+
+        public bool Match(Liquid liquidPart)
+        {
+            if (liquidPart.GetId() == GetId())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public Liquid(string name, LiquidType type = LiquidType.Default, bool isUnknown = true)
+        {
+            LiquidType = type;
+            IsUnknown = isUnknown;
+            UniqueId = Guid.NewGuid();
+            _assignedId = name;
+        }
+
+        public virtual HeterogeneousLiquid Mix(Liquid liquid, double ratio)
+        {
+            if(Match(liquid))
+            {
+                var sameLiquid = new HeterogeneousLiquid();
+                sameLiquid.Mix(this, 1.0);
+                return sameLiquid;
+            }
+
+            if(ratio > 1.0)
+            {
+                ratio = 1.0;
+            }
+
+            if(liquid is HeterogeneousLiquid)
+            {
+                var hLiquid = liquid as HeterogeneousLiquid;
+                return hLiquid!.Mix(this, 1.0 - ratio);
+            }
+
+            var outputLiquid = new HeterogeneousLiquid();
+            outputLiquid.Mix(this, 1.0);
+            outputLiquid.Mix(liquid, ratio);
+
+            return outputLiquid;
+        }
+
+        
     }
 }

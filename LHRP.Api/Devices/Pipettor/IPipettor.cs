@@ -6,12 +6,8 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public interface IPipettor : IDevice
     {
-        ProcessResult Aspirate(AspirateParameters parameters,
-            List<TransferTarget> targets,
-            ChannelPattern pattern);
-        ProcessResult Dispense(DispenseParameters parameters,
-            List<TransferTarget> targets,
-            ChannelPattern pattern);
+        ProcessResult Aspirate(AspirateContext context);
+        ProcessResult Dispense(DispenseContext context);
         ProcessResult PickupTips(TipPickupParameters parameters);
         ProcessResult DropTips(TipDropParameters parameters);
 

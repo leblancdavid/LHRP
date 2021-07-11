@@ -29,10 +29,10 @@ namespace LHRP.TestConsole
             //First setup the deck, add a tip rack and 2 plates
 
             
-            var reagent = new Liquid();
+            var reagent = new Liquid("TestReagent");
 
             var reagentTrough = ExampleLabwareCreator.GetReagentPlate1();
-            reagentTrough.GetWell(new LabwareAddress(1, 1)).Value.AssignLiquid(reagent);
+            reagentTrough.GetWell(new LabwareAddress(1, 1))?.AssignLiquid(reagent);
 
             deck.AssignLabware(1, ExampleLabwareCreator.GetTipRack());
             deck.AssignLabware(2, reagentTrough);

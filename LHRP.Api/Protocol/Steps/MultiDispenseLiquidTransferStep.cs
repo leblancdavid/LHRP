@@ -15,7 +15,7 @@ namespace LHRP.Api.Protocol.Steps
     {
         private MultiDispenseLiquidTransferStepData _stepData;
         private ITransferOptimizer<LiquidToOneTransfer> _transferOptimizer;
-        public MultiDispenseLiquidTransferStep(MultiDispenseLiquidTransferStepData stepData, ITransferOptimizer<LiquidToOneTransfer> optimizer = null)
+        public MultiDispenseLiquidTransferStep(MultiDispenseLiquidTransferStepData stepData, ITransferOptimizer<LiquidToOneTransfer>? optimizer = null)
         {
             _stepData = stepData;
             if (optimizer == null)
@@ -80,7 +80,7 @@ namespace LHRP.Api.Protocol.Steps
         }
 
         private Result<IEnumerable<IRunnableCommand>> GetMultiDispenseCommands(
-            List<TransferGroup<LiquidToOneTransfer>> liquidTransferGroups,
+            List<ChannelPattern<LiquidToOneTransfer>> liquidTransferGroups,
             IRuntimeEngine engine)
         {
             if (!liquidTransferGroups.Any())
@@ -105,7 +105,7 @@ namespace LHRP.Api.Protocol.Steps
             var commands = new List<IRunnableCommand>();
             if (_stepData.ReuseTips)
             {
-                commands.Add(new PickupTips(ChannelPattern.Full(liquidTransferGroups.First().ChannelPattern.NumChannels), _stepData.TipTypeId));
+                commands.Add(new PickupTips(ChannelPattern.Full(liquidTransferGroups.First().NumChannels), _stepData.TipTypeId));
                 foreach (var transferGroup in multiDispenseTransferGroups.Value)
                 {
               

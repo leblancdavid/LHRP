@@ -9,7 +9,7 @@ namespace LHRP.Api.Runtime
     {
         IEnumerable<IRunnableCommand> Queue { get; }
         int CurrentCommandIndex { get; }
-        IRunnableCommand CurrentCommand { get; }
+        IRunnableCommand? CurrentCommand { get; }
         bool IsCompleted { get; }
 
         void MoveToLastExecutedCommand();
@@ -21,7 +21,7 @@ namespace LHRP.Api.Runtime
         void Insert(int index, IRunnableCommand command);
         void Remove(int index);
 
-        Result<IRunnableCommand> GetCommandAt(int index);
+        IRunnableCommand? GetCommandAt(int index);
 
         ResourcesUsage GetTotalResources();
         ResourcesUsage GetRemainingResources();

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Protocol.Transfers.OneToOne
@@ -10,12 +11,12 @@ namespace LHRP.Api.Protocol.Transfers.OneToOne
         {
 
         }
-        public Result<IEnumerable<TransferGroup<OneToOneTransfer>>> OptimizeTransfers(
+        public Result<IEnumerable<ChannelPattern<OneToOneTransfer>>> OptimizeTransfers(
             IEnumerable<OneToOneTransfer> transfers, 
             IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
-            var transferGroups = new List<TransferGroup<OneToOneTransfer>>();
+            var transferGroups = new List<ChannelPattern<OneToOneTransfer>>();
 
             foreach(var transfer in transfers)
             {
@@ -26,35 +27,39 @@ namespace LHRP.Api.Protocol.Transfers.OneToOne
                 }
                 if(!assigned)
                 {
-                    var newGroup = new TransferGroup<OneToOneTransfer>(pipettor.Specification.NumChannels);
+                    var newGroup = new ChannelPattern<OneToOneTransfer>(pipettor.Specification.NumChannels);
                     if(!TryAssignTransferToGroup(transfer, newGroup, instrument))
                     {
-                        return Result.Failure<IEnumerable<TransferGroup<OneToOneTransfer>>>("Unable to assign a transfer to a transfer group");
+                        return Result.Failure<IEnumerable<ChannelPattern<OneToOneTransfer>>>("Unable to assign a transfer to a transfer group");
                     }
                     transferGroups.Add(newGroup);
                 }
             }
 
-            return Result.Ok<IEnumerable<TransferGroup<OneToOneTransfer>>>(transferGroups);
+            return Result.Ok<IEnumerable<ChannelPattern<OneToOneTransfer>>>(transferGroups);
         }
 
-        private bool TryAssignTransferToGroup(OneToOneTransfer transfer, TransferGroup<OneToOneTransfer> group, IInstrument instrument)
+        private bool TryAssignTransferToGroup(OneToOneTransfer transfer, ChannelPattern<OneToOneTransfer> group, IInstrument instrument)
         {
             var pipettor = instrument.Pipettor;
             var sourceCoordinates = instrument.Deck.GetCoordinates(transfer.Source.Address);
             var destinationCoordinates = instrument.Deck.GetCoordinates(transfer.Target.Address);
             
+            if(sourceCoordinates == null || destinationCoordinates == null)
+            {
+                return false;
+            }
 
-            if(group.ChannelPattern.IsFull())
+            if(group.IsFull())
             {
                 return false;
             }
             int channelIndex = 0;
             for(channelIndex = 0; channelIndex < pipettor.Specification.NumChannels; ++channelIndex)
             {
-                if(pipettor.Specification[channelIndex].CanReach(sourceCoordinates.Value) &&
-                    pipettor.Specification[channelIndex].CanReach(destinationCoordinates.Value) &&
-                    !group.ChannelPattern[channelIndex])
+                if(pipettor.Specification[channelIndex].CanReach(sourceCoordinates) &&
+                    pipettor.Specification[channelIndex].CanReach(destinationCoordinates) &&
+                    !group.IsInUse(channelIndex))
                 {
                     group[channelIndex] = transfer;
                     channelIndex++;

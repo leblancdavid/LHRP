@@ -10,7 +10,7 @@ namespace LHRP.Api.Runtime
         private List<IRunnableCommand> _queue;
         public IEnumerable<IRunnableCommand> Queue => _queue;
         public int CurrentCommandIndex { get; private set; }
-        public IRunnableCommand CurrentCommand
+        public IRunnableCommand? CurrentCommand
         {
             get
             {
@@ -81,14 +81,14 @@ namespace LHRP.Api.Runtime
             return result;
         }
 
-        public Result<IRunnableCommand> GetCommandAt(int index)
+        public IRunnableCommand? GetCommandAt(int index)
         {
             if(index < 0 || index >= _queue.Count)
             {
-                return Result.Failure<IRunnableCommand>($"Invalid command index '{index}'");
+                return null;
             }
 
-            return Result.Ok(_queue[index]);
+            return _queue[index];
         }
 
         public ResourcesUsage GetTotalResources()
