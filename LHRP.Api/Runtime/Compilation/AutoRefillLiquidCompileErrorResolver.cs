@@ -1,13 +1,12 @@
-﻿using CSharpFunctionalExtensions;
-using LHRP.Api.Protocol.Pipetting;
-using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling;
+﻿using LHRP.Api.Runtime.ErrorHandling;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
+namespace LHRP.Api.Runtime.Compilation
 {
-    public class SimpleLiquidRefillErrorResolver : IErrorResolver
+    public class AutoRefillLiquidCompileErrorResolver : IErrorResolver
     {
         public ProcessResult Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
         {
@@ -15,27 +14,11 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             var insuffientLiquidError = error as InsufficientLiquidRuntimeError;
             if (insuffientLiquidError == null)
             {
-                var errorMsg = $"Invalid error type {error.GetType()}";
-                process.AddError(new RuntimeError(errorMsg));
+                process.AddError(error);
                 return process;
             }
 
-            Console.WriteLine(insuffientLiquidError.Message);
-            
-            Console.Write("Handling options: Refill and Continue (c), Abort (a): ");
-            var requestInput = Console.ReadLine();
-            if(requestInput == "c")
-            {
-                Console.WriteLine("Continuing...");
-                return TryRefillAndContinuePipetteSequence(engine, insuffientLiquidError);
-            }
-            else
-            {
-                Console.WriteLine("Aborting...");
-                engine.Abort();
-                return process;
-            }
-
+            return TryRefillAndContinuePipetteSequence(engine, insuffientLiquidError);
         }
 
         private ProcessResult TryRefillAndContinuePipetteSequence(IRuntimeEngine engine, InsufficientLiquidRuntimeError error)

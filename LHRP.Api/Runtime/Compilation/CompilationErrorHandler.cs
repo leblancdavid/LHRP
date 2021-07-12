@@ -7,16 +7,15 @@ namespace LHRP.Api.Runtime.Compilation
 {
     public class CompilationErrorHandler : ErrorHandler, IErrorHandler
     {
-        public CompilationErrorHandler() : base()
+        public CompilationErrorHandler() : base(new CompileDefaultErrorResolver())
         {
             ConfigureResolutionTable();
         }
 
         private void ConfigureResolutionTable()
         {
-            //ConfigureResolution<InsuffientTipsRuntimeError>(new SimpleTipRackReloadRequest());
-            //ConfigureResolution<TipPickupRuntimeError>(new SimpleTipPickupErrorResolver());
-            //ConfigureResolution<InsufficientLiquidRuntimeError>(new SimpleLiquidRefillErrorResolver());
+            ConfigureResolution<InsuffientTipsRuntimeError>(new AutoReloadTipsCompileErrorResolver());
+            ConfigureResolution<TipPickupRuntimeError>(new AutoReloadTipsCompileErrorResolver());
         }
     }
 }
