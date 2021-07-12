@@ -51,12 +51,14 @@ namespace LHRP.Api.Runtime
             _queue.RemoveAt(index);
         }
 
-        public void MoveToLastExecutedCommand()
+        public IRunnableCommand? MoveToLastExecutedCommand()
         {
             if(CurrentCommandIndex > 0)
             {
                 CurrentCommandIndex--;
             }
+
+            return CurrentCommand;
         }
 
         public void MoveTo(int commandIndex)
@@ -127,6 +129,27 @@ namespace LHRP.Api.Runtime
             queue.MoveTo(CurrentCommandIndex);
 
             return queue;
+        }
+
+        public IRunnableCommand? Next()
+        {
+            if (IsCompleted)
+            {
+                return null;
+            }
+
+            CurrentCommandIndex++;
+            return CurrentCommand;
+        }
+
+        public IRunnableCommand? Previous()
+        {
+            if (CurrentCommandIndex > 0)
+            {
+                CurrentCommandIndex--;
+            }
+
+            return CurrentCommand;
         }
     }
 }

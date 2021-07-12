@@ -6,7 +6,7 @@ using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Runtime
 {
-    public interface IRuntimeEngine : IStateSnapshotGetter<IRuntimeEngine>
+    public interface IRuntimeEngine : IStateSnapshotGetter<IRuntimeEngine>, ISimulatable<IRuntimeEngine>
     {
         IInstrument Instrument { get; }
         IRuntimeCommandQueue Commands { get; }

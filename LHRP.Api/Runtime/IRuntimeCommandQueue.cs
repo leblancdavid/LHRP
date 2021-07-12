@@ -12,8 +12,12 @@ namespace LHRP.Api.Runtime
         IRunnableCommand? CurrentCommand { get; }
         bool IsCompleted { get; }
 
-        void MoveToLastExecutedCommand();
+        IRunnableCommand? MoveToLastExecutedCommand();
+        IRunnableCommand? Next();
+        IRunnableCommand? Previous();
+        IRunnableCommand? GetCommandAt(int index);
         ProcessResult RunNextCommand(IRuntimeEngine engine);
+
         ProcessResult RetryLastCommand(IRuntimeEngine engine);
         ProcessResult Clear();
 
@@ -21,7 +25,6 @@ namespace LHRP.Api.Runtime
         void Insert(int index, IRunnableCommand command);
         void Remove(int index);
 
-        IRunnableCommand? GetCommandAt(int index);
 
         ResourcesUsage GetTotalResources();
         ResourcesUsage GetRemainingResources();

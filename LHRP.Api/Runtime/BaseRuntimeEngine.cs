@@ -18,6 +18,8 @@ namespace LHRP.Api.Runtime
         public IRuntimeCommandQueue Commands { get; protected set; }
         public IErrorHandler ErrorHandler { get; protected set; }
         public RuntimeStatus Status { get; protected set; }
+        public uint SimulationSpeedFactor { get; set; }
+        public double FailureRate { get; set; }
 
         public void Abort()
         {
@@ -28,6 +30,11 @@ namespace LHRP.Api.Runtime
         public virtual ICompilationEngine GetCompilationEngine()
         {
             return new CompilationEngine(Instrument, Commands);
+        }
+
+        public IRuntimeEngine GetSimulation()
+        {
+            return new BaseRuntimeEngine(Instrument.GetSimulation(), Commands.GetSnapshot(), ErrorHandler);
         }
 
         public virtual IRuntimeEngine GetSnapshot()

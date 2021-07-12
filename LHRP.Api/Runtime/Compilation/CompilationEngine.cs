@@ -26,7 +26,14 @@ namespace LHRP.Api.Runtime.Compilation
 
         public override ProcessResult Run()
         {
-            throw new NotImplementedException();
+            var process = new ProcessResult();
+            var currentCommand = Commands.CurrentCommand;
+            while(currentCommand != null)
+            {
+                process.Combine(currentCommand.Compile(this));
+            }
+
+            return process;
         }
     }
 }
