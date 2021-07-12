@@ -11,9 +11,8 @@ using System.Text;
 
 namespace LHRP.Api.Instrument
 {
-    public abstract class BaseInstrument : IInstrument
+    public class Instrument : IInstrument
     {
-
         public IDeck Deck { get; protected set; }
 
         public ITipManager TipManager { get; protected set; }
@@ -28,7 +27,7 @@ namespace LHRP.Api.Instrument
         public double FailureRate { get; set; }
 
 
-        public BaseInstrument(IPipettor pipettor, IDeck deck)
+        public Instrument(IPipettor pipettor, IDeck deck)
         {
             Pipettor = pipettor;
             Deck = deck;
@@ -42,10 +41,7 @@ namespace LHRP.Api.Instrument
             throw new NotImplementedException();
         }
 
-        public IInstrument GetSimulation()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public Result<Schedule> InitializeResources(Schedule schedule)
         {
@@ -112,6 +108,15 @@ namespace LHRP.Api.Instrument
             return result;
         }
 
-        public abstract IInstrument GetSnapshot();
+        public IInstrument GetSnapshot()
+        {
+            var deck = this.Deck.GetSnapshot();
+            return new Instrument(Pipettor, deck);
+        }
+
+        public IInstrument GetSimulation()
+        {
+            return new Instrument(Pipettor.GetSimulation(), Deck.GetSnapshot());
+        }
     }
 }

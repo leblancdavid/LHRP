@@ -11,7 +11,7 @@ using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
 {
-    public class SimplePipettorInstrument : BaseInstrument, IInstrument
+    public class SimplePipettorInstrument : Api.Instrument.Instrument, IInstrument
     {
         public SimplePipettorInstrument() :
             base(new IndependentChannelPipettor(), GetDeck())
@@ -32,18 +32,6 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             }
 
             return new Deck(deckPositions);
-        }
-
-        public override IInstrument GetSnapshot()
-        {
-            var deck = this.Deck.GetSnapshot();
-            return new SimplePipettorInstrument()
-            {
-                Deck = deck,
-                TipManager = new TipManager(deck),
-                LiquidManager = new LiquidManager(deck),
-                Pipettor = this.Pipettor
-            };
         }
     }
 }

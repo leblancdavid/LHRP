@@ -27,7 +27,7 @@ namespace LHRP.Api.Runtime
 
         public virtual ICompilationEngine GetCompilationEngine()
         {
-            throw new System.NotImplementedException();
+            return new CompilationEngine(Instrument, Commands);
         }
 
         public virtual IRuntimeEngine GetSnapshot()
@@ -35,7 +35,7 @@ namespace LHRP.Api.Runtime
             return new BaseRuntimeEngine(Instrument.GetSnapshot(), Commands.GetSnapshot(), ErrorHandler);
         }
 
-        public ProcessResult Run()
+        public virtual ProcessResult Run()
         {
             var process = new ProcessResult();
             while(!Commands.IsCompleted && Status != RuntimeStatus.Aborted)

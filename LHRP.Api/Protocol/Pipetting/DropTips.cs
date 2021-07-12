@@ -2,6 +2,7 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using System;
@@ -83,7 +84,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Success(schedule);
         }
 
-        public ProcessResult Compile(IRuntimeEngine engine)
+        public ProcessResult Compile(ICompilationEngine engine)
         {
             throw new System.NotImplementedException();
         }

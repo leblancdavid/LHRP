@@ -5,6 +5,7 @@ using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
@@ -88,7 +89,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Success(schedule);
         }
 
-        public ProcessResult Compile(IRuntimeEngine engine)
+        public ProcessResult Compile(ICompilationEngine engine)
         {
             throw new System.NotImplementedException();
         }

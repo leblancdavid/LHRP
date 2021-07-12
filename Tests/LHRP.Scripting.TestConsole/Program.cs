@@ -17,8 +17,8 @@ namespace LHRP.Scripting.TestConsole
         {
 
             var script = File.ReadAllText("MySimpleProtocol.csx");
-            var engine = new SimplePipettorSimulationEngine();
-            engine.SimulationSpeedFactor = 100;
+            var engine = new SimplePipettorRuntimeEngine();
+            //engine.SimulationSpeedFactor = 100;
             var host = new ScriptHost()
             {
                 SimulationEngine = engine,

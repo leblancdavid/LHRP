@@ -6,32 +6,25 @@ using System.Text;
 
 namespace LHRP.Api.Runtime.Compilation
 {
-    public class CompilationEngine : ICompilationEngine
+    public class CompilationEngine : BaseRuntimeEngine, ICompilationEngine
     {
-        public IInstrument Instrument => throw new NotImplementedException();
-
-        public IRuntimeCommandQueue Commands => throw new NotImplementedException();
-
-        public IErrorHandler ErrorHandler => throw new NotImplementedException();
-
-        public RuntimeStatus Status => throw new NotImplementedException();
-
-        public void Abort()
+        public CompilationEngine(IInstrument instrument, IRuntimeCommandQueue commands)
+            : base(instrument.GetSimulation(), commands.GetSnapshot(), new ErrorHandler())
         {
-            throw new NotImplementedException();
+
         }
 
-        public ICompilationEngine GetCompilationEngine()
+        public override ICompilationEngine GetCompilationEngine()
         {
             return this;
         }
 
-        public IRuntimeEngine GetSnapshot()
+        public override IRuntimeEngine GetSnapshot()
         {
-            throw new NotImplementedException();
+            return new CompilationEngine(Instrument.GetSnapshot(), Commands.GetSnapshot());
         }
 
-        public ProcessResult Run()
+        public override ProcessResult Run()
         {
             throw new NotImplementedException();
         }

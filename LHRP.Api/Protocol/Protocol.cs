@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
@@ -73,7 +74,7 @@ namespace LHRP.Api.Protocol
             return Result.Success(schedule);
         }
 
-        public ProcessResult Compile(IRuntimeEngine engine)
+        public ProcessResult Compile(ICompilationEngine engine)
         {
             var process = new ProcessResult();
             foreach (var step in _steps)

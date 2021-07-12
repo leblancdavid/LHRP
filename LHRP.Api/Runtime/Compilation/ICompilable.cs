@@ -2,6 +2,6 @@
 {
     public interface ICompilable
     {
-        ProcessResult Compile(IRuntimeEngine engine);
+        ProcessResult Compile(ICompilationEngine engine);
     }
 }

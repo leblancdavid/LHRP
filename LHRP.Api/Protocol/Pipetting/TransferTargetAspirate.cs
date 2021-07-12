@@ -8,6 +8,7 @@ using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.ErrorHandling;
 using System.Linq;
+using LHRP.Api.Runtime.Compilation;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -84,7 +85,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Success(schedule);
         }
 
-        public ProcessResult Compile(IRuntimeEngine engine)
+        public ProcessResult Compile(ICompilationEngine engine)
         {
             throw new NotImplementedException();
         }
