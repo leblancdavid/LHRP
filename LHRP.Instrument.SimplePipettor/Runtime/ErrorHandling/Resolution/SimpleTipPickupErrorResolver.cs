@@ -9,12 +9,15 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 {
     public class SimpleLiquidRefillErrorResolver : IErrorResolver
     {
-        public Result Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
+        public ProcessResult Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
         {
+            var process = new ProcessResult();
             var insuffientLiquidError = error as InsufficientLiquidRuntimeError;
             if (insuffientLiquidError == null)
             {
-                return Result.Failure($"Invalid error type {error.GetType()}");
+                var errorMsg = $"Invalid error type {error.GetType()}";
+                process.AddError(new RuntimeError(errorMsg));
+                return process;
             }
 
             Console.WriteLine(insuffientLiquidError.Message);
@@ -30,19 +33,21 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             {
                 Console.WriteLine("Aborting...");
                 engine.Abort();
-                return Result.Ok();
+                return process;
             }
 
         }
 
-        private Result TryRefillAndContinuePipetteSequence(IRuntimeEngine engine, InsufficientLiquidRuntimeError error)
+        private ProcessResult TryRefillAndContinuePipetteSequence(IRuntimeEngine engine, InsufficientLiquidRuntimeError error)
         {
+            var process = new ProcessResult();
             var containers = engine.Instrument.Deck.GetLiquidContainers()
                  .Where(x => x.ContainsLiquid(error.RequestedLiquid)).ToList();
 
             if (!containers.Any())
             {
-                return Result.Failure($"No containers have been assigned to liquid {error.RequestedLiquid.GetId()}");
+                process.AddError(new RuntimeError($"No containers have been assigned to liquid {error.RequestedLiquid.GetId()}"));
+                return process;
             }
 
             double volume = error.RemainingVolumeNeeded;
@@ -65,7 +70,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 
             engine.Commands.MoveToLastExecutedCommand();
 
-            return Result.Ok();
+            return process;
         }
     }
 }

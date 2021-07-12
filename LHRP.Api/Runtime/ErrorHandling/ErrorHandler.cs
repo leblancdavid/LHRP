@@ -19,12 +19,14 @@ namespace LHRP.Api.Runtime.ErrorHandling
             ResolutionTable[errorType] = resolver;
         }
 
-        public Result HandleError(IRuntimeEngine engine, RuntimeError error)
+        public ProcessResult HandleError(IRuntimeEngine engine, RuntimeError error)
         {
             var errorType = error.GetType();
             if(!ResolutionTable.ContainsKey(errorType))
             {
-                return Result.Failure($"No resolution found for error type '{errorType.ToString()}'");
+                var process = new ProcessResult();
+                process.AddError(new RuntimeError($"No resolution found for error type '{errorType.ToString()}'"));
+                return process;
             }
 
             return ResolutionTable[errorType].Resolve(engine, error);

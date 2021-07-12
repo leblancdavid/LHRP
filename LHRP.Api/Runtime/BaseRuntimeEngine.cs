@@ -1,6 +1,7 @@
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
+using System.Linq;
 
 namespace LHRP.Api.Runtime
 {
@@ -53,10 +54,10 @@ namespace LHRP.Api.Runtime
                     foreach(var error in result.Errors)
                     {
                         var errorHandlingResult = ErrorHandler.HandleError(this, error);
-                        if(errorHandlingResult.IsFailure)
+                        if(errorHandlingResult.ContainsErrors)
                         {
                             Commands.Clear();
-                            process.AddError(new RuntimeError(errorHandlingResult.Error));
+                            process.Combine(errorHandlingResult);
                         }
                     }
                 }

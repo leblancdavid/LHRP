@@ -23,17 +23,5 @@ namespace LHRP.Api.Runtime.Compilation
         {
             return new CompilationEngine(Instrument.GetSnapshot(), Commands.GetSnapshot());
         }
-
-        public override ProcessResult Run()
-        {
-            var process = new ProcessResult();
-            var currentCommand = Commands.CurrentCommand;
-            while(currentCommand != null)
-            {
-                process.Combine(currentCommand.Compile(this));
-            }
-
-            return process;
-        }
     }
 }

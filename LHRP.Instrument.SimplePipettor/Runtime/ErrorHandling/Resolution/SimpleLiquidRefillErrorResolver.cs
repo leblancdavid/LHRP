@@ -9,14 +9,16 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 {
     public class SimpleTipPickupErrorResolver : IErrorResolver
     {
-        public Result Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
+        public ProcessResult Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
         {
+            var process = new ProcessResult();
             var tipError = error as TipPickupRuntimeError;
             if (tipError == null)
             {
                 var errorMsg = $"Invalid error type {error.GetType()}";
+                process.AddError(new RuntimeError(errorMsg));
                 Console.WriteLine(errorMsg);
-                return Result.Failure(errorMsg);
+                return process;
             }
 
             Console.WriteLine(tipError.Message);
@@ -42,16 +44,17 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
             {
                 Console.WriteLine("Aborting...");
                 engine.Abort();
-                return Result.Ok();
+                return process;
             }
 
         }
 
-        private Result TryAddRetryTipPickUp(IRuntimeEngine engine, TipPickupRuntimeError error)
+        private ProcessResult TryAddRetryTipPickUp(IRuntimeEngine engine, TipPickupRuntimeError error)
         {
             var tipManager = engine.Instrument.TipManager;
             var pipettor = engine.Instrument.Pipettor;
 
+            var process = new ProcessResult();
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
@@ -60,7 +63,8 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
                     {
-                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
+                        process.AddError(new RuntimeError($"Unable to consume tips: '{consumeResult.Error}'"));
+                        return process;
                     }
                 }
             }
@@ -70,14 +74,15 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                     error.TipTypeId,
                     engine.Commands.CurrentCommand.RetryCount + 1));
 
-            return Result.Ok();
+            return process;
         }
 
-        private Result TryPickUpNextTip(IRuntimeEngine engine, TipPickupRuntimeError error)
+        private ProcessResult TryPickUpNextTip(IRuntimeEngine engine, TipPickupRuntimeError error)
         {
             var tipManager = engine.Instrument.TipManager;
             var pipettor = engine.Instrument.Pipettor;
 
+            var process = new ProcessResult();
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
@@ -86,7 +91,8 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
                     {
-                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
+                        process.AddError(new RuntimeError($"Unable to consume tips: '{consumeResult.Error}'"));
+                        return process;
                     }
                 }
             }
@@ -95,14 +101,15 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                 new PickupTips(error.ChannelErrors,
                     error.TipTypeId));
 
-            return Result.Ok();
+            return process;
         }
 
-        private Result TryContinuePipetteSequence(IRuntimeEngine engine, TipPickupRuntimeError error)
+        private ProcessResult TryContinuePipetteSequence(IRuntimeEngine engine, TipPickupRuntimeError error)
         {
             var tipManager = engine.Instrument.TipManager;
             var pipettor = engine.Instrument.Pipettor;
 
+            var process = new ProcessResult();
             //Make sure the tips get consumed
             for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
             {
@@ -111,7 +118,8 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                     var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
                     if (consumeResult.IsFailure)
                     {
-                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
+                        process.AddError(new RuntimeError($"Unable to consume tips: '{consumeResult.Error}'"));
+                        return process;
                     }
                 }
             }
@@ -128,7 +136,7 @@ namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
                 nextCommand = engine.Commands.GetCommandAt(index);
             }
 
-            return Result.Ok();
+            return process;
         }
     }
 }

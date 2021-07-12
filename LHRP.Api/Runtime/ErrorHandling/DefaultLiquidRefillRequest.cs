@@ -9,12 +9,15 @@ namespace LHRP.Api.Runtime.ErrorHandling
 {
     public class DefaultLiquidRefillRequest : IErrorResolver
     {
-        public Result Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
+        public ProcessResult Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
         {
+            var process = new ProcessResult();
             var insuffientLiquidError = error as InsufficientLiquidRuntimeError;
             if (insuffientLiquidError == null)
             {
-                return Result.Failure($"Invalid error type {error.GetType()}");
+                var errorMsg = $"Invalid error type {error.GetType()}";
+                process.AddError(new RuntimeError(errorMsg));
+                return process;
             }
 
             var containers = engine.Instrument.Deck.GetLiquidContainers()
@@ -22,7 +25,8 @@ namespace LHRP.Api.Runtime.ErrorHandling
 
             if (!containers.Any())
             {
-                return Result.Failure($"No containers have been assigned to liquid {insuffientLiquidError.RequestedLiquid.GetId()}");
+                process.AddError(new RuntimeError($"No containers have been assigned to liquid {insuffientLiquidError.RequestedLiquid.GetId()}"));
+                return process;
             }
 
             double volume = insuffientLiquidError.RemainingVolumeNeeded;
@@ -45,7 +49,7 @@ namespace LHRP.Api.Runtime.ErrorHandling
 
             engine.Commands.MoveToLastExecutedCommand();
 
-            return Result.Ok();
+            return process;
         }
     }
 }
