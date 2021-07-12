@@ -1,18 +1,93 @@
-﻿using LHRP.Api.Runtime.Compilation;
+﻿using FluentAssertions;
+using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Labware;
+using LHRP.Api.Protocol.Pipetting;
+using LHRP.Api.Protocol.Steps;
+using LHRP.Api.Protocol.Transfers;
+using LHRP.Api.Runtime.Compilation;
+using LHRP.Domain.Tests.Labware;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Xunit;
 
 namespace LHRP.Domain.Tests.Runtime.Compilation
 {
     public class CompilationTests
     {
-        ICompilationEngine engine;
+        ICompilationEngine compiler;
         public CompilationTests()
         {
-            engine = RuntimeEngineDataProvider.BuildSimulationRunEngine(4).GetCompilationEngine();
+            compiler = RuntimeEngineDataProvider.BuildSimulationRunEngine(4).GetCompilationEngine();
         }
 
+        [Fact]
+        public void StepShouldCompile()
+        {
+            var tipRack = LabwareProvider.Get300TipRack();
+            compiler.Instrument.Deck.AssignLabware(1, tipRack);
+            compiler.Instrument.Deck.AssignLabware(2, LabwareProvider.Get96WellPlate());
+            compiler.Instrument.Deck.AssignLabware(3, LabwareProvider.Get96WellPlate());
+
+            var customStep = new CustomStep();
+            customStep.AddCommand(new PickupTips(ChannelPattern.Full(compiler.Instrument.Pipettor.Specification.NumChannels), tipRack.Definition.Id));
+            customStep.AddCommand(new TransferTargetAspirate(new AspirateParameters(),
+                new ChannelPattern<TransferTarget>(
+                    new TransferTarget[]
+                    {
+                        new TransferTarget(new LabwareAddress(1, 1, 2), 50, TransferType.Aspirate),
+                        new TransferTarget(new LabwareAddress(1, 2, 2), 50, TransferType.Aspirate),
+                    }
+                )));
+            customStep.AddCommand(new Dispense(new DispenseParameters(),
+                new ChannelPattern<TransferTarget>(
+                    new TransferTarget[]
+                    {
+                        new TransferTarget(new LabwareAddress(1, 1, 3), 50, TransferType.Dispense),
+                        new TransferTarget(new LabwareAddress(1, 2, 3), 50, TransferType.Dispense),
+                    }
+                )));
+            customStep.AddCommand(new DropTips());
+
+            var compilationResult = customStep.Run(compiler);
+            compilationResult.Errors.Count().Should().Be(0);
+
+
+        }
+
+        [Fact]
+        public void StepShouldNotCompile()
+        {
+            var tipRack = LabwareProvider.Get50TipRack();
+            compiler.Instrument.Deck.AssignLabware(1, tipRack);
+            compiler.Instrument.Deck.AssignLabware(2, LabwareProvider.Get96WellPlate());
+            compiler.Instrument.Deck.AssignLabware(3, LabwareProvider.Get96WellPlate());
+
+            var customStep = new CustomStep();
+            customStep.AddCommand(new PickupTips(ChannelPattern.Full(compiler.Instrument.Pipettor.Specification.NumChannels), tipRack.Definition.Id));
+            //This will not compile because we are trying to aspirate more than the tip can hold
+            customStep.AddCommand(new TransferTargetAspirate(new AspirateParameters(),
+                new ChannelPattern<TransferTarget>(
+                    new TransferTarget[]
+                    {
+                        new TransferTarget(new LabwareAddress(1, 1, 2), 200, TransferType.Aspirate),
+                        new TransferTarget(new LabwareAddress(1, 2, 2), 200, TransferType.Aspirate),
+                    }
+                )));
+            customStep.AddCommand(new Dispense(new DispenseParameters(),
+                new ChannelPattern<TransferTarget>(
+                    new TransferTarget[]
+                    {
+                        new TransferTarget(new LabwareAddress(1, 1, 3), 50, TransferType.Dispense),
+                        new TransferTarget(new LabwareAddress(1, 2, 3), 50, TransferType.Dispense),
+                    }
+                )));
+            customStep.AddCommand(new DropTips());
+
+            var compilationResult = customStep.Run(compiler);
+            compilationResult.Errors.Count().Should().NotBe(0);
+        }
 
     }
 }

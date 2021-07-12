@@ -2,17 +2,19 @@ using System.Collections.Generic;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Labware;
 using LHRP.Api.Liquids;
+using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Devices.Pipettor
 {
     public class ChannelStatus : IDeviceStatus
     {
-        public bool HasTip 
-        { 
+        public bool HasTip
+        {
             get
             {
                 return CurrentTip != null;
-            } 
+            }
         }
 
         public bool ContainsLiquid
@@ -26,8 +28,8 @@ namespace LHRP.Api.Devices.Pipettor
         public Tip? CurrentTip { get; private set; }
         public double CurrentVolume { get; private set; }
         public Liquid? CurrentLiquid { get; private set; }
-        public bool HasErrors 
-        { 
+        public bool HasErrors
+        {
             get
             {
                 return _errorMessages.Count > 0;
@@ -69,53 +71,72 @@ namespace LHRP.Api.Devices.Pipettor
             return true;
         }
 
-        public void OnAspiratedVolume(Liquid liquid, double volume)
+        public ProcessResult OnAspiratedVolume(Liquid liquid, double volume)
         {
-            if(!HasTip)
+            var process = new ProcessResult();
+            if (!HasTip)
             {
-                _errorMessages.Add($"Attempted to aspirate {volume}uL from a channel with no tip");
-                return;
+                var msg = $"Attempted to aspirate {volume}uL from a channel with no tip";
+                process.AddError(new RuntimeError(msg));
+                _errorMessages.Add(msg);
+                return process;
+            }
+
+            if (!CanAspirate(volume))
+            {
+                var msg = $"Tip volume exceeded: Attempted to aspirate {volume}uL from a channel with {EmptyVolume}uL of available volume";
+                process.AddError(new RuntimeError(msg));
+                _errorMessages.Add(msg);
+                return process;
             }
 
             CurrentVolume += volume;
-            if(CurrentVolume > CurrentTip!.TipVolume)
-            {
-                _errorMessages.Add($"Current volume of {CurrentVolume} exceeds maximum tip capacity");
-            }
-
             CurrentLiquid = liquid;
+            return process;
         }
 
-        public void OnDispensedVolume(double volume)
+        public ProcessResult OnDispensedVolume(double volume)
         {
-            if(!HasTip)
+            var process = new ProcessResult();
+            if (!HasTip)
             {
-                _errorMessages.Add($"Attempted to dispense {volume}uL from a channel with no tip");
-                return;
+                var msg = $"Attempted to dispense {volume}uL from a channel with no tip";
+                process.AddError(new RuntimeError(msg));
+                _errorMessages.Add(msg);
+                return process;
             }
 
             CurrentVolume -= volume;
-            if(CurrentVolume < 0)
+            if (CurrentVolume < 0)
             {
                 CurrentVolume = 0.0;
             }
+
+            return process;
         }
 
-        public void OnPickedUpTip(Tip tip)
+        public ProcessResult OnPickedUpTip(Tip tip)
         {
-            if(HasTip)
+            var process = new ProcessResult();
+            if (HasTip)
             {
-                 _errorMessages.Add($"Attempted to pickup a tip on channel with no tip");
-                return;
+                var msg = $"Attempted to pickup a tip on channel with a tip already";
+                process.AddError(new RuntimeError(msg));
+                _errorMessages.Add(msg);
+                return process;
             }
 
             CurrentTip = tip;
+            return process;
         }
 
-        public void OnDroppedTip()
+        public ProcessResult OnDroppedTip()
         {
             CurrentTip = null;
             CurrentVolume = 0.0;
+            CurrentLiquid = null;
+
+            return new ProcessResult();
         }
 
 

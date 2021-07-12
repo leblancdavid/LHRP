@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Liquids;
+using LHRP.Api.Runtime.ErrorHandling;
 using System;
 using System.Linq;
 
@@ -8,16 +9,17 @@ namespace LHRP.Api.Runtime.Resources
 {
     public class DefaultResourceAutoInitializer : IResourceInitializer
     {
-        public Result Initialize(IInstrument instrument, ResourcesUsage resources)
+        public ProcessResult Initialize(IInstrument instrument, ResourcesUsage resources)
         {
-            var result = Result.Success();
+            var process = new ProcessResult();
             var liquidContainers = instrument.Deck.GetLiquidContainers();
             foreach (var liquid in resources.ConsumableLiquidUsages)
             {
                 var containers = liquidContainers.Where(x => x.ContainsLiquid(liquid.Key)).ToList();
                 if (!containers.Any())
                 {
-                    Result.Combine(result, Result.Failure($"Unable to initialize liquid resource {liquid.Key.GetId()}, no container has been assigned for this liquid"));
+                    process.AddError(new RuntimeError(
+                        $"Unable to initialize liquid resource {liquid.Key.GetId()}, no container has been assigned for this liquid"));
                     continue;
                 }
 
@@ -45,7 +47,8 @@ namespace LHRP.Api.Runtime.Resources
                 var container = liquidContainers.FirstOrDefault(x => x.Address == unknownLiquid.Address);
                 if (container == null)
                 {
-                    Result.Combine(result, Result.Failure($"Unable to initialize source liquid container at {unknownLiquid.Address}"));
+                    process.AddError(new RuntimeError(
+                        $"Unable to initialize source liquid container at {unknownLiquid.Address}"));
                 }
 
                 if (container!.Volume < unknownLiquid.RequiredLiquidVolumeAtStart)
@@ -67,10 +70,12 @@ namespace LHRP.Api.Runtime.Resources
                 }
                 else
                 {
-                    Result.Combine(result, Result.Failure($"Unable to initialize tip resource {tip.TipTypeId}, tip rack not found"));
+
+                    process.AddError(new RuntimeError(
+                        $"Unable to initialize tip resource {tip.TipTypeId}, tip rack not found"));
                 }
             }
-            return result;
+            return process;
         }
     }
 }

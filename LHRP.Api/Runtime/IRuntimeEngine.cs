@@ -3,6 +3,7 @@ using LHRP.Api.Instrument;
 using LHRP.Api.Protocol;
 using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
+using LHRP.Api.Runtime.Resources;
 
 namespace LHRP.Api.Runtime
 {
@@ -12,7 +13,7 @@ namespace LHRP.Api.Runtime
         IRuntimeCommandQueue Commands { get; }
         IErrorHandler ErrorHandler { get; }
         RuntimeStatus Status { get; }
-        ProcessResult Run();
+        ProcessResult Run(IResourceInitializer? resourceInitializer = null);
 
         void Abort();
 

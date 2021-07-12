@@ -5,6 +5,6 @@ namespace LHRP.Api.Runtime.Resources
 {
     public interface IResourceInitializer
     {
-        Result Initialize(IInstrument instrument, ResourcesUsage resources);
+        ProcessResult Initialize(IInstrument instrument, ResourcesUsage resources);
     }
 }

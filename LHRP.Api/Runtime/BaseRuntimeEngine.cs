@@ -1,6 +1,7 @@
 using LHRP.Api.Instrument;
 using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
+using LHRP.Api.Runtime.Resources;
 using System.Linq;
 
 namespace LHRP.Api.Runtime
@@ -43,9 +44,22 @@ namespace LHRP.Api.Runtime
             return new BaseRuntimeEngine(Instrument.GetSnapshot(), Commands.GetSnapshot(), ErrorHandler);
         }
 
-        public virtual ProcessResult Run()
+        public virtual ProcessResult Run(IResourceInitializer? resourceInitializer = null)
         {
             var process = new ProcessResult();
+
+            var initializer = resourceInitializer;
+            if (initializer == null)
+            {
+                initializer = new DefaultResourceAutoInitializer();
+            }
+
+            process.Combine(initializer.Initialize(Instrument, Commands.GetTotalResources()));
+            if(process.ContainsErrors)
+            {
+                return process;
+            }
+
             while(!Commands.IsCompleted && Status != RuntimeStatus.Aborted)
             {
                 var result = Commands.RunNextCommand(this);
