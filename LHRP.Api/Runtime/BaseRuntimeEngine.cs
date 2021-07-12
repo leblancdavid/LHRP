@@ -24,6 +24,11 @@ namespace LHRP.Api.Runtime
             Status = RuntimeStatus.Aborted;
         }
 
+        public virtual IRuntimeEngine GetSnapshot()
+        {
+            return new BaseRuntimeEngine(Instrument.GetSnapshot(), Commands.GetSnapshot(), ErrorHandler);
+        }
+
         public ProcessResult Run()
         {
             var process = new ProcessResult();

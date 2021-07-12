@@ -58,6 +58,17 @@ namespace LHRP.Api.Runtime
                 CurrentCommandIndex--;
             }
         }
+
+        public void MoveTo(int commandIndex)
+        {
+            if (commandIndex < 0 || commandIndex >= _queue.Count())
+            {
+                return;
+            }
+
+            CurrentCommandIndex = commandIndex;
+        }
+
         public ProcessResult RetryLastCommand(IRuntimeEngine engine)
         {
             if(IsCompleted)
@@ -103,6 +114,19 @@ namespace LHRP.Api.Runtime
             var resources = new ResourcesUsage();
             resources.Combine(_queue.Skip(CurrentCommandIndex).Select(x => x.ResourcesUsed).ToArray());
             return resources;
+        }
+
+        public IRuntimeCommandQueue GetSnapshot()
+        {
+            var queue = new RuntimeCommandQueue();
+            foreach(var command in _queue)
+            {
+                queue.Add(command);
+            }
+
+            queue.MoveTo(CurrentCommandIndex);
+
+            return queue;
         }
     }
 }

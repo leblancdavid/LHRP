@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LHRP.Api.Runtime.Resources
 {
-    public class DefaultResoureAutoInitializer : IResourceInitializer
+    public class DefaultResourceAutoInitializer : IResourceInitializer
     {
         public Result Initialize(IInstrument instrument, ResourcesUsage resources)
         {

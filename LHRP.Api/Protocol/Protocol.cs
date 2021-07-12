@@ -72,5 +72,16 @@ namespace LHRP.Api.Protocol
             }
             return Result.Success(schedule);
         }
+
+        public ProcessResult Compile(IRuntimeEngine engine)
+        {
+            var process = new ProcessResult();
+            foreach (var step in _steps)
+            {
+                step.Compile(engine);
+            }
+
+            return process;
+        }
     }
 }

@@ -5,7 +5,7 @@ using LHRP.Api.Runtime.Resources;
 
 namespace LHRP.Api.Runtime
 {
-    public interface IRuntimeCommandQueue
+    public interface IRuntimeCommandQueue : IStateSnapshotGetter<IRuntimeCommandQueue>
     {
         IEnumerable<IRunnableCommand> Queue { get; }
         int CurrentCommandIndex { get; }

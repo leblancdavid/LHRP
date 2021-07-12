@@ -92,5 +92,17 @@ namespace LHRP.Api.Runtime
             EstimatedDuration += subProcess.EstimatedDuration;
             _subProcess.Add(subProcess);
         }
+
+        public void Combine(params ProcessResult[] processes)
+        {
+            for (int i = 0; i < processes.Length; ++i)
+            {
+                _errors.AddRange(processes[i].Errors);
+                _warnings.AddRange(processes[i].Warnings);
+                Duration += processes[i].Duration;
+                EstimatedDuration += processes[i].EstimatedDuration;
+                _subProcess.AddRange(processes[i].SubProcess);
+            }
+        }
     }
 }
