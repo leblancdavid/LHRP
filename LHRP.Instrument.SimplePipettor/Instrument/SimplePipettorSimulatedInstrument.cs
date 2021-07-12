@@ -13,7 +13,7 @@ using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
 {
-    public class SimplePipettorSimulatedInstrument : IInstrument, ISimulation
+    public class SimplePipettorSimulatedInstrument : IInstrument, ISimulatable<IInstrument>
     {
         IndependentChannelSimulatedPipettor _pipettor;
 
@@ -151,5 +151,9 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             };
         }
 
+        public IInstrument GetSimulation()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

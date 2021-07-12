@@ -95,7 +95,17 @@ namespace LHRP.Api.Protocol.Pipetting
 
         public ProcessResult Compile(IRuntimeEngine engine)
         {
+            var processResult = new ProcessResult();
 
+            var pipettor = engine.Instrument.Pipettor;
+            var liquidManager = engine.Instrument.LiquidManager;
+            var pipettorStatus = pipettor.PipettorStatus;
+
+
+            var errors = new List<RuntimeError>();
+            var pipetteTargets = _targets.ToChannelPatternPipettingContext(engine.Instrument, out errors);
+
+            return processResult;
         }
     }
 }

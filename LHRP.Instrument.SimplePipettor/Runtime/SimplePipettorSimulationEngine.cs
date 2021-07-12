@@ -4,7 +4,7 @@ using LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime
 {
-    public class SimplePipettorSimulationEngine : BaseRuntimeEngine, IRuntimeEngine, ISimulation
+    public class SimplePipettorSimulationEngine : BaseRuntimeEngine, IRuntimeEngine, ISimulatable<IRuntimeEngine>
     {
         SimplePipettorSimulatedInstrument _instrument;
         
@@ -37,6 +37,11 @@ namespace LHRP.Instrument.SimplePipettor.Runtime
             SimulationSpeedFactor = previousSpeedFactor;
 
             return process;
+        }
+
+        public IRuntimeEngine GetSimulation()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -11,7 +11,7 @@ using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 {
-    public class IndependentChannelSimulatedPipettor: IPipettor, ISimulation
+    public class IndependentChannelSimulatedPipettor: IPipettor, ISimulatable<IPipettor>
     {
         private const double _motorSpeed = 100.0; //mm/s
         private const double _tipPickupFailureRate = 0.0;
@@ -250,5 +250,29 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
             Thread.Sleep((int)estimatedDuration.TotalMilliseconds / (int)SimulationSpeedFactor);
         }
 
+        public ProcessResult CheckAspirate(AspirateContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProcessResult CheckDispense(DispenseContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProcessResult CheckPickupTips(TipPickupParameters parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProcessResult CheckDropTips(TipDropParameters parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPipettor GetSimulation()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

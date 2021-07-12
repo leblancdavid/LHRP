@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using LHRP.Api.Instrument;
 using LHRP.Api.Protocol;
+using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Runtime
@@ -14,5 +15,7 @@ namespace LHRP.Api.Runtime
         ProcessResult Run();
 
         void Abort();
+
+        ICompilationEngine GetCompilationEngine();
     }
 }
