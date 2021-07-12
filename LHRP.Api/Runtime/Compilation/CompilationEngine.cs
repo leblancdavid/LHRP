@@ -21,6 +21,11 @@ namespace LHRP.Api.Runtime.Compilation
             throw new NotImplementedException();
         }
 
+        public ICompilationEngine GetCompilationEngine()
+        {
+            return this;
+        }
+
         public IRuntimeEngine GetSnapshot()
         {
             throw new NotImplementedException();

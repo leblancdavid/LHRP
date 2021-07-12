@@ -11,58 +11,30 @@ using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
 {
-    public class SimplePipettorInstrument : IInstrument
+    public class SimplePipettorInstrument : BaseInstrument, IInstrument
     {
-        
-        public SimplePipettorInstrument()
+        public SimplePipettorInstrument() :
+            base(new IndependentChannelPipettor(), GetDeck())
         {
-            Pipettor = new IndependentChannelPipettor();
 
+        }
+
+        private static IDeck GetDeck()
+        {
             var deckPositions = new List<DeckPosition>();
             int numPositions = 8;
-            for(int i = 0; i < numPositions; ++i)
+            for (int i = 0; i < numPositions; ++i)
             {
                 //just temporary position assignement
-                deckPositions.Add(new DeckPosition(i+1,
+                deckPositions.Add(new DeckPosition(i + 1,
                     new Coordinates(1.0, 1.0, 1.0),
                     new Coordinates(i, i, i)));
             }
-            
-            InitializeDeck(new Deck(deckPositions));
+
+            return new Deck(deckPositions);
         }
 
-        public IPipettor Pipettor { get; private set; }
-        public IDeck Deck { get; private set; }
-        public ITipManager TipManager { get; private set; }
-        public ILiquidManager LiquidManager { get; private set; }
-
-        private Coordinates _wastePosition = new Coordinates(0.0, 0.0, 0.0);
-        public Coordinates WastePosition
-        {
-            get
-            {
-                return _wastePosition;
-            }
-        }
-
-        public IDevice GetDevice(Guid id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void InitializeDeck(IDeck deck)
-        {
-            Deck = deck;
-            TipManager = new TipManager(Deck);
-            LiquidManager = new LiquidManager(Deck);
-        }
-
-        public Result<Schedule> InitializeResources(Schedule schedule)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IInstrument GetSnapshot()
+        public override IInstrument GetSnapshot()
         {
             var deck = this.Deck.GetSnapshot();
             return new SimplePipettorInstrument()
@@ -73,6 +45,5 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
                 Pipettor = this.Pipettor
             };
         }
-
-  }
+    }
 }

@@ -8,7 +8,7 @@ using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Instrument
 {
-    public interface IInstrument : IStateSnapshotGetter<IInstrument>
+    public interface IInstrument : IStateSnapshotGetter<IInstrument>, ISimulatable<IInstrument>
     {
         IDeck Deck { get; }
         ITipManager TipManager { get; }

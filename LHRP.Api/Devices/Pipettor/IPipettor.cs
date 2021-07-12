@@ -4,7 +4,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public interface IPipettor : IDevice
+    public interface IPipettor : IDevice, ISimulatable<IPipettor>
     {
         ProcessResult Aspirate(AspirateContext context);
         ProcessResult Dispense(DispenseContext context);

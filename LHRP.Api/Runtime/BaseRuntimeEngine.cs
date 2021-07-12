@@ -1,4 +1,5 @@
 using LHRP.Api.Instrument;
+using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Runtime
@@ -22,6 +23,11 @@ namespace LHRP.Api.Runtime
         {
             Commands.Clear();
             Status = RuntimeStatus.Aborted;
+        }
+
+        public virtual ICompilationEngine GetCompilationEngine()
+        {
+            throw new System.NotImplementedException();
         }
 
         public virtual IRuntimeEngine GetSnapshot()

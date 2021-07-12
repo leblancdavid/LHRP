@@ -17,6 +17,8 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         public bool IsInitialized => throw new NotImplementedException();
 
         public PipettorSpecification Specification { get; private set; }
+        public uint SimulationSpeedFactor { get; set; }
+        public double FailureRate { get; set; }
 
         public IndependentChannelPipettor()
         {
@@ -69,5 +71,10 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         {
         throw new NotImplementedException();
         }
-  }
+
+        public IPipettor GetSimulation()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
