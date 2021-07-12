@@ -65,7 +65,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
         {
             _deck = deck;
             _tipManager = new TipManager(_deck);
-            _liquidManager = new LiquidManager(new LiquidManagerConfiguration(true), _deck);
+            _liquidManager = new LiquidManager(_deck);
         }
 
         public Result<Schedule> InitializeResources(Schedule schedule)

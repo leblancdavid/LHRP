@@ -113,10 +113,5 @@ namespace LHRP.Api.Instrument
 
             return -1;
         }
-
-        public ITipManager GetSnapshot()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

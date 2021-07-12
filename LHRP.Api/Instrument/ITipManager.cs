@@ -6,7 +6,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {
-    public interface ITipManager : IStateSnapshot<ITipManager>
+    public interface ITipManager
     {
         Result<TipChannelPattern> RequestTips(ChannelPattern pattern, int tipTypeId);
         Result ConsumeTip(Tip tip);

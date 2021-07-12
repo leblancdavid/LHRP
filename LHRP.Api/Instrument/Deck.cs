@@ -127,7 +127,7 @@ namespace LHRP.Api.Instrument
 
         public IDeck GetSnapshot()
         {
-            throw new System.NotImplementedException();
+            return new Deck(_deckPositions.Select(x => x.Value.GetSnapshot()).ToList());
         }
     }
 }

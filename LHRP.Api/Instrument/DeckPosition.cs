@@ -37,7 +37,11 @@ namespace LHRP.Api.Instrument
 
         public DeckPosition GetSnapshot()
         {
-            throw new System.NotImplementedException();
+            var snapshotPosition = new DeckPosition(PositionId, Dimensions, Position);
+            if (this.IsOccupied)
+                snapshotPosition.Assign(this.AssignedLabware!.GetSnapshot());
+
+            return snapshotPosition;
         }
 
         public void RemoveLabware()

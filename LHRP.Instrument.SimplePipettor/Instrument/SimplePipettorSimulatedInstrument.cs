@@ -72,7 +72,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
         {
             Deck = deck;
             TipManager = new TipManager(Deck);
-            LiquidManager = new LiquidManager(new LiquidManagerConfiguration(true), Deck);
+            LiquidManager = new LiquidManager(Deck);
         }
 
         public Result<Schedule> InitializeResources(Schedule schedule)
@@ -141,11 +141,12 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
 
         public IInstrument GetSnapshot()
         {
+            var deck = Deck = this.Deck.GetSnapshot();
             return new SimplePipettorSimulatedInstrument()
             {
-                TipManager = this.TipManager.GetSnapshot(),
-                Deck = this.Deck.GetSnapshot(),
-                LiquidManager = this.LiquidManager.GetSnapshot(),
+                Deck = deck,
+                TipManager = new TipManager(deck),
+                LiquidManager = new LiquidManager(deck),
                 Pipettor = this.Pipettor
             };
         }

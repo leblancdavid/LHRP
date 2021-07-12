@@ -9,11 +9,9 @@ namespace LHRP.Api.Instrument
     public class LiquidManager : ILiquidManager
     {
         private IDeck _deck;
-        private LiquidManagerConfiguration _configuration;
-        public LiquidManager(LiquidManagerConfiguration configuration, IDeck deck)
+        public LiquidManager(IDeck deck)
         {
             _deck = deck;
-            _configuration = configuration;
         }
         public Result RemoveLiquidFromPosition(LabwareAddress address, double volume)
         {
@@ -123,11 +121,6 @@ namespace LHRP.Api.Instrument
 
             well.Clear();
             return Result.Ok();
-        }
-
-        public ILiquidManager GetSnapshot()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

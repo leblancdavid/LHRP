@@ -156,5 +156,9 @@ namespace LHRP.Api.Labware
             return _tips[address].AbsolutePosition;
         }
 
+        public override Labware GetSnapshot()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
