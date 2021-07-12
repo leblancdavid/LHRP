@@ -9,7 +9,7 @@ namespace LHRP.Api.Runtime.Compilation
     public class CompilationEngine : BaseRuntimeEngine, ICompilationEngine
     {
         public CompilationEngine(IInstrument instrument, IRuntimeCommandQueue commands)
-            : base(instrument.GetSimulation(), commands.GetSnapshot(), new ErrorHandler())
+            : base(instrument.GetSimulation(), commands.GetSnapshot(), new CompilationErrorHandler())
         {
 
         }

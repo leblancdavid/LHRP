@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace LHRP.Api.Runtime
 {
-    public interface IRunnable : ISchedulable, ICompilable
+    public interface IRunnable : ISchedulable
     {
         ProcessResult Run(IRuntimeEngine engine);
     }

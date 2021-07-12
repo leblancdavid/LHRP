@@ -62,7 +62,7 @@ namespace LHRP.Api.Runtime
                     }
                 }
 
-                process.AppendSubProcess(result);
+                process.Combine(result);
             }
 
             return process;

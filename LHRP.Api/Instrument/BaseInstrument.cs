@@ -11,7 +11,7 @@ using System.Text;
 
 namespace LHRP.Api.Instrument
 {
-    public class Instrument : IInstrument
+    public class BaseInstrument : IInstrument
     {
         public IDeck Deck { get; protected set; }
 
@@ -27,7 +27,7 @@ namespace LHRP.Api.Instrument
         public double FailureRate { get; set; }
 
 
-        public Instrument(IPipettor pipettor, IDeck deck)
+        public BaseInstrument(IPipettor pipettor, IDeck deck)
         {
             Pipettor = pipettor;
             Deck = deck;
@@ -111,12 +111,12 @@ namespace LHRP.Api.Instrument
         public IInstrument GetSnapshot()
         {
             var deck = this.Deck.GetSnapshot();
-            return new Instrument(Pipettor, deck);
+            return new BaseInstrument(Pipettor, deck);
         }
 
         public IInstrument GetSimulation()
         {
-            return new Instrument(Pipettor.GetSimulation(), Deck.GetSnapshot());
+            return new BaseInstrument(Pipettor.GetSimulation(), Deck.GetSnapshot());
         }
     }
 }

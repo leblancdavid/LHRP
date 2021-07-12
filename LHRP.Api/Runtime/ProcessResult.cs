@@ -8,8 +8,6 @@ namespace LHRP.Api.Runtime
     public class ProcessResult
     {
         public Guid ProcessId { get; private set; }
-        private List<ProcessResult> _subProcess = new List<ProcessResult>();
-        public IEnumerable<ProcessResult> SubProcess => _subProcess;
         public TimeSpan Duration { get; private set; }
         public TimeSpan EstimatedDuration { get; set; }
         public bool ContainsErrors 
@@ -28,7 +26,6 @@ namespace LHRP.Api.Runtime
             {
                 List<RuntimeError> errors = new List<RuntimeError>();
                 errors.AddRange(_errors);
-                _subProcess.ForEach(p => errors.AddRange(p.Errors));
                 return errors;
             }
         }
@@ -49,7 +46,6 @@ namespace LHRP.Api.Runtime
             {
                 List<RuntimeError> warnings = new List<RuntimeError>();
                 warnings.AddRange(_warnings);
-                _subProcess.ForEach(p => warnings.AddRange(p.Errors));
                 return warnings;
             }
         }
@@ -86,13 +82,6 @@ namespace LHRP.Api.Runtime
             _warnings.Add(warning);
         }
 
-        public void AppendSubProcess(ProcessResult subProcess)
-        {
-            Duration += subProcess.Duration;
-            EstimatedDuration += subProcess.EstimatedDuration;
-            _subProcess.Add(subProcess);
-        }
-
         public void Combine(params ProcessResult[] processes)
         {
             for (int i = 0; i < processes.Length; ++i)
@@ -101,7 +90,6 @@ namespace LHRP.Api.Runtime
                 _warnings.AddRange(processes[i].Warnings);
                 Duration += processes[i].Duration;
                 EstimatedDuration += processes[i].EstimatedDuration;
-                _subProcess.AddRange(processes[i].SubProcess);
             }
         }
     }

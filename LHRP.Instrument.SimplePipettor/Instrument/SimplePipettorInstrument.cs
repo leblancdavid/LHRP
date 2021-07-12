@@ -11,7 +11,7 @@ using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
 {
-    public class SimplePipettorInstrument : Api.Instrument.Instrument, IInstrument
+    public class SimplePipettorInstrument : Api.Instrument.BaseInstrument, IInstrument
     {
         public SimplePipettorInstrument() :
             base(new IndependentChannelPipettor(), GetDeck())

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\..\LHRP.Api\LHRP.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Protocols\" />
+  </ItemGroup>
+
 </Project>
