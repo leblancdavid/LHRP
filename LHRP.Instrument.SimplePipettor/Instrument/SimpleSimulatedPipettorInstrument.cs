@@ -11,10 +11,10 @@ using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument
 {
-    public class SimplePipettorInstrument : BaseInstrument, IInstrument
+    public class SimpleSimulatedPipettorInstrument : BaseInstrument, IInstrument
     {
-        public SimplePipettorInstrument() :
-            base(new IndependentChannelPipettor(), GetDeck())
+        public SimpleSimulatedPipettorInstrument() :
+            base((new IndependentChannelPipettor()).GetSimulation(), GetDeck())
         {
 
         }

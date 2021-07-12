@@ -35,7 +35,9 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
             Specification = new PipettorSpecification(channelSpecification,
                 new Coordinates(0.0, 9.0, 0.0),
-                true); 
+                true);
+
+            PipettorStatus = new PipettorStatus(Specification.NumChannels);
         }
 
         public ProcessResult Aspirate(AspirateContext context)
@@ -74,7 +76,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
 
         public IPipettor GetSimulation()
         {
-            throw new NotImplementedException();
+            return new DefaultSimulatedPipettor(Specification);
         }
     }
 }
