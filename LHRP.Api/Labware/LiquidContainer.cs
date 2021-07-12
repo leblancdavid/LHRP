@@ -1,9 +1,10 @@
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Liquids;
+using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Labware
 {
-    public class LiquidContainer
+    public class LiquidContainer : IStateSnapshot<LiquidContainer>
     {
         public double Volume { get; protected set; }
 
@@ -35,6 +36,8 @@ namespace LHRP.Api.Labware
                 return _liquid != null;
             }
         }
+
+
         public Coordinates AbsolutePosition { get; protected set; }
         public LabwareAddress Address { get; protected set; }
 
@@ -108,6 +111,18 @@ namespace LHRP.Api.Labware
             Volume = 0.0;
         }
 
-
+        public virtual LiquidContainer GetSnapshot()
+        {
+            var container = new LiquidContainer(Address, AbsolutePosition, MaxVolume);
+            if(IsAssigned)
+            {
+                container.AssignLiquid(this.Liquid!);
+            }
+            if(Volume > 0.0)
+            {
+                container.AddLiquid(this.Liquid!, Volume);
+            }
+            return container;
+        }
     }
 }

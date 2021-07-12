@@ -16,5 +16,19 @@ namespace LHRP.Api.Labware
             
             Definition = definition;
         }
+
+        public override LiquidContainer GetSnapshot()
+        {
+            var well = new Well(Address, AbsolutePosition, Definition);
+            if (IsAssigned)
+            {
+                well.AssignLiquid(this.Liquid!);
+            }
+            if (Volume > 0.0)
+            {
+                well.AddLiquid(this.Liquid!, Volume);
+            }
+            return well;
+        }
     }
 }

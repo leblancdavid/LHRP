@@ -141,7 +141,7 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
 
         public IInstrument GetSnapshot()
         {
-            var deck = Deck = this.Deck.GetSnapshot();
+            var deck = this.Deck.GetSnapshot();
             return new SimplePipettorSimulatedInstrument()
             {
                 Deck = deck,

@@ -13,11 +13,10 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
 {
     public class SimplePipettorInstrument : IInstrument
     {
-        private IPipettor _pipettor;
         
         public SimplePipettorInstrument()
         {
-            _pipettor = new IndependentChannelPipettor();
+            Pipettor = new IndependentChannelPipettor();
 
             var deckPositions = new List<DeckPosition>();
             int numPositions = 8;
@@ -32,20 +31,10 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             InitializeDeck(new Deck(deckPositions));
         }
 
-        private IDeck _deck;
-        public IDeck Deck 
-        { 
-            get
-            {
-                return _deck;
-            }
-        }
-
-        private TipManager _tipManager;
-        public ITipManager TipManager => _tipManager;
-        
-        private LiquidManager _liquidManager;
-        public ILiquidManager LiquidManager => _liquidManager;
+        public IPipettor Pipettor { get; private set; }
+        public IDeck Deck { get; private set; }
+        public ITipManager TipManager { get; private set; }
+        public ILiquidManager LiquidManager { get; private set; }
 
         private Coordinates _wastePosition = new Coordinates(0.0, 0.0, 0.0);
         public Coordinates WastePosition
@@ -63,9 +52,9 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
 
         private void InitializeDeck(IDeck deck)
         {
-            _deck = deck;
-            _tipManager = new TipManager(_deck);
-            _liquidManager = new LiquidManager(_deck);
+            Deck = deck;
+            TipManager = new TipManager(Deck);
+            LiquidManager = new LiquidManager(Deck);
         }
 
         public Result<Schedule> InitializeResources(Schedule schedule)
@@ -75,12 +64,14 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
 
         public IInstrument GetSnapshot()
         {
-            throw new NotImplementedException();
-        }
-
-        public IPipettor Pipettor 
-        {
-            get { return _pipettor; }
+            var deck = this.Deck.GetSnapshot();
+            return new SimplePipettorInstrument()
+            {
+                Deck = deck,
+                TipManager = new TipManager(deck),
+                LiquidManager = new LiquidManager(deck),
+                Pipettor = this.Pipettor
+            };
         }
 
   }
