@@ -34,9 +34,40 @@ namespace LHRP.Api.Devices.Pipettor
             }
         }
 
+        public double EmptyVolume
+        {
+            get
+            {
+                if (CurrentTip == null)
+                    return 0.0;
+
+                return CurrentTip.TipVolume - CurrentVolume;
+            }
+        }
+
         private List<string> _errorMessages = new List<string>();
         public IEnumerable<string> ErrorMessages => _errorMessages;
         public Coordinates? CurrentPosition { get; set; }
+
+        public bool CanAspirate(double volume)
+        {
+            if (!HasTip || EmptyVolume < volume)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool CanDispense(double volume)
+        {
+            if (!HasTip || CurrentVolume < volume)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public void OnAspiratedVolume(Liquid liquid, double volume)
         {

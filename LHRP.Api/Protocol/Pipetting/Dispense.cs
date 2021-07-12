@@ -92,5 +92,10 @@ namespace LHRP.Api.Protocol.Pipetting
 
             return Result.Success(schedule);
         }
+
+        public ProcessResult Compile(IRuntimeEngine engine)
+        {
+
+        }
     }
 }

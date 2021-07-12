@@ -87,5 +87,10 @@ namespace LHRP.Api.Protocol.Steps
 
             return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
         }
+
+        public ProcessResult Compile(IRuntimeEngine engine)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -121,5 +121,10 @@ namespace LHRP.Api.Protocol.Pipetting
            
             return Result.Ok(transferContext);
         }
+
+        public ProcessResult Compile(IRuntimeEngine engine)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
