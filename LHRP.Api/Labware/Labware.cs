@@ -5,7 +5,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Labware
 {
-    public abstract class Labware : IStateSnapshot<Labware>
+    public abstract class Labware : IStateSnapshotGetter<Labware>
     {
         public string Name { get; protected set; }
         public double Width { get; protected set; }

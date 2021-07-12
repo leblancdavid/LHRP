@@ -4,7 +4,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Labware
 {
-    public class LiquidContainer : IStateSnapshot<LiquidContainer>
+    public class LiquidContainer : IStateSnapshotGetter<LiquidContainer>
     {
         public double Volume { get; protected set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace LHRP.Api.Runtime
 {
-    public interface IStateSnapshot<T>
+    public interface IStateSnapshotGetter<T>
     {
         T GetSnapshot();
     }

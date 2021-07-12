@@ -4,7 +4,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {
-    public class DeckPosition : IStateSnapshot<DeckPosition>
+    public class DeckPosition : IStateSnapshotGetter<DeckPosition>
     {
         public DeckPosition(int positionId,
             Coordinates dimensions,

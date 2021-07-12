@@ -6,7 +6,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {
-    public interface IDeck : IStateSnapshot<IDeck>
+    public interface IDeck : IStateSnapshotGetter<IDeck>
     {
         IEnumerable<DeckPosition> Positions { get; }
         Result AssignLabware(int positionId, Labware.Labware labware);

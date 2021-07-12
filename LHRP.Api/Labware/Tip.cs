@@ -4,7 +4,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Labware
 {
-    public class Tip : IStateSnapshot<Tip>
+    public class Tip : IStateSnapshotGetter<Tip>
     {
         public LabwareAddress Address { get; private set; }
         public Coordinates AbsolutePosition { get; private set; }
