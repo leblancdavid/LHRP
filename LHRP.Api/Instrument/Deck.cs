@@ -124,5 +124,10 @@ namespace LHRP.Api.Instrument
 
             return liquidContainerLabware.GetContainer(address);
         }
+
+        public IDeck GetSnapshot()
+        {
+            return new Deck(_deckPositions.Select(x => x.Value.GetSnapshot()).ToList());
+        }
     }
 }

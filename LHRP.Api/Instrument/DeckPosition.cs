@@ -1,9 +1,10 @@
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
+using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {
-    public class DeckPosition
+    public class DeckPosition : IStateSnapshotGetter<DeckPosition>
     {
         public DeckPosition(int positionId,
             Coordinates dimensions,
@@ -32,6 +33,15 @@ namespace LHRP.Api.Instrument
             AssignedLabware = labware;
             AssignedLabware.UpdatePosition(Position, PositionId);
             return Result.Ok();
+        }
+
+        public DeckPosition GetSnapshot()
+        {
+            var snapshotPosition = new DeckPosition(PositionId, Dimensions, Position);
+            if (this.IsOccupied)
+                snapshotPosition.Assign(this.AssignedLabware!.GetSnapshot());
+
+            return snapshotPosition;
         }
 
         public void RemoveLabware()

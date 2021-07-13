@@ -7,128 +7,70 @@ using System.Linq;
 
 namespace LHRP.Instrument.SimplePipettor.Runtime.ErrorHandling
 {
-    public class SimpleTipPickupErrorResolver : IErrorResolver
+    public class SimpleLiquidRefillErrorResolver : IErrorResolver
     {
-        public Result Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
+        public ProcessResult Resolve<TErrorType>(IRuntimeEngine engine, TErrorType error) where TErrorType : RuntimeError
         {
-            var tipError = error as TipPickupRuntimeError;
-            if (tipError == null)
+            var process = new ProcessResult();
+            var insuffientLiquidError = error as InsufficientLiquidRuntimeError;
+            if (insuffientLiquidError == null)
             {
                 var errorMsg = $"Invalid error type {error.GetType()}";
-                Console.WriteLine(errorMsg);
-                return Result.Failure(errorMsg);
+                process.AddError(new RuntimeError(errorMsg));
+                return process;
             }
 
-            Console.WriteLine(tipError.Message);
+            Console.WriteLine(insuffientLiquidError.Message);
             
-            Console.Write("Handling options: Retry (r), Next Tips (n), Contine (c), Abort (a): ");
+            Console.Write("Handling options: Refill and Continue (c), Abort (a): ");
             var requestInput = Console.ReadLine();
-            if (requestInput == "r")
-            {
-                Console.WriteLine("Retrying...");
-                return TryAddRetryTipPickUp(engine, tipError);
-            }
-            else if(requestInput == "n")
-            {
-                Console.WriteLine("Moving to next set of tips...");
-                return TryPickUpNextTip(engine, tipError);
-            }
-            else if(requestInput == "c")
+            if(requestInput == "c")
             {
                 Console.WriteLine("Continuing...");
-                return TryContinuePipetteSequence(engine, tipError);
+                return TryRefillAndContinuePipetteSequence(engine, insuffientLiquidError);
             }
             else
             {
                 Console.WriteLine("Aborting...");
                 engine.Abort();
-                return Result.Ok();
+                return process;
             }
 
         }
 
-        private Result TryAddRetryTipPickUp(IRuntimeEngine engine, TipPickupRuntimeError error)
+        private ProcessResult TryRefillAndContinuePipetteSequence(IRuntimeEngine engine, InsufficientLiquidRuntimeError error)
         {
-            var tipManager = engine.Instrument.TipManager;
-            var pipettor = engine.Instrument.Pipettor;
+            var process = new ProcessResult();
+            var containers = engine.Instrument.Deck.GetLiquidContainers()
+                 .Where(x => x.ContainsLiquid(error.RequestedLiquid)).ToList();
 
-            //Make sure the tips get consumed
-            for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
+            if (!containers.Any())
             {
-                if (error.RequestedPattern.IsInUse(channel) && pipettor.PipettorStatus[channel].HasTip)
+                process.AddError(new RuntimeError($"No containers have been assigned to liquid {error.RequestedLiquid.GetId()}"));
+                return process;
+            }
+
+            double volume = error.RemainingVolumeNeeded;
+            int containerIndex = 0;
+            while (containerIndex < containers.Count())
+            {
+                var c = containers[containerIndex];
+                if (c.MaxVolume < volume)
                 {
-                    var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
-                    if (consumeResult.IsFailure)
-                    {
-                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
-                    }
+                    volume -= c.MaxVolume;
+                    c.AddLiquid(error.RequestedLiquid, c.MaxVolume);
                 }
-            }
-
-            engine.Commands.Insert(engine.Commands.CurrentCommandIndex, 
-                new PickupTips(error.ChannelErrors, 
-                    error.TipTypeId,
-                    engine.Commands.CurrentCommand.RetryCount + 1));
-
-            return Result.Ok();
-        }
-
-        private Result TryPickUpNextTip(IRuntimeEngine engine, TipPickupRuntimeError error)
-        {
-            var tipManager = engine.Instrument.TipManager;
-            var pipettor = engine.Instrument.Pipettor;
-
-            //Make sure the tips get consumed
-            for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
-            {
-                if (error.RequestedPattern.IsInUse(channel))
+                else
                 {
-                    var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
-                    if (consumeResult.IsFailure)
-                    {
-                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
-                    }
+                    c.AddLiquid(error.RequestedLiquid, volume);
+                    break;
                 }
+                containerIndex++;
             }
 
-            engine.Commands.Insert(engine.Commands.CurrentCommandIndex,
-                new PickupTips(error.ChannelErrors,
-                    error.TipTypeId));
+            engine.Commands.MoveToLastExecutedCommand();
 
-            return Result.Ok();
-        }
-
-        private Result TryContinuePipetteSequence(IRuntimeEngine engine, TipPickupRuntimeError error)
-        {
-            var tipManager = engine.Instrument.TipManager;
-            var pipettor = engine.Instrument.Pipettor;
-
-            //Make sure the tips get consumed
-            for (int channel = 0; channel < pipettor.PipettorStatus.ChannelStatus.Count(); ++channel)
-            {
-                if (error.RequestedPattern.IsInUse(channel))
-                {
-                    var consumeResult = tipManager.ConsumeTip(error.RequestedPattern.GetTip(channel));
-                    if (consumeResult.IsFailure)
-                    {
-                        return Result.Failure($"Unable to consume tips: '{consumeResult.Error}'");
-                    }
-                }
-            }
-            
-            var newChannelPattern = error.RequestedPattern - error.ChannelErrors;
-            int index = engine.Commands.CurrentCommandIndex;
-            var nextCommand = engine.Commands.GetCommandAt(index);
-            while (nextCommand != null && 
-                nextCommand is IPipettingCommand &&
-                !(nextCommand is PickupTips))
-            {
-                (nextCommand as IPipettingCommand).ApplyChannelMask(newChannelPattern);
-                index++;
-                nextCommand = engine.Commands.GetCommandAt(index);
-            }
-
-            return Result.Ok();
+            return process;
         }
     }
 }

@@ -126,6 +126,12 @@ namespace LHRP.Api.Devices.Pipettor
             _channels = new T?[numChannels];
         }
 
+        public ChannelPattern(T?[] channels)
+           : base(channels.Length)
+        {
+            _channels = channels;
+        }
+
         protected T?[] _channels;
         public T? this[int i]
         {

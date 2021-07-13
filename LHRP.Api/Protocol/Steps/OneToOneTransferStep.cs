@@ -7,11 +7,10 @@ using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
-using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol.Steps
 {
-    public class OneToOneTransferStep : IRunnable
+    public class OneToOneTransferStep : BaseRunnable, IRunnable
     {
         private OneToOneTransferStepData _stepData;
         private ITransferOptimizer<OneToOneTransfer> _transferOptimizer;
@@ -26,7 +25,7 @@ namespace LHRP.Api.Protocol.Steps
             _transferOptimizer = optimizer;
         }
 
-        public ProcessResult Run(IRuntimeEngine engine)
+        public override ProcessResult Run(IRuntimeEngine engine)
         {
             var process = new ProcessResult();
 
@@ -45,29 +44,7 @@ namespace LHRP.Api.Protocol.Steps
             return engine.Run();
         }
 
-        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
-        {
-            var schedule = new Schedule();
-            var commands = GetCommands(runtimeEngine);
-            if (commands.IsFailure)
-            {
-                return Result.Failure<Schedule>(commands.Error);
-            }
-
-            foreach (var command in commands.Value)
-            {
-                var commandSchedule = command.Schedule(runtimeEngine, false);
-                schedule.Combine(commandSchedule.Value);
-            }
-            if (initializeResources)
-            {
-                return runtimeEngine.Instrument.InitializeResources(schedule);
-            }
-
-            return Result.Success(schedule);
-        }
-
-        public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
+        public override Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
         {
             var pipettor = engine.Instrument.Pipettor;
             var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);

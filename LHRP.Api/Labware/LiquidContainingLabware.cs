@@ -7,7 +7,7 @@ using System.Text;
 
 namespace LHRP.Api.Labware
 {
-    public class LiquidContainingLabware : Labware
+    public abstract class LiquidContainingLabware : Labware
     {
 
         protected Dictionary<LabwareAddress, LiquidContainer> _containers = new Dictionary<LabwareAddress, LiquidContainer>();

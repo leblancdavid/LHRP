@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Devices.Pipettor
 {
@@ -11,6 +9,11 @@ namespace LHRP.Api.Devices.Pipettor
         public AspirateContext(ChannelPattern<ChannelPipettingContext> targets, AspirateParameters parameters)
         {
             Targets = targets;
+        }
+
+        ProcessResult Validate(IPipettor pipettor)
+        {
+            return new ProcessResult();
         }
 
     }

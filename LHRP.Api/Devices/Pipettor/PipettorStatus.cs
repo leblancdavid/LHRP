@@ -50,5 +50,23 @@ namespace LHRP.Api.Devices.Pipettor
             CurrentPosition = new Coordinates();
         }
 
+        public bool CanAspirate(int channel, double volume)
+        {
+            if (channel < 0 || channel >= _channelStatus.Length)
+                return false;
+
+            return _channelStatus[channel].CanAspirate(volume);
+        }
+
+        public bool CanDispense(int channel, double volume)
+        {
+            if (channel < 0 || channel >= _channelStatus.Length)
+            {
+                return false;
+            }
+
+            return _channelStatus[channel].CanDispense(volume);
+        }
+
     }
 }

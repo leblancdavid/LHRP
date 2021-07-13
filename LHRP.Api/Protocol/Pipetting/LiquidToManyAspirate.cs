@@ -2,14 +2,11 @@
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
-using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.Resources;
-using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -75,20 +72,6 @@ namespace LHRP.Api.Protocol.Pipetting
             return new ProcessResult();
         }
 
-        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
-        {
-            var schedule = new Schedule();
-            schedule.ResourcesUsage.Combine(ResourcesUsed);
-
-            //Todo: come up with a way to calculate time
-            schedule.ExpectedDuration = new TimeSpan(0, 0, 5);
-            if (initializeResources)
-            {
-                return runtimeEngine.Instrument.InitializeResources(schedule);
-            }
-            return Result.Success(schedule);
-        }
-
         private Result<ChannelPattern<ChannelPipettingContext>> GetTransferContext(ILiquidManager liquidManager)
         {
             var volumeUsagePerLiquid = new Dictionary<string, double>();
@@ -120,6 +103,11 @@ namespace LHRP.Api.Protocol.Pipetting
             }
            
             return Result.Ok(transferContext);
+        }
+
+        public ResourcesUsage CalculateResources(IRuntimeEngine engine)
+        {
+            return ResourcesUsed;
         }
     }
 }

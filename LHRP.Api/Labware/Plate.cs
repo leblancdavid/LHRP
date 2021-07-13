@@ -97,5 +97,9 @@ namespace LHRP.Api.Labware
             }
         }
 
+        public override Labware GetSnapshot()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

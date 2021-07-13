@@ -156,5 +156,11 @@ namespace LHRP.Api.Labware
             return _tips[address].AbsolutePosition;
         }
 
+        public override Labware GetSnapshot()
+        {
+            var tipRack = new TipRack(Definition);
+
+            return tipRack;
+        }
     }
 }

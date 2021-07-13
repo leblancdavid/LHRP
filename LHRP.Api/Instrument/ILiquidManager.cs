@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using LHRP.Api.Labware;
 using LHRP.Api.Liquids;
-using LHRP.Api.Protocol.Transfers;
+using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {

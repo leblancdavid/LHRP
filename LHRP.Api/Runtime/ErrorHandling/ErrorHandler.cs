@@ -6,11 +6,12 @@ namespace LHRP.Api.Runtime.ErrorHandling
     public class ErrorHandler : IErrorHandler
     {
         protected Dictionary<System.Type, IErrorResolver> ResolutionTable;
+        protected IErrorResolver? _defaultResolver;
 
-        public ErrorHandler()
+        public ErrorHandler(IErrorResolver? defaultResolver = null)
         {
             ResolutionTable = new Dictionary<System.Type, IErrorResolver>();
-            ConfigureResolution<InsuffientTipsRuntimeError>(new DefaultTipReloadRequest());
+            _defaultResolver = defaultResolver;
         }
 
         public void ConfigureResolution<TErrorType>(IErrorResolver resolver) where TErrorType : RuntimeError
@@ -19,15 +20,22 @@ namespace LHRP.Api.Runtime.ErrorHandling
             ResolutionTable[errorType] = resolver;
         }
 
-        public Result HandleError(IRuntimeEngine engine, RuntimeError error)
+        public ProcessResult HandleError(IRuntimeEngine engine, RuntimeError error)
         {
             var errorType = error.GetType();
-            if(!ResolutionTable.ContainsKey(errorType))
+            if (ResolutionTable.ContainsKey(errorType))
             {
-                return Result.Failure($"No resolution found for error type '{errorType.ToString()}'");
+                return ResolutionTable[errorType].Resolve(engine, error);
+            }
+            else if (_defaultResolver != null) 
+            {
+                return _defaultResolver.Resolve(engine, error);
             }
 
-            return ResolutionTable[errorType].Resolve(engine, error);
+            var process = new ProcessResult();
+            process.AddError(new RuntimeError($"No resolution found for error type '{errorType.ToString()}'"));
+            return process;
+
         }
     }
 }

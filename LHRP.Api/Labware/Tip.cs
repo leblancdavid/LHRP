@@ -1,9 +1,10 @@
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
+using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Labware
 {
-    public class Tip
+    public class Tip : IStateSnapshotGetter<Tip>
     {
         public LabwareAddress Address { get; private set; }
         public Coordinates AbsolutePosition { get; private set; }
@@ -18,6 +19,11 @@ namespace LHRP.Api.Labware
             IsFiltered = filtered;
             TipVolume = tipVolume;
             TipTypeId = tipTypeId;
+        }
+
+        public Tip GetSnapshot()
+        {
+            return new Tip(Address, AbsolutePosition, TipVolume, IsFiltered, TipTypeId);
         }
     }
 }

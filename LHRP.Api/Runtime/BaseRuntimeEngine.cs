@@ -1,5 +1,8 @@
 using LHRP.Api.Instrument;
+using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
+using LHRP.Api.Runtime.Resources;
+using System.Linq;
 
 namespace LHRP.Api.Runtime
 {
@@ -17,6 +20,8 @@ namespace LHRP.Api.Runtime
         public IRuntimeCommandQueue Commands { get; protected set; }
         public IErrorHandler ErrorHandler { get; protected set; }
         public RuntimeStatus Status { get; protected set; }
+        public uint SimulationSpeedFactor { get; set; }
+        public double FailureRate { get; set; }
 
         public void Abort()
         {
@@ -24,9 +29,37 @@ namespace LHRP.Api.Runtime
             Status = RuntimeStatus.Aborted;
         }
 
-        public ProcessResult Run()
+        public virtual ICompilationEngine GetCompilationEngine()
+        {
+            return new CompilationEngine(Instrument, Commands);
+        }
+
+        public IRuntimeEngine GetSimulation()
+        {
+            return new BaseRuntimeEngine(Instrument.GetSimulation(), Commands.GetSnapshot(), ErrorHandler);
+        }
+
+        public virtual IRuntimeEngine GetSnapshot()
+        {
+            return new BaseRuntimeEngine(Instrument.GetSnapshot(), Commands.GetSnapshot(), ErrorHandler);
+        }
+
+        public virtual ProcessResult Run(IResourceInitializer? resourceInitializer = null)
         {
             var process = new ProcessResult();
+
+            var initializer = resourceInitializer;
+            if (initializer == null)
+            {
+                initializer = new DefaultResourceAutoInitializer();
+            }
+
+            process.Combine(initializer.Initialize(Instrument, Commands.GetTotalResources()));
+            if(process.ContainsErrors)
+            {
+                return process;
+            }
+
             while(!Commands.IsCompleted && Status != RuntimeStatus.Aborted)
             {
                 var result = Commands.RunNextCommand(this);
@@ -35,15 +68,15 @@ namespace LHRP.Api.Runtime
                     foreach(var error in result.Errors)
                     {
                         var errorHandlingResult = ErrorHandler.HandleError(this, error);
-                        if(errorHandlingResult.IsFailure)
+                        if(errorHandlingResult.ContainsErrors)
                         {
                             Commands.Clear();
-                            process.AddError(new RuntimeError(errorHandlingResult.Error));
+                            process.Combine(errorHandlingResult);
                         }
                     }
                 }
 
-                process.AppendSubProcess(result);
+                process.Combine(result);
             }
 
             return process;

@@ -3,11 +3,11 @@ using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Runtime.Scheduling;
+using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {
-    public interface IInstrument
+    public interface IInstrument : IStateSnapshotGetter<IInstrument>, ISimulatable<IInstrument>
     {
         IDeck Deck { get; }
         ITipManager TipManager { get; }
@@ -15,7 +15,5 @@ namespace LHRP.Api.Instrument
         IPipettor Pipettor { get; }
         IDevice GetDevice(Guid id);
         Coordinates WastePosition { get; }
-
-        Result<Schedule> InitializeResources(Schedule schedule);
     }
 }

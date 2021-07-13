@@ -1,17 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Instrument;
-using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
+using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Resources;
-using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -74,18 +71,9 @@ namespace LHRP.Api.Protocol.Pipetting
             return processResult;
         }
 
-        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
+        public ResourcesUsage CalculateResources(IRuntimeEngine engine)
         {
-            var schedule = new Schedule();
-            schedule.ResourcesUsage.Combine(ResourcesUsed);
-
-            //Todo: come up with a way to calculate time
-            schedule.ExpectedDuration = new TimeSpan(0, 0, 5);
-            if (initializeResources)
-            {
-                return runtimeEngine.Instrument.InitializeResources(schedule);
-            }
-            return Result.Success(schedule);
+            return ResourcesUsed;
         }
     }
 }

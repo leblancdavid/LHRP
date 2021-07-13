@@ -1,6 +1,5 @@
 using LHRP.Api.Runtime;
 using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Runtime.Scheduling;
 using System;
 using CSharpFunctionalExtensions;
 using System.Collections.Generic;
@@ -70,18 +69,9 @@ namespace LHRP.Api.Protocol.Pipetting
             return processResult;
         }
 
-        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
+        public ResourcesUsage CalculateResources(IRuntimeEngine engine)
         {
-            var schedule = new Schedule();
-            schedule.ResourcesUsage.Combine(ResourcesUsed);
-
-            //Todo: come up with a way to calculate time
-            schedule.ExpectedDuration = new TimeSpan(0, 0, 5);
-            if (initializeResources)
-            {
-                return runtimeEngine.Instrument.InitializeResources(schedule);
-            }
-            return Result.Success(schedule);
+            return ResourcesUsed;
         }
     }
 }

@@ -7,7 +7,6 @@ using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Runtime;
 using LHRP.TestConsole.Examples;
 using System;
@@ -16,15 +15,13 @@ namespace LHRP.TestConsole
 {
     public class AddReagentExample : IProtocolExampleRunner
     {
-        private IScheduleStream _scheduleStream;
-        public AddReagentExample(IScheduleStream scheduleStream)
+        public AddReagentExample()
         {
-            _scheduleStream = scheduleStream;
         }
         public ProcessResult RunExample()
         {
-            var simplePipettorSimulation = new SimplePipettorSimulationEngine();
-            simplePipettorSimulation.SimulationSpeedFactor = 10;
+            var simplePipettorSimulation = new SimplePipettorRuntimeEngine();
+            //simplePipettorSimulation.SimulationSpeedFactor = 10;
             var deck = simplePipettorSimulation.Instrument.Deck;
             //First setup the deck, add a tip rack and 2 plates
 
@@ -43,9 +40,6 @@ namespace LHRP.TestConsole
                 new LiquidTransferStepData(GetLiquidTransferFor96Wells(reagent, 3, 50.0), reagent,
                 300, false, true));
             protocol.AddStep(addReagent);
-
-            var schedule = protocol.Schedule(simplePipettorSimulation, true);
-            _scheduleStream.Send(schedule.Value);
 
             return protocol.Run(simplePipettorSimulation);
         }

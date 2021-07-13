@@ -51,13 +51,26 @@ namespace LHRP.Api.Runtime
             _queue.RemoveAt(index);
         }
 
-        public void MoveToLastExecutedCommand()
+        public IRunnableCommand? MoveToLastExecutedCommand()
         {
             if(CurrentCommandIndex > 0)
             {
                 CurrentCommandIndex--;
             }
+
+            return CurrentCommand;
         }
+
+        public void MoveTo(int commandIndex)
+        {
+            if (commandIndex < 0 || commandIndex >= _queue.Count())
+            {
+                return;
+            }
+
+            CurrentCommandIndex = commandIndex;
+        }
+
         public ProcessResult RetryLastCommand(IRuntimeEngine engine)
         {
             if(IsCompleted)
@@ -103,6 +116,40 @@ namespace LHRP.Api.Runtime
             var resources = new ResourcesUsage();
             resources.Combine(_queue.Skip(CurrentCommandIndex).Select(x => x.ResourcesUsed).ToArray());
             return resources;
+        }
+
+        public IRuntimeCommandQueue GetSnapshot()
+        {
+            var queue = new RuntimeCommandQueue();
+            foreach(var command in _queue)
+            {
+                queue.Add(command);
+            }
+
+            queue.MoveTo(CurrentCommandIndex);
+
+            return queue;
+        }
+
+        public IRunnableCommand? Next()
+        {
+            if (IsCompleted)
+            {
+                return null;
+            }
+
+            CurrentCommandIndex++;
+            return CurrentCommand;
+        }
+
+        public IRunnableCommand? Previous()
+        {
+            if (CurrentCommandIndex > 0)
+            {
+                CurrentCommandIndex--;
+            }
+
+            return CurrentCommand;
         }
     }
 }
