@@ -27,7 +27,7 @@ namespace LHRP.Api.Devices.Pipettor
 
         public Tip? CurrentTip { get; private set; }
         public double CurrentVolume { get; private set; }
-        public Liquid? CurrentLiquid { get; private set; }
+        public HeterogeneousLiquid? CurrentLiquid { get; private set; }
         public bool HasErrors
         {
             get
@@ -90,8 +90,12 @@ namespace LHRP.Api.Devices.Pipettor
                 return process;
             }
 
+            if(CurrentLiquid == null)
+            {
+                CurrentLiquid = new HeterogeneousLiquid();
+            }
+            CurrentLiquid.Mix(liquid, volume / (CurrentVolume + volume));
             CurrentVolume += volume;
-            CurrentLiquid = liquid;
             return process;
         }
 

@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
-using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Devices.Pipettor
 {
@@ -28,6 +23,8 @@ namespace LHRP.Api.Devices.Pipettor
 
         public PipettorSpecification Specification { get; private set; }
 
+        public ILiquidTracker LiquidTracker { get; private set; }
+
         public DefaultSimulatedPipettor(PipettorSpecification specification)
         {
             Specification = specification;
@@ -35,6 +32,7 @@ namespace LHRP.Api.Devices.Pipettor
             PipettorStatus = new PipettorStatus(NumberChannels);
             SimulationSpeedFactor = 0;
             FailureRate = 0;
+            LiquidTracker = new LiquidTracker();
         }
 
         public ProcessResult Aspirate(AspirateContext context)
@@ -209,6 +207,8 @@ namespace LHRP.Api.Devices.Pipettor
 
 
         public bool IsInitialized => throw new NotImplementedException();
+
+
         public ProcessResult Initialize()
         {
             throw new NotImplementedException();

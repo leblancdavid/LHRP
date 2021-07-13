@@ -20,6 +20,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         public uint SimulationSpeedFactor { get; set; }
         public double FailureRate { get; set; }
 
+        public ILiquidTracker LiquidTracker { get; private set; }
         public IndependentChannelPipettor()
         {
             var channelSpecification = new List<ChannelSpecification>();
@@ -38,6 +39,8 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true);
 
             PipettorStatus = new PipettorStatus(Specification.NumChannels);
+
+            LiquidTracker = new LiquidTracker();
         }
 
         public ProcessResult Aspirate(AspirateContext context)
