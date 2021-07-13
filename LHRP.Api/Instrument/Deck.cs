@@ -3,6 +3,7 @@ using System.Linq;
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Labware;
+using LHRP.Api.Liquids;
 
 namespace LHRP.Api.Instrument
 {
@@ -128,6 +129,21 @@ namespace LHRP.Api.Instrument
         public IDeck GetSnapshot()
         {
             return new Deck(_deckPositions.Select(x => x.Value.GetSnapshot()).ToList());
+        }
+
+        public IEnumerable<LiquidContainer> FindLiquidContainers(Liquid withLiquid)
+        {
+            var liquidContainers = new List<LiquidContainer>();
+            foreach (var position in _deckPositions.Values)
+            {
+                var liquidContainer = position.AssignedLabware as LiquidContainingLabware;
+                if (liquidContainer != null)
+                {
+                    liquidContainers.AddRange(liquidContainer.GetLiquidContainers(withLiquid));
+                }
+            }
+
+            return liquidContainers;
         }
     }
 }

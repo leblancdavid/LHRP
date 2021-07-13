@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Labware;
+using LHRP.Api.Liquids;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
@@ -15,6 +16,7 @@ namespace LHRP.Api.Instrument
         IEnumerable<TipRack> GetTipRacks();
         IEnumerable<Plate> GetPlates();
         IEnumerable<LiquidContainer> GetLiquidContainers();
+        IEnumerable<LiquidContainer> FindLiquidContainers(Liquid withLiquid);
         LiquidContainer? GetLiquidContainer(LabwareAddress address);
         Coordinates? GetCoordinates(LabwareAddress address);
         
