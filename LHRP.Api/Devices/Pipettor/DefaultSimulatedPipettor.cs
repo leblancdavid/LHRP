@@ -23,16 +23,23 @@ namespace LHRP.Api.Devices.Pipettor
 
         public PipettorSpecification Specification { get; private set; }
 
-        public ILiquidTracker LiquidTracker { get; private set; }
+        public ILiquidTrackingLogger LiquidTracker { get; private set; }
 
-        public DefaultSimulatedPipettor(PipettorSpecification specification)
+        public DefaultSimulatedPipettor(PipettorSpecification specification, ILiquidTrackingLogger? liquidTrackingLogger = null)
         {
             Specification = specification;
             NumberChannels = specification.NumChannels;
             PipettorStatus = new PipettorStatus(NumberChannels);
             SimulationSpeedFactor = 0;
             FailureRate = 0;
-            LiquidTracker = new LiquidTracker();
+            if(liquidTrackingLogger == null)
+            {
+                LiquidTracker = new InMemoryLiquidTrackingLogger();
+            }
+            else
+            {
+                LiquidTracker = liquidTrackingLogger;
+            }
         }
 
         public ProcessResult Aspirate(AspirateContext context)

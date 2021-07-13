@@ -2,6 +2,7 @@
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
+using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.Resources;
@@ -72,7 +73,7 @@ namespace LHRP.Api.Protocol.Pipetting
             return new ProcessResult();
         }
 
-        private Result<ChannelPattern<ChannelPipettingContext>> GetTransferContext(ILiquidManager liquidManager)
+        private Result<ChannelPattern<ChannelPipettingTransfer>> GetTransferContext(ILiquidManager liquidManager)
         {
             var volumeUsagePerLiquid = new Dictionary<string, double>();
             foreach (var liquidTarget in TransferGroup.GetActiveChannels())
@@ -81,7 +82,7 @@ namespace LHRP.Api.Protocol.Pipetting
                 //volumeUsagePerLiquid[liquidTarget.Source.GetId()] += liquidTarget.Target.Volume;
             }
 
-            var transferContext = new ChannelPattern<ChannelPipettingContext>(TransferGroup.NumChannels);
+            var transferContext = new ChannelPattern<ChannelPipettingTransfer>(TransferGroup.NumChannels);
             for(int i = 0; i < TransferGroup.NumChannels; ++i)
             {
                 if(!TransferGroup.IsInUse(i))
@@ -93,13 +94,14 @@ namespace LHRP.Api.Protocol.Pipetting
                 //If this happens then there's not enough liquid
                 if (transferTarget.IsFailure)
                 {
-                    return Result.Failure<ChannelPattern<ChannelPipettingContext>>(transferTarget.Error);
+                    return Result.Failure<ChannelPattern<ChannelPipettingTransfer>>(transferTarget.Error);
                 }
 
                 double volume = TransferGroup[i]!.GetTotalTransferVolume() + AdditionalAspirateVolume;
-                transferContext[i] = new ChannelPipettingContext(volume, i, TransferGroup[i]!.Source,
+                transferContext[i] = new ChannelPipettingTransfer(volume, i, TransferGroup[i]!.Source,
                     new Coordinates(), //TODO
-                    transferTarget.Value.Address);
+                    transferTarget.Value.Address,
+                    TransferType.Aspirate);
             }
            
             return Result.Ok(transferContext);

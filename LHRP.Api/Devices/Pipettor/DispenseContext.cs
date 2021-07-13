@@ -2,9 +2,9 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public class DispenseContext
     {
-        public ChannelPattern<ChannelPipettingContext> Targets { get; private set; }
+        public ChannelPattern<ChannelPipettingTransfer> Targets { get; private set; }
 
-        public DispenseContext(ChannelPattern<ChannelPipettingContext> targets, DispenseParameters parameters)
+        public DispenseContext(ChannelPattern<ChannelPipettingTransfer> targets, DispenseParameters parameters)
         {
             Targets = targets;
         }
