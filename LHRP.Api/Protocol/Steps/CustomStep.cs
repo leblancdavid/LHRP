@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,11 +42,6 @@ namespace LHRP.Api.Protocol.Steps
             }
 
             return engine.Run();
-        }
-
-        public override Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
-        {
-            throw new NotImplementedException();
         }
     }
 }

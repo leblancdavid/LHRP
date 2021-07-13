@@ -4,7 +4,6 @@ using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Instrument
 {
@@ -16,7 +15,5 @@ namespace LHRP.Api.Instrument
         IPipettor Pipettor { get; }
         IDevice GetDevice(Guid id);
         Coordinates WastePosition { get; }
-
-        Result<Schedule> InitializeResources(Schedule schedule);
     }
 }

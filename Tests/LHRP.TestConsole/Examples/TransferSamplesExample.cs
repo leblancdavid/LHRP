@@ -1,12 +1,9 @@
-﻿using LHRP.Api.Instrument;
-using LHRP.Api.Labware;
-using LHRP.Api.Liquids;
+﻿using LHRP.Api.Labware;
 using LHRP.Api.Protocol;
 using LHRP.Api.Protocol.Steps;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.OneToOne;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Runtime;
 using LHRP.TestConsole.Examples;
 using System;
@@ -15,10 +12,8 @@ namespace LHRP.TestConsole
 {
     public class TransferSamplesExample : IProtocolExampleRunner
     {
-        private IScheduleStream _scheduleStream;
-        public TransferSamplesExample(IScheduleStream scheduleStream)
+        public TransferSamplesExample()
         {
-            _scheduleStream = scheduleStream;
         }
         public ProcessResult RunExample()
         {
@@ -35,9 +30,6 @@ namespace LHRP.TestConsole
                 new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(2, 3, 50.0),
                 300, false));
             protocol.AddStep(transferSampleStep);
-
-            var schedule = protocol.Schedule(simplePipettorSimulation, true);
-            _scheduleStream.Send(schedule.Value);
 
             return protocol.Run(simplePipettorSimulation);
         }

@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
-using CSharpFunctionalExtensions;
 using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
-using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
-using LHRP.Api.Runtime.Resources;
-using LHRP.Api.Runtime.Scheduling;
 using LHRP.Instrument.SimplePipettor.Devices.Pipettor;
 
 namespace LHRP.Instrument.SimplePipettor.Instrument

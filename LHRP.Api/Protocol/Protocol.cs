@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Resources;
-using LHRP.Api.Runtime.Scheduling;
 
 namespace LHRP.Api.Protocol
 {
@@ -56,22 +54,6 @@ namespace LHRP.Api.Protocol
             }
 
             return runtime.Run();
-        }
-
-        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
-        {
-            var schedule = new Schedule();
-            foreach(var step in _steps)
-            {
-                var stepSchedule = step.Schedule(runtimeEngine, false);
-                schedule.Combine(stepSchedule.Value);
-            }
-
-            if (initializeResources)
-            {
-                return runtimeEngine.Instrument.InitializeResources(schedule);
-            }
-            return Result.Success(schedule);
         }
 
         public ResourcesUsage CalculateResources(IRuntimeEngine engine)

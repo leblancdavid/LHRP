@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using LHRP.Api.Runtime.Resources;
-using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +25,5 @@ namespace LHRP.Api.Runtime
         public abstract Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine);
 
         public abstract ProcessResult Run(IRuntimeEngine engine);
-
-        public abstract Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources);
     }
 }

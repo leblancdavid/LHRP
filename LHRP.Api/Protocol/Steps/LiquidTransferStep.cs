@@ -5,7 +5,6 @@ using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.ErrorHandling;
-using LHRP.Api.Runtime.Scheduling;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,27 +42,6 @@ namespace LHRP.Api.Protocol.Steps
             }
 
             return engine.Run();
-        }
-
-        public override Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
-        {
-            var schedule = new Schedule();
-            var commands = GetCommands(runtimeEngine);
-            if (commands.IsFailure)
-            {
-                return Result.Failure<Schedule>(commands.Error);
-            }
-
-            foreach (var command in commands.Value)
-            {
-                var commandSchedule = command.Schedule(runtimeEngine, false);
-                schedule.Combine(commandSchedule.Value);
-            }
-            if (initializeResources)
-            {
-                return runtimeEngine.Instrument.InitializeResources(schedule);
-            }
-            return Result.Success(schedule);
         }
 
         public override Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)

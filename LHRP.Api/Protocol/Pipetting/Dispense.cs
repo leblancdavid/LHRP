@@ -5,7 +5,6 @@ using LHRP.Api.Runtime;
 using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Resources;
-using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,38 +73,6 @@ namespace LHRP.Api.Protocol.Pipetting
                 }
             }
             
-            return processResult;
-        }
-
-        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
-        {
-            var schedule = new Schedule();
-            schedule.ResourcesUsage.Combine(ResourcesUsed);
-
-            //Todo: come up with a way to calculate time
-            schedule.ExpectedDuration = new TimeSpan(0, 0, 5);
-
-            if(initializeResources)
-            {
-                return runtimeEngine.Instrument.InitializeResources(schedule);
-                
-            }
-
-            return Result.Success(schedule);
-        }
-
-        public ProcessResult Compile(ICompilationEngine engine)
-        {
-            var processResult = new ProcessResult();
-
-            var pipettor = engine.Instrument.Pipettor;
-            var liquidManager = engine.Instrument.LiquidManager;
-            var pipettorStatus = pipettor.PipettorStatus;
-
-
-            var errors = new List<RuntimeError>();
-            var pipetteTargets = _targets.ToChannelPatternPipettingContext(engine.Instrument, out errors);
-
             return processResult;
         }
 
