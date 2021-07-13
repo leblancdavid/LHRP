@@ -4,7 +4,6 @@ using LHRP.Api.Protocol.Pipetting;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.ErrorHandling;
 using LHRP.Api.Runtime.Scheduling;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Linq;
 
 namespace LHRP.Api.Protocol.Steps
 {
-    public class MultiDispenseLiquidTransferStep : IRunnable
+    public class MultiDispenseLiquidTransferStep : BaseRunnable, IRunnable
     {
         private MultiDispenseLiquidTransferStepData _stepData;
         private ITransferOptimizer<LiquidToOneTransfer> _transferOptimizer;
@@ -27,7 +26,7 @@ namespace LHRP.Api.Protocol.Steps
         }
 
 
-        public ProcessResult Run(IRuntimeEngine engine)
+        public override ProcessResult Run(IRuntimeEngine engine)
         {
             var process = new ProcessResult();
 
@@ -46,7 +45,7 @@ namespace LHRP.Api.Protocol.Steps
             return engine.Run();
         }
 
-        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
+        public override Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             var schedule = new Schedule();
             var commands = GetCommands(runtimeEngine);
@@ -67,7 +66,7 @@ namespace LHRP.Api.Protocol.Steps
             return Result.Success(schedule);
         }
 
-        public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
+        public override Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
         {
             var pipettor = engine.Instrument.Pipettor;
             var tranfersResult = _stepData.Pattern.GetTransferGroups(engine.Instrument, _transferOptimizer);
@@ -117,9 +116,5 @@ namespace LHRP.Api.Protocol.Steps
             return Result.Ok<IEnumerable<IRunnableCommand>>(commands);
         }
 
-        public ProcessResult Compile(ICompilationEngine engine)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

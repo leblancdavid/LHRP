@@ -84,9 +84,9 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Success(schedule);
         }
 
-        public ProcessResult Compile(ICompilationEngine engine)
+        public ResourcesUsage CalculateResources(IRuntimeEngine engine)
         {
-            throw new System.NotImplementedException();
+            return ResourcesUsed;
         }
     }
 }

@@ -108,5 +108,10 @@ namespace LHRP.Api.Protocol.Pipetting
 
             return processResult;
         }
+
+        public ResourcesUsage CalculateResources(IRuntimeEngine engine)
+        {
+            return ResourcesUsed;
+        }
     }
 }

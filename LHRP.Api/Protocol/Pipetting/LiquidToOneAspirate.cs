@@ -93,5 +93,10 @@ namespace LHRP.Api.Protocol.Pipetting
         {
             throw new System.NotImplementedException();
         }
+
+        public ResourcesUsage CalculateResources(IRuntimeEngine engine)
+        {
+            return ResourcesUsed;
+        }
     }
 }

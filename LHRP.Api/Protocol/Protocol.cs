@@ -73,5 +73,15 @@ namespace LHRP.Api.Protocol
             }
             return Result.Success(schedule);
         }
+
+        public ResourcesUsage CalculateResources(IRuntimeEngine engine)
+        {
+            var resources = new ResourcesUsage();
+            foreach (var step in _steps)
+            {
+                resources.Combine(step.CalculateResources(engine));
+            }
+            return resources;
+        }
     }
 }

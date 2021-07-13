@@ -2,15 +2,12 @@
 using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices.Pipettor;
 using LHRP.Api.Instrument;
-using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Protocol.Transfers.LiquidTransfers;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.Compilation;
 using LHRP.Api.Runtime.Resources;
 using LHRP.Api.Runtime.Scheduling;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LHRP.Api.Protocol.Pipetting
 {
@@ -123,9 +120,9 @@ namespace LHRP.Api.Protocol.Pipetting
             return Result.Ok(transferContext);
         }
 
-        public ProcessResult Compile(ICompilationEngine engine)
+        public ResourcesUsage CalculateResources(IRuntimeEngine engine)
         {
-            throw new System.NotImplementedException();
+            return ResourcesUsed;
         }
     }
 }

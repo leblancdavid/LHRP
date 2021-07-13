@@ -8,7 +8,7 @@ using System.Text;
 
 namespace LHRP.Api.Protocol.Steps
 {
-    public class CustomStep : IRunnable
+    public class CustomStep : BaseRunnable, IRunnable
     {
         protected List<IRunnableCommand> _commands;
         public IEnumerable<IRunnableCommand> Commands => _commands;
@@ -28,12 +28,12 @@ namespace LHRP.Api.Protocol.Steps
             _commands.Add(command);
         }
 
-        public Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
+        public override Result<IEnumerable<IRunnableCommand>> GetCommands(IRuntimeEngine engine)
         {
             return Result.Success(Commands);
         }
 
-        public ProcessResult Run(IRuntimeEngine engine)
+        public override ProcessResult Run(IRuntimeEngine engine)
         {
             var process = new ProcessResult();
 
@@ -45,7 +45,7 @@ namespace LHRP.Api.Protocol.Steps
             return engine.Run();
         }
 
-        public Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
+        public override Result<Schedule> Schedule(IRuntimeEngine runtimeEngine, bool initializeResources)
         {
             throw new NotImplementedException();
         }
