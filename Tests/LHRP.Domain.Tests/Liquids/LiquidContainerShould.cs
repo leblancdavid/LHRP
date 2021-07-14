@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentAssertions;
+using LHRP.Api.Instrument;
 using LHRP.Api.Labware;
 using LHRP.Api.Liquids;
 using Xunit;
@@ -12,7 +13,7 @@ namespace LHRP.Domain.Tests.Liquids
 
         public LiquidContainerShould()
         {
-            _liquidContainer = new LiquidContainer(new LabwareAddress(1,1), new Api.CoordinateSystem.Coordinates(0,0 ,0), 9999);
+            _liquidContainer = new LiquidContainer(new LabwareAddress(1,1), new Coordinates(0,0 ,0), 9999);
         }
 
         [Fact]

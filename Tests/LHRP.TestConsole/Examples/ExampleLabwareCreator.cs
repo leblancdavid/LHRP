@@ -1,4 +1,4 @@
-using LHRP.Api.CoordinateSystem;
+using LHRP.Api.Instrument;
 using LHRP.Api.Labware;
 
 namespace LHRP.TestConsole.Examples

@@ -1,5 +1,4 @@
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument

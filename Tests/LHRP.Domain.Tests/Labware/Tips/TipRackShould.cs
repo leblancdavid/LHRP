@@ -1,5 +1,5 @@
 using FluentAssertions;
-using LHRP.Api.CoordinateSystem;
+using LHRP.Api.Instrument;
 using LHRP.Api.Labware;
 using Xunit;
 

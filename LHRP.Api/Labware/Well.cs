@@ -1,8 +1,4 @@
-
-using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
-using LHRP.Api.Liquids;
+using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Labware
 {

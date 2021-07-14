@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Labware;
 using LHRP.Api.Liquids;
 using LHRP.Api.Runtime;

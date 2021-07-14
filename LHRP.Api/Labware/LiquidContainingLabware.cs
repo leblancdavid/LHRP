@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
+using LHRP.Api.Instrument;
 using LHRP.Api.Liquids;
 using System;
 using System.Collections.Generic;

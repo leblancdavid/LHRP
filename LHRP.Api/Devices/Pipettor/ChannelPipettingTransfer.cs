@@ -1,4 +1,4 @@
-﻿using LHRP.Api.CoordinateSystem;
+﻿using LHRP.Api.Instrument;
 using LHRP.Api.Labware;
 using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Transfers;

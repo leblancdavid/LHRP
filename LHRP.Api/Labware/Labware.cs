@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
+using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Labware

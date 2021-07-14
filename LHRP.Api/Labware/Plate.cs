@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
+using LHRP.Api.Instrument;
 using LHRP.Api.Liquids;
 
 namespace LHRP.Api.Labware

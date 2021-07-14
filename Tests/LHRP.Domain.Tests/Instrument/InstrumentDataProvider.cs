@@ -1,5 +1,4 @@
-﻿using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Instrument;
+﻿using LHRP.Api.Instrument;
 using LHRP.Domain.Tests.Devices;
 using System;
 using System.Collections.Generic;

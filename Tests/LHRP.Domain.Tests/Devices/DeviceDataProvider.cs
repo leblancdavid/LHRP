@@ -1,5 +1,5 @@
-﻿using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices.Pipettor;
+﻿using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Instrument;
 using System;
 using System.Collections.Generic;
 using System.Text;
