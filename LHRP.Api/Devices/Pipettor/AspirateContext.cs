@@ -4,9 +4,9 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public class AspirateContext
     {
-        public ChannelPattern<ChannelPipettingContext> Targets { get; private set; }
+        public ChannelPattern<ChannelPipettingTransfer> Targets { get; private set; }
 
-        public AspirateContext(ChannelPattern<ChannelPipettingContext> targets, AspirateParameters parameters)
+        public AspirateContext(ChannelPattern<ChannelPipettingTransfer> targets, AspirateParameters parameters)
         {
             Targets = targets;
         }

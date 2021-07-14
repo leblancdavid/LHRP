@@ -1,8 +1,4 @@
-
-using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
-using LHRP.Api.Liquids;
+using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Labware
 {
@@ -17,7 +13,7 @@ namespace LHRP.Api.Labware
             Definition = definition;
         }
 
-        public override LiquidContainer GetSnapshot()
+        public override LiquidContainer CreateSnapshot()
         {
             var well = new Well(Address, AbsolutePosition, Definition);
             if (IsAssigned)

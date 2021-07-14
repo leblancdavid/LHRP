@@ -1,10 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
+﻿using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Liquids;
 using System;
-using System.Linq;
 
 namespace LHRP.Api.Instrument
 {
@@ -38,15 +34,15 @@ namespace LHRP.Api.Instrument
             throw new NotImplementedException();
         }
 
-        public IInstrument GetSnapshot()
+        public IInstrument CreateSnapshot()
         {
-            var deck = this.Deck.GetSnapshot();
+            var deck = this.Deck.CreateSnapshot();
             return new BaseInstrument(Pipettor, deck);
         }
 
         public IInstrument GetSimulation()
         {
-            return new BaseInstrument(Pipettor.GetSimulation(), Deck.GetSnapshot());
+            return new BaseInstrument(Pipettor.GetSimulation(), Deck.CreateSnapshot());
         }
     }
 }

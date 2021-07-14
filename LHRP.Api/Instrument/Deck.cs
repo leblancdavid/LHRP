@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Labware;
+using LHRP.Api.Liquids;
 
 namespace LHRP.Api.Instrument
 {
@@ -125,9 +125,24 @@ namespace LHRP.Api.Instrument
             return liquidContainerLabware.GetContainer(address);
         }
 
-        public IDeck GetSnapshot()
+        public IDeck CreateSnapshot()
         {
-            return new Deck(_deckPositions.Select(x => x.Value.GetSnapshot()).ToList());
+            return new Deck(_deckPositions.Select(x => x.Value.CreateSnapshot()).ToList());
+        }
+
+        public IEnumerable<LiquidContainer> FindLiquidContainers(Liquid withLiquid)
+        {
+            var liquidContainers = new List<LiquidContainer>();
+            foreach (var position in _deckPositions.Values)
+            {
+                var liquidContainer = position.AssignedLabware as LiquidContainingLabware;
+                if (liquidContainer != null)
+                {
+                    liquidContainers.AddRange(liquidContainer.GetLiquidContainers(withLiquid));
+                }
+            }
+
+            return liquidContainers;
         }
     }
 }

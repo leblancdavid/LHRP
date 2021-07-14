@@ -1,11 +1,11 @@
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
+using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Labware
 {
-    public abstract class Labware : IStateSnapshotGetter<Labware>
+    public abstract class Labware : ISnapshotCreator<Labware>
     {
         public string Name { get; protected set; }
         public double Width { get; protected set; }
@@ -49,6 +49,6 @@ namespace LHRP.Api.Labware
             PositionId = positionId;
         }
 
-        public abstract Labware GetSnapshot();
+        public abstract Labware CreateSnapshot();
     }
 }

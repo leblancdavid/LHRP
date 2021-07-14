@@ -78,7 +78,7 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
             return Result.Ok<IEnumerable<ChannelPattern<LiquidToManyTransfer?>>>(multiDispenseTransferGroups);
         }
 
-        public static ChannelPattern<ChannelPipettingContext> ToChannelPatternPipettingContext(
+        public static ChannelPattern<ChannelPipettingTransfer> ToChannelPatternPipettingContext(
             this ChannelPattern<LiquidToOneTransfer> transferPattern,
             IInstrument instrument,
             out List<RuntimeError> errors)
@@ -97,7 +97,7 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
                 volumeUsagePerLiquid[id] += liquidTarget.Target.Volume;
             }
 
-            var transferContext = new ChannelPattern<ChannelPipettingContext>(transferPattern.NumChannels);
+            var transferContext = new ChannelPattern<ChannelPipettingTransfer>(transferPattern.NumChannels);
             for (int i = 0; i < transferPattern.NumChannels; ++i)
             {
                 if (transferPattern[i] == null)
@@ -123,8 +123,8 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
                     continue;
                 }
 
-                transferContext[i] = new ChannelPipettingContext(transfer.Target.Volume, i, transfer.Source,
-                    transferTarget.Value.AbsolutePosition, transferTarget.Value.Address);
+                transferContext[i] = new ChannelPipettingTransfer(transfer.Target.Volume, i, transfer.Source,
+                    transferTarget.Value.AbsolutePosition, transferTarget.Value.Address, TransferType.Aspirate);
             }
 
             return transferContext;

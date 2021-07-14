@@ -1,10 +1,10 @@
-using LHRP.Api.CoordinateSystem;
+using LHRP.Api.Instrument;
 using LHRP.Api.Liquids;
 using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Labware
 {
-    public class LiquidContainer : IStateSnapshotGetter<LiquidContainer>
+    public class LiquidContainer : ISnapshotCreator<LiquidContainer>
     {
         public double Volume { get; protected set; }
 
@@ -111,7 +111,7 @@ namespace LHRP.Api.Labware
             Volume = 0.0;
         }
 
-        public virtual LiquidContainer GetSnapshot()
+        public virtual LiquidContainer CreateSnapshot()
         {
             var container = new LiquidContainer(Address, AbsolutePosition, MaxVolume);
             if(IsAssigned)

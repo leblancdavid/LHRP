@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
+using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Labware
 {
@@ -156,9 +155,14 @@ namespace LHRP.Api.Labware
             return _tips[address].AbsolutePosition;
         }
 
-        public override Labware GetSnapshot()
+        public override Labware CreateSnapshot()
         {
             var tipRack = new TipRack(Definition);
+            tipRack._tips = new Dictionary<LabwareAddress, Tip>();
+            foreach(var tip in _tips)
+            {
+                tipRack._tips[tip.Key] = tip.Value.CreateSnapshot();
+            }
 
             return tipRack;
         }

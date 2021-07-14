@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using LHRP.Api.CoordinateSystem;
 using LHRP.Api.Devices;
 using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Instrument;
 using LHRP.Api.Protocol.Transfers;
 using LHRP.Api.Runtime;
 
@@ -20,6 +20,7 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
         public uint SimulationSpeedFactor { get; set; }
         public double FailureRate { get; set; }
 
+        public IPipetteLogger Logger { get; private set; }
         public IndependentChannelPipettor()
         {
             var channelSpecification = new List<ChannelSpecification>();
@@ -38,6 +39,8 @@ namespace LHRP.Instrument.SimplePipettor.Devices.Pipettor
                 true);
 
             PipettorStatus = new PipettorStatus(Specification.NumChannels);
+
+            Logger = new InMemoryPipetteLogger();
         }
 
         public ProcessResult Aspirate(AspirateContext context)

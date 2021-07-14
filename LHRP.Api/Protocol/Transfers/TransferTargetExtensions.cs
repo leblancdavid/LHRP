@@ -11,13 +11,13 @@ namespace LHRP.Api.Protocol.Transfers
 {
     public static class TransferTargetExtensions
     {
-        public static ChannelPattern<ChannelPipettingContext> ToChannelPatternPipettingContext(
+        public static ChannelPattern<ChannelPipettingTransfer> ToChannelPatternPipettingContext(
             this ChannelPattern<TransferTarget> transferPattern,
             IInstrument instrument,
             out List<RuntimeError> errors)
         {
             errors = new List<RuntimeError>();
-            var transferContext = new ChannelPattern<ChannelPipettingContext>(transferPattern.NumChannels);
+            var transferContext = new ChannelPattern<ChannelPipettingTransfer>(transferPattern.NumChannels);
             for (int i = 0; i < transferPattern.NumChannels; ++i)
             {
                 if(transferPattern[i] == null)
@@ -44,8 +44,8 @@ namespace LHRP.Api.Protocol.Transfers
                         transfer.Volume));
                 }
 
-                transferContext[i] = new ChannelPipettingContext(transfer.Volume, i, container.Liquid!,
-                    container.AbsolutePosition, transfer.Address);
+                transferContext[i] = new ChannelPipettingTransfer(transfer.Volume, i, container.Liquid!,
+                    container.AbsolutePosition, transfer.Address, transfer.TransferType);
             }
 
             return transferContext;

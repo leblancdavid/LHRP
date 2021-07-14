@@ -1,4 +1,5 @@
-using LHRP.Api.CoordinateSystem;
+
+using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Labware
 {

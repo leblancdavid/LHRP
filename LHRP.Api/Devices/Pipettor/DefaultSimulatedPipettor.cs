@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
-using LHRP.Api.Devices.Pipettor;
-using LHRP.Api.Protocol.Transfers;
+using LHRP.Api.Instrument;
 using LHRP.Api.Runtime;
-using LHRP.Api.Runtime.ErrorHandling;
 
 namespace LHRP.Api.Devices.Pipettor
 {
@@ -28,13 +23,23 @@ namespace LHRP.Api.Devices.Pipettor
 
         public PipettorSpecification Specification { get; private set; }
 
-        public DefaultSimulatedPipettor(PipettorSpecification specification)
+        public IPipetteLogger Logger { get; private set; }
+
+        public DefaultSimulatedPipettor(PipettorSpecification specification, IPipetteLogger? logger = null)
         {
             Specification = specification;
             NumberChannels = specification.NumChannels;
             PipettorStatus = new PipettorStatus(NumberChannels);
             SimulationSpeedFactor = 0;
             FailureRate = 0;
+            if(logger == null)
+            {
+                Logger = new InMemoryPipetteLogger();
+            }
+            else
+            {
+                Logger = logger;
+            }
         }
 
         public ProcessResult Aspirate(AspirateContext context)
@@ -54,6 +59,7 @@ namespace LHRP.Api.Devices.Pipettor
                     var target = targets[i];
                     sb.Append($"Pos{target!.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     process.Combine(PipettorStatus[i].OnAspiratedVolume(target.Liquid, target.Volume));
+
                 }
                 else
                 {
@@ -68,6 +74,8 @@ namespace LHRP.Api.Devices.Pipettor
             PipettorStatus.CurrentPosition = position;
 
             Console.WriteLine(sb.ToString());
+
+            Logger.LogTransfer(targets);
 
             return process;
         }
@@ -103,6 +111,8 @@ namespace LHRP.Api.Devices.Pipettor
             PipettorStatus.CurrentPosition = position;
 
             Console.WriteLine(sb.ToString());
+
+            Logger.LogTransfer(targets);
 
             return process;
         }
@@ -145,6 +155,8 @@ namespace LHRP.Api.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
+            Logger.BeginSequence(parameters.Pattern);
+
             return process;
         }
 
@@ -182,6 +194,9 @@ namespace LHRP.Api.Devices.Pipettor
 
                 Console.WriteLine(sb.ToString());
 
+
+                Logger.EndSequence(parameters.Pattern);
+
                 return process;
             }
             else
@@ -209,6 +224,8 @@ namespace LHRP.Api.Devices.Pipettor
 
 
         public bool IsInitialized => throw new NotImplementedException();
+
+
         public ProcessResult Initialize()
         {
             throw new NotImplementedException();

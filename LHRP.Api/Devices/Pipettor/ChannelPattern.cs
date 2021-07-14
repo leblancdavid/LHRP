@@ -130,6 +130,10 @@ namespace LHRP.Api.Devices.Pipettor
            : base(channels.Length)
         {
             _channels = channels;
+            for(int i = 0; i < NumChannels; ++i)
+            {
+                _active[i] = _channels[i] != null;
+            }
         }
 
         protected T?[] _channels;

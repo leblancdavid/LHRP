@@ -1,5 +1,5 @@
+using LHRP.Api.Instrument;
 using System.Collections.Generic;
-using LHRP.Api.CoordinateSystem;
 
 namespace LHRP.Api.Devices.Pipettor
 {

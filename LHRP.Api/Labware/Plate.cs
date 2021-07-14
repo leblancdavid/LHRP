@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
-using LHRP.Api.CoordinateSystem;
-using LHRP.Api.Devices;
+using LHRP.Api.Instrument;
 using LHRP.Api.Liquids;
 
 namespace LHRP.Api.Labware
@@ -97,9 +96,16 @@ namespace LHRP.Api.Labware
             }
         }
 
-        public override Labware GetSnapshot()
+        public override Labware CreateSnapshot()
         {
-            throw new System.NotImplementedException();
+            var plate = new Plate(Definition);
+
+            foreach (var well in _containers)
+            {
+                plate._containers[well.Key] = well.Value.CreateSnapshot();
+            }
+
+            return plate;
         }
     }
 }

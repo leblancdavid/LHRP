@@ -32,6 +32,11 @@ namespace LHRP.Api.Liquids
             return false;
         }
 
+        public virtual bool ContainsLiquid(Liquid liquid)
+        {
+            return Match(liquid);
+        }
+
         public Liquid(string name, LiquidType type = LiquidType.Default, bool isUnknown = true)
         {
             LiquidType = type;

@@ -118,7 +118,7 @@ namespace LHRP.Api.Runtime
             return resources;
         }
 
-        public IRuntimeCommandQueue GetSnapshot()
+        public IRuntimeCommandQueue CreateSnapshot()
         {
             var queue = new RuntimeCommandQueue();
             foreach(var command in _queue)
