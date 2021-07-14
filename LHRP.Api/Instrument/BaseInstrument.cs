@@ -34,15 +34,15 @@ namespace LHRP.Api.Instrument
             throw new NotImplementedException();
         }
 
-        public IInstrument GetSnapshot()
+        public IInstrument CreateSnapshot()
         {
-            var deck = this.Deck.GetSnapshot();
+            var deck = this.Deck.CreateSnapshot();
             return new BaseInstrument(Pipettor, deck);
         }
 
         public IInstrument GetSimulation()
         {
-            return new BaseInstrument(Pipettor.GetSimulation(), Deck.GetSnapshot());
+            return new BaseInstrument(Pipettor.GetSimulation(), Deck.CreateSnapshot());
         }
     }
 }

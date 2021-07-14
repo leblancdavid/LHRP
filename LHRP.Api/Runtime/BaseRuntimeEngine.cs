@@ -36,12 +36,12 @@ namespace LHRP.Api.Runtime
 
         public IRuntimeEngine GetSimulation()
         {
-            return new BaseRuntimeEngine(Instrument.GetSimulation(), Commands.GetSnapshot(), ErrorHandler);
+            return new BaseRuntimeEngine(Instrument.GetSimulation(), Commands.CreateSnapshot(), ErrorHandler);
         }
 
-        public virtual IRuntimeEngine GetSnapshot()
+        public virtual IRuntimeEngine CreateSnapshot()
         {
-            return new BaseRuntimeEngine(Instrument.GetSnapshot(), Commands.GetSnapshot(), ErrorHandler);
+            return new BaseRuntimeEngine(Instrument.CreateSnapshot(), Commands.CreateSnapshot(), ErrorHandler);
         }
 
         public virtual ProcessResult Run(IResourceInitializer? resourceInitializer = null)

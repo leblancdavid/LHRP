@@ -96,13 +96,13 @@ namespace LHRP.Api.Labware
             }
         }
 
-        public override Labware GetSnapshot()
+        public override Labware CreateSnapshot()
         {
             var plate = new Plate(Definition);
 
             foreach (var well in _containers)
             {
-                plate._containers[well.Key] = well.Value.GetSnapshot();
+                plate._containers[well.Key] = well.Value.CreateSnapshot();
             }
 
             return plate;

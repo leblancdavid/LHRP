@@ -9,7 +9,7 @@ namespace LHRP.Api.Runtime.Compilation
     public class CompilationEngine : BaseRuntimeEngine, ICompilationEngine
     {
         public CompilationEngine(IInstrument instrument, IRuntimeCommandQueue commands)
-            : base(instrument.GetSimulation(), commands.GetSnapshot(), new CompilationErrorHandler())
+            : base(instrument.GetSimulation(), commands.CreateSnapshot(), new CompilationErrorHandler())
         {
 
         }
@@ -19,9 +19,9 @@ namespace LHRP.Api.Runtime.Compilation
             return this;
         }
 
-        public override IRuntimeEngine GetSnapshot()
+        public override IRuntimeEngine CreateSnapshot()
         {
-            return new CompilationEngine(Instrument.GetSnapshot(), Commands.GetSnapshot());
+            return new CompilationEngine(Instrument.CreateSnapshot(), Commands.CreateSnapshot());
         }
     }
 }

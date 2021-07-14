@@ -7,7 +7,7 @@ using LHRP.Api.Runtime.Resources;
 
 namespace LHRP.Api.Runtime
 {
-    public interface IRuntimeEngine : IStateSnapshotGetter<IRuntimeEngine>, ISimulatable<IRuntimeEngine>
+    public interface IRuntimeEngine : ISnapshotCreator<IRuntimeEngine>, ISimulatable<IRuntimeEngine>
     {
         IInstrument Instrument { get; }
         IRuntimeCommandQueue Commands { get; }

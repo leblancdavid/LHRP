@@ -76,7 +76,7 @@ namespace LHRP.Domain.Tests.Labware.Plates
             var liquid = new Liquid("TestLiquid");
             well.AddLiquid(liquid, 100.0);
 
-            var snapshotPlate = _plate96.GetSnapshot() as Plate;
+            var snapshotPlate = _plate96.CreateSnapshot() as Plate;
             var snapshotWell = snapshotPlate.GetWell(address);
             snapshotWell.Should().NotBeNull();
             snapshotWell.ContainsLiquid(liquid).Should().BeTrue();

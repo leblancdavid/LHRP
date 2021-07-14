@@ -155,13 +155,13 @@ namespace LHRP.Api.Labware
             return _tips[address].AbsolutePosition;
         }
 
-        public override Labware GetSnapshot()
+        public override Labware CreateSnapshot()
         {
             var tipRack = new TipRack(Definition);
             tipRack._tips = new Dictionary<LabwareAddress, Tip>();
             foreach(var tip in _tips)
             {
-                tipRack._tips[tip.Key] = tip.Value.GetSnapshot();
+                tipRack._tips[tip.Key] = tip.Value.CreateSnapshot();
             }
 
             return tipRack;

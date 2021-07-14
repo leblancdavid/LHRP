@@ -5,7 +5,7 @@ using LHRP.Api.Runtime;
 
 namespace LHRP.Api.Instrument
 {
-    public interface IInstrument : IStateSnapshotGetter<IInstrument>, ISimulatable<IInstrument>
+    public interface IInstrument : ISnapshotCreator<IInstrument>, ISimulatable<IInstrument>
     {
         IDeck Deck { get; }
         ITipManager TipManager { get; }

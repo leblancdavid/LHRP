@@ -125,9 +125,9 @@ namespace LHRP.Api.Instrument
             return liquidContainerLabware.GetContainer(address);
         }
 
-        public IDeck GetSnapshot()
+        public IDeck CreateSnapshot()
         {
-            return new Deck(_deckPositions.Select(x => x.Value.GetSnapshot()).ToList());
+            return new Deck(_deckPositions.Select(x => x.Value.CreateSnapshot()).ToList());
         }
 
         public IEnumerable<LiquidContainer> FindLiquidContainers(Liquid withLiquid)
