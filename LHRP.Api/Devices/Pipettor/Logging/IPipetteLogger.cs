@@ -12,7 +12,7 @@ namespace LHRP.Api.Devices.Pipettor
         void EndSequence(ChannelPattern pattern);
 
         IEnumerable<ChannelPipettingTransfer> GetSourceTransfers();
-        PipetteSequenceLog GetLiquidTracking(Liquid? liquid = null, LabwareAddress? address = null);
+        PipetteSequenceLog? GetLiquidTracking(Liquid? liquid = null, LabwareAddress? address = null);
         IEnumerable<PipetteSequenceLog> Sequences { get; }
     }
 }

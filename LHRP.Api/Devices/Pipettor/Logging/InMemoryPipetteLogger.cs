@@ -49,7 +49,7 @@ namespace LHRP.Api.Devices.Pipettor
             }
         }
 
-        public PipetteSequenceLog GetLiquidTracking(Liquid? liquid = null, LabwareAddress? address = null)
+        public PipetteSequenceLog? GetLiquidTracking(Liquid? liquid = null, LabwareAddress? address = null)
         {
             var filtered = new List<PipetteSequenceLog>();
             foreach(var sequence in _sequences)
@@ -66,6 +66,9 @@ namespace LHRP.Api.Devices.Pipettor
 
                 filtered.Add(sequence);
             }
+
+            if (!filtered.Any())
+                return null;
 
             return PipetteSequenceLog.Combine(filtered.ToArray());
         }
@@ -104,7 +107,8 @@ namespace LHRP.Api.Devices.Pipettor
 
         public void Reset()
         {
-            
+            _currentSequence = null;
+            _sequences.Clear();
         }
 
 
