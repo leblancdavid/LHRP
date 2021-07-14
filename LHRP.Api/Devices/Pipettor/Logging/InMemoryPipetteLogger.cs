@@ -11,6 +11,7 @@ namespace LHRP.Api.Devices.Pipettor
     {
         private ChannelPattern<PipetteSequenceLog>? _currentSequence;
         private List<PipetteSequenceLog> _sequences = new List<PipetteSequenceLog>();
+        public IEnumerable<PipetteSequenceLog> Sequences => _sequences;
         public InMemoryPipetteLogger()
         {
 
@@ -18,7 +19,7 @@ namespace LHRP.Api.Devices.Pipettor
 
         public void BeginSequence(ChannelPattern pattern)
         {
-            if(_currentSequence == null)
+            if(_currentSequence == null || _currentSequence.NumChannels != pattern.NumChannels)
             {
                 _currentSequence = new ChannelPattern<PipetteSequenceLog>(pattern.NumChannels);
             }
@@ -43,6 +44,7 @@ namespace LHRP.Api.Devices.Pipettor
                 if (pattern.IsInUse(i) && _currentSequence[i] != null)
                 {
                     _sequences.Add(_currentSequence[i]!);
+                    _currentSequence[i] = null;
                 }
             }
         }
