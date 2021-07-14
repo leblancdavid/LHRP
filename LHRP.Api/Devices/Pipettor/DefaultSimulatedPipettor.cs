@@ -57,7 +57,7 @@ namespace LHRP.Api.Devices.Pipettor
                 if (targets[i] != null)
                 {
                     var target = targets[i];
-                    sb.Append($"Pos{target!.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
+                    sb.Append($"Pos{target!.Address.InstanceId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     process.Combine(PipettorStatus[i].OnAspiratedVolume(target.Liquid, target.Volume));
 
                 }
@@ -95,7 +95,7 @@ namespace LHRP.Api.Devices.Pipettor
                 if (targets[i] != null)
                 {
                     var target = targets[i];
-                    sb.Append($"Pos{target!.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
+                    sb.Append($"Pos{target!.Address.InstanceId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     process.Combine(PipettorStatus[i].OnDispensedVolume(target.Volume));
                 }
                 else
@@ -134,7 +134,7 @@ namespace LHRP.Api.Devices.Pipettor
                 {
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip!.AbsolutePosition;
-                    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
+                    sb.Append($"Pos{tip.Address.InstanceId}-({tip.Address.ToAlphaAddress()}); ");
                     errorPattern.SetInUse(i, random.NextDouble() < _tipPickupFailureRate);
                     if (!errorPattern.IsInUse(i))
                     {
@@ -177,7 +177,7 @@ namespace LHRP.Api.Devices.Pipettor
                     {
                         var tip = parameters.Pattern.GetTip(i);
                         position = tip!.AbsolutePosition;
-                        sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
+                        sb.Append($"Pos{tip.Address.InstanceId}-({tip.Address.ToAlphaAddress()}); ");
                         process.Combine(PipettorStatus[i].OnDroppedTip());
                     }
                     else

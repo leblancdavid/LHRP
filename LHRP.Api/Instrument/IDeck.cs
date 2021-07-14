@@ -9,9 +9,9 @@ namespace LHRP.Api.Instrument
     public interface IDeck : ISnapshotCreator<IDeck>
     {
         IEnumerable<DeckPosition> Positions { get; }
-        Result AssignLabware(int positionId, Labware.Labware labware);
+        Result AddLabware(int positionId, Labware.Labware labware);
         DeckPosition? GetDeckPosition(int positionId);
-        Labware.Labware? GetLabware(int positionId);
+        Labware.Labware? GetLabware(int instanceId);
         IEnumerable<TipRack> GetTipRacks();
         IEnumerable<Plate> GetPlates();
         IEnumerable<LiquidContainer> GetLiquidContainers();

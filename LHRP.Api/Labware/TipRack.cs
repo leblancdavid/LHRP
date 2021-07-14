@@ -42,19 +42,19 @@ namespace LHRP.Api.Labware
             }
         }
 
-        public override int PositionId
+        public override int InstanceId
         {
             get
             {
-                return _positionId;
+                return _instanceId;
             }
-            protected set
+            set
             {
-                _positionId = value;
+                _instanceId = value;
                 foreach (var tip in _tips)
                 {
-                    tip.Key.PositionId = value;
-                    tip.Value.Address.PositionId = value;
+                    tip.Key.InstanceId = value;
+                    tip.Value.Address.InstanceId = value;
                 }
             }
         }
@@ -83,7 +83,7 @@ namespace LHRP.Api.Labware
                         Z = AbsolutePosition.Z + Definition.Offset.Z
                     };
 
-                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _positionId);
+                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _instanceId);
 
                     _tips.Add(labwareAddress, new Tip(labwareAddress, absolutePosition, Definition.TipVolume, Definition.AreFilteredTips, Definition.Id));
                 }
@@ -131,7 +131,7 @@ namespace LHRP.Api.Labware
         {
             if (RemainingTips < numberTips)
             {
-                return Result.Failure<Tip[]>($"Insufficient tips on tip-rack at position {PositionId}");
+                return Result.Failure<Tip[]>($"Insufficient tips on tip-rack at position {InstanceId}");
             }
 
             //TODO This will need to be optimized, but for now just grab the first N tips you find...

@@ -15,7 +15,7 @@ namespace LHRP.Api.Instrument
 
         public Result ConsumeTip(Tip tip)
         {
-            var position = _deck.GetDeckPosition(tip.Address.PositionId);
+            var position = _deck.GetDeckPosition(tip.Address.InstanceId);
             if(position == null)
             {
                 return Result.Failure($"No deck position found at address {tip.Address.ToAlphaAddress()}");
@@ -24,7 +24,7 @@ namespace LHRP.Api.Instrument
             var tipRack = position.AssignedLabware as TipRack;
             if (tipRack == null)
             {
-                return Result.Failure($"Position Id {tip.Address.PositionId} does not contain a tip rack");
+                return Result.Failure($"Position Id {tip.Address.InstanceId} does not contain a tip rack");
             }
 
             return tipRack.Consume(tip);

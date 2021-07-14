@@ -30,7 +30,7 @@ namespace LHRP.Api.Instrument
         public Result Assign(Labware.Labware labware)
         {
             AssignedLabware = labware;
-            AssignedLabware.UpdatePosition(Position, PositionId);
+            AssignedLabware.UpdatePosition(Position);
             return Result.Ok();
         }
 

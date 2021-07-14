@@ -36,19 +36,19 @@ namespace LHRP.Api.Labware
             }
         }
 
-         public override int PositionId
+         public override int InstanceId
         {
             get
             {
-                return _positionId;
+                return _instanceId;
             }
-            protected set
+            set
             {
-                _positionId = value;
+                _instanceId = value;
                 foreach (var well in _containers)
                 {
-                    well.Key.PositionId = value;
-                    well.Value.Address.PositionId = value;
+                    well.Key.InstanceId = value;
+                    well.Value.Address.InstanceId = value;
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace LHRP.Api.Labware
                         Z = AbsolutePosition.Z + Definition.Offset.Z
                     };
 
-                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _positionId);
+                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _instanceId);
 
                     _containers.Add(labwareAddress, new Well(labwareAddress, absolutePosition, definition.WellDefinition));
                 }
