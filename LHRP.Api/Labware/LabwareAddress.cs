@@ -68,7 +68,7 @@ namespace LHRP.Api.Labware
             return Equals((LabwareAddress) obj);
         }
 
-        public static bool operator ==(LabwareAddress obj1, LabwareAddress obj2)
+        public static bool operator ==(LabwareAddress? obj1, LabwareAddress? obj2)
         {
             if (ReferenceEquals(obj1, obj2))
             {
@@ -88,7 +88,7 @@ namespace LHRP.Api.Labware
         }
 
         // this is second one '!='
-        public static bool operator !=(LabwareAddress obj1, LabwareAddress obj2)
+        public static bool operator !=(LabwareAddress? obj1, LabwareAddress? obj2)
         {
             return !(obj1 == obj2);
         }

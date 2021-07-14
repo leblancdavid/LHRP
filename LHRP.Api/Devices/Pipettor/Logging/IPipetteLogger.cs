@@ -1,4 +1,5 @@
-﻿using LHRP.Api.Liquids;
+﻿using LHRP.Api.Labware;
+using LHRP.Api.Liquids;
 using System.Collections.Generic;
 
 namespace LHRP.Api.Devices.Pipettor
@@ -9,5 +10,8 @@ namespace LHRP.Api.Devices.Pipettor
         void BeginSequence(ChannelPattern pattern);
         void LogTransfer(ChannelPattern<ChannelPipettingTransfer> transfer);
         void EndSequence(ChannelPattern pattern);
+
+        IEnumerable<ChannelPipettingTransfer> GetSourceTransfers();
+        PipetteSequenceLog GetLiquidTracking(Liquid? liquid = null, LabwareAddress? address = null);
     }
 }

@@ -1,4 +1,5 @@
-﻿using LHRP.Api.Liquids;
+﻿using LHRP.Api.Labware;
+using LHRP.Api.Liquids;
 using LHRP.Api.Protocol.Transfers;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,43 @@ namespace LHRP.Api.Devices.Pipettor
                     _sequences.Add(_currentSequence[i]!);
                 }
             }
+        }
+
+        public PipetteSequenceLog GetLiquidTracking(Liquid? liquid = null, LabwareAddress? address = null)
+        {
+            var filtered = new List<PipetteSequenceLog>();
+            foreach(var sequence in _sequences)
+            {
+                if(liquid != null && !sequence.HasTransferedLiquid(liquid))
+                {
+                    continue;
+                }
+
+                if(address != null && !sequence.HasTransferedFrom(address))
+                {
+                    continue;
+                }
+
+                filtered.Add(sequence);
+            }
+
+            return PipetteSequenceLog.Combine(filtered.ToArray());
+        }
+
+        public IEnumerable<ChannelPipettingTransfer> GetSourceTransfers()
+        {
+            var allTransfers = PipetteSequenceLog.Combine(_sequences.ToArray()).Transfers.ToList();
+            var sourceTransfers = new List<ChannelPipettingTransfer>();
+            for(int i = 0; i < allTransfers.Count; ++i)
+            {
+                if(allTransfers[i].Transfer == TransferType.Aspirate &&
+                    !allTransfers.Take(i).Any(x => x.Address == allTransfers[i].Address))
+                {
+                    sourceTransfers.Add(allTransfers[i]);
+                }
+            }
+
+            return sourceTransfers;
         }
 
         public void LogTransfer(ChannelPattern<ChannelPipettingTransfer> transfer)

@@ -1,4 +1,6 @@
-﻿using LHRP.Api.Liquids;
+﻿using LHRP.Api.Labware;
+using LHRP.Api.Liquids;
+using LHRP.Api.Protocol.Transfers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +29,16 @@ namespace LHRP.Api.Devices.Pipettor
         public bool HasTransferedLiquid(Liquid liquid)
         {
             return _transfers.Any(x => x.Liquid.ContainsLiquid(liquid));
+        }
+
+        public bool HasTransferedFrom(LabwareAddress address)
+        {
+            return _transfers.Any(x => x.Address == address && x.Transfer == TransferType.Aspirate);
+        }
+
+        public bool HasTransferedTo(LabwareAddress address)
+        {
+            return _transfers.Any(x => x.Address == address && x.Transfer == TransferType.Dispense);
         }
 
         public void Add(ChannelPipettingTransfer transfer)
