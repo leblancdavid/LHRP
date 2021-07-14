@@ -23,22 +23,22 @@ namespace LHRP.Api.Devices.Pipettor
 
         public PipettorSpecification Specification { get; private set; }
 
-        public ILiquidTrackingLogger LiquidTracker { get; private set; }
+        public IPipetteLogger Logger { get; private set; }
 
-        public DefaultSimulatedPipettor(PipettorSpecification specification, ILiquidTrackingLogger? liquidTrackingLogger = null)
+        public DefaultSimulatedPipettor(PipettorSpecification specification, IPipetteLogger? logger = null)
         {
             Specification = specification;
             NumberChannels = specification.NumChannels;
             PipettorStatus = new PipettorStatus(NumberChannels);
             SimulationSpeedFactor = 0;
             FailureRate = 0;
-            if(liquidTrackingLogger == null)
+            if(logger == null)
             {
-                LiquidTracker = new InMemoryLiquidTrackingLogger();
+                Logger = new InMemoryPipetteLogger();
             }
             else
             {
-                LiquidTracker = liquidTrackingLogger;
+                Logger = logger;
             }
         }
 
@@ -59,6 +59,7 @@ namespace LHRP.Api.Devices.Pipettor
                     var target = targets[i];
                     sb.Append($"Pos{target!.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     process.Combine(PipettorStatus[i].OnAspiratedVolume(target.Liquid, target.Volume));
+
                 }
                 else
                 {
@@ -73,6 +74,8 @@ namespace LHRP.Api.Devices.Pipettor
             PipettorStatus.CurrentPosition = position;
 
             Console.WriteLine(sb.ToString());
+
+            Logger.LogTransfer(targets);
 
             return process;
         }
@@ -108,6 +111,8 @@ namespace LHRP.Api.Devices.Pipettor
             PipettorStatus.CurrentPosition = position;
 
             Console.WriteLine(sb.ToString());
+
+            Logger.LogTransfer(targets);
 
             return process;
         }
@@ -150,6 +155,8 @@ namespace LHRP.Api.Devices.Pipettor
 
             Console.WriteLine(sb.ToString());
 
+            Logger.BeginSequence(parameters.Pattern);
+
             return process;
         }
 
@@ -186,6 +193,9 @@ namespace LHRP.Api.Devices.Pipettor
                 PipettorStatus.CurrentPosition = position;
 
                 Console.WriteLine(sb.ToString());
+
+
+                Logger.EndSequence(parameters.Pattern);
 
                 return process;
             }

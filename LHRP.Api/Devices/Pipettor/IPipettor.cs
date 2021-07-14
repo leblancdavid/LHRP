@@ -6,7 +6,7 @@ namespace LHRP.Api.Devices.Pipettor
 {
     public interface IPipettor : IDevice, ISimulatable<IPipettor>
     {
-        ILiquidTrackingLogger LiquidTracker { get; }
+        IPipetteLogger Logger { get; }
         ProcessResult Aspirate(AspirateContext context);
         ProcessResult Dispense(DispenseContext context);
         ProcessResult PickupTips(TipPickupParameters parameters);

@@ -33,7 +33,7 @@ namespace LHRP.Api.Liquids
             return _liquidParts.Count <= 1;
         }
 
-        public bool ContainsLiquid(Liquid liquid)
+        public override bool ContainsLiquid(Liquid liquid)
         {
             if (GetId() == liquid.GetId() || _liquidParts.Any(x => x.GetId() == liquid.GetId()))
                 return true;
