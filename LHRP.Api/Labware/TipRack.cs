@@ -158,6 +158,11 @@ namespace LHRP.Api.Labware
         public override Labware GetSnapshot()
         {
             var tipRack = new TipRack(Definition);
+            tipRack._tips = new Dictionary<LabwareAddress, Tip>();
+            foreach(var tip in _tips)
+            {
+                tipRack._tips[tip.Key] = tip.Value.GetSnapshot();
+            }
 
             return tipRack;
         }

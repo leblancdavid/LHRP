@@ -12,7 +12,7 @@ namespace LHRP.Domain.Tests.Labware.Plates
         private Plate _plate96;
         public PlateShould()
         {
-            _plate96 = new Plate(new PlateDefinition("Plate96", new WellDefinition(), 8, 12, new Coordinates(85.0, 127.0, 14.5), 9.0));
+            _plate96 = new Plate(new PlateDefinition("Plate96", new WellDefinition(300), 8, 12, new Coordinates(85.0, 127.0, 14.5), 9.0));
         }
 
         [Fact]
@@ -66,6 +66,21 @@ namespace LHRP.Domain.Tests.Labware.Plates
             var liquid = new Liquid(LiquidType.Water);
             var wellsWithLiquid = _plate96.GetWellsWithLiquid(liquid);
             wellsWithLiquid.Count().Should().Be(0);
+        }
+
+        [Fact]
+        public void GetSnapshot_ShouldPreserveState()
+        {
+            var address = new LabwareAddress(1, 2);
+            var well = _plate96.GetWell(address);
+            var liquid = new Liquid("TestLiquid");
+            well.AddLiquid(liquid, 100.0);
+
+            var snapshotPlate = _plate96.GetSnapshot() as Plate;
+            var snapshotWell = snapshotPlate.GetWell(address);
+            snapshotWell.Should().NotBeNull();
+            snapshotWell.ContainsLiquid(liquid).Should().BeTrue();
+            snapshotWell.Volume.Should().BeApproximately(100.0, 0.00001);
         }
 
     }

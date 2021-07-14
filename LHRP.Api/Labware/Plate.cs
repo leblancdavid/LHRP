@@ -98,7 +98,14 @@ namespace LHRP.Api.Labware
 
         public override Labware GetSnapshot()
         {
-            throw new System.NotImplementedException();
+            var plate = new Plate(Definition);
+
+            foreach (var well in _containers)
+            {
+                plate._containers[well.Key] = well.Value.GetSnapshot();
+            }
+
+            return plate;
         }
     }
 }
