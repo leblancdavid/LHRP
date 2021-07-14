@@ -149,5 +149,13 @@ namespace LHRP.Api.Instrument
 
             return liquidContainers;
         }
+
+        public void Clear()
+        {
+            foreach(var position in _deckPositions)
+            {
+                position.Value.RemoveLabware();
+            }
+        }
     }
 }

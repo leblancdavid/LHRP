@@ -18,6 +18,7 @@ namespace LHRP.Api.Instrument
         IEnumerable<LiquidContainer> FindLiquidContainers(Liquid withLiquid);
         LiquidContainer? GetLiquidContainer(LabwareAddress address);
         Coordinates? GetCoordinates(LabwareAddress address);
+        void Clear();
         
     }
 }
