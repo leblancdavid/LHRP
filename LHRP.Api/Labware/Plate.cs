@@ -53,10 +53,12 @@ namespace LHRP.Api.Labware
             }
         }
 
-        public Plate(PlateDefinition definition)
+        public Plate(PlateDefinition definition, int id = 0) :
+            base(id)
         {
             Definition = definition;
             InitializeWells(definition);
+            InstanceId = id;
         }
 
         public Well? GetWell(LabwareAddress address)
@@ -98,7 +100,7 @@ namespace LHRP.Api.Labware
 
         public override Labware CreateSnapshot()
         {
-            var plate = new Plate(Definition);
+            var plate = new Plate(Definition, _instanceId);
 
             foreach (var well in _containers)
             {

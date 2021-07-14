@@ -35,6 +35,11 @@ namespace LHRP.Api.Instrument
                 return Result.Failure("Invalid deck position ID");
             }
 
+            if(_deckPositions.Values.Any(x => x.IsOccupied && x.AssignedLabware!.InstanceId == labware.InstanceId))
+            {
+                return Result.Failure($"Invalid labware instance ID: Deck already contains a labware with ID {labware.InstanceId}");
+            }
+
             return _deckPositions[positionId].Assign(labware);
         }
 

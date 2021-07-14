@@ -25,10 +25,10 @@ namespace LHRP.Domain.Tests.Runtime.Compilation
         [Fact]
         public void StepShouldCompile()
         {
-            var tipRack = LabwareProvider.Get300TipRack();
+            var tipRack = LabwareProvider.Get300TipRack(1);
             compiler.Instrument.Deck.AddLabware(1, tipRack);
-            compiler.Instrument.Deck.AddLabware(2, LabwareProvider.Get96WellPlate());
-            compiler.Instrument.Deck.AddLabware(3, LabwareProvider.Get96WellPlate());
+            compiler.Instrument.Deck.AddLabware(2, LabwareProvider.Get96WellPlate(2));
+            compiler.Instrument.Deck.AddLabware(3, LabwareProvider.Get96WellPlate(3));
 
             var customStep = new CustomStep();
             customStep.AddCommand(new PickupTips(ChannelPattern.Full(compiler.Instrument.Pipettor.Specification.NumChannels), tipRack.Definition.Id));
@@ -59,10 +59,10 @@ namespace LHRP.Domain.Tests.Runtime.Compilation
         [Fact]
         public void StepShouldNotCompile()
         {
-            var tipRack = LabwareProvider.Get50TipRack();
+            var tipRack = LabwareProvider.Get50TipRack(1);
             compiler.Instrument.Deck.AddLabware(1, tipRack);
-            compiler.Instrument.Deck.AddLabware(2, LabwareProvider.Get96WellPlate());
-            compiler.Instrument.Deck.AddLabware(3, LabwareProvider.Get96WellPlate());
+            compiler.Instrument.Deck.AddLabware(2, LabwareProvider.Get96WellPlate(2));
+            compiler.Instrument.Deck.AddLabware(3, LabwareProvider.Get96WellPlate(3));
 
             var customStep = new CustomStep();
             customStep.AddCommand(new PickupTips(ChannelPattern.Full(compiler.Instrument.Pipettor.Specification.NumChannels), tipRack.Definition.Id));

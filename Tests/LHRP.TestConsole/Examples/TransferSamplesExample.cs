@@ -20,9 +20,9 @@ namespace LHRP.TestConsole
             var simplePipettorSimulation = new SimplePipettorSimulationEngine();
             //simplePipettorSimulation.SimulationSpeedFactor = 10;
             //First setup the deck, add a tip rack and 2 plates
-            simplePipettorSimulation.Instrument.Deck.AddLabware(1, ExampleLabwareCreator.GetTipRack());
-            simplePipettorSimulation.Instrument.Deck.AddLabware(2, ExampleLabwareCreator.GetPlate());
-            simplePipettorSimulation.Instrument.Deck.AddLabware(3, ExampleLabwareCreator.GetPlate());
+            simplePipettorSimulation.Instrument.Deck.AddLabware(1, ExampleLabwareCreator.GetTipRack(1));
+            simplePipettorSimulation.Instrument.Deck.AddLabware(2, ExampleLabwareCreator.GetPlate(2));
+            simplePipettorSimulation.Instrument.Deck.AddLabware(3, ExampleLabwareCreator.GetPlate(3));
 
             //Setup protocol and steps
             var protocol = new Protocol();

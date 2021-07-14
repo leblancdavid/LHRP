@@ -37,9 +37,10 @@ namespace LHRP.Api.Labware
             }
         }
 
-        public Labware()
+        public Labware(int id)
         {
             Name = "";
+            _instanceId = id;
         }
 
         public abstract Coordinates? GetRealCoordinates(LabwareAddress address);

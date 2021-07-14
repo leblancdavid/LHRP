@@ -61,7 +61,7 @@ namespace LHRP.Api.Labware
 
         private Dictionary<LabwareAddress, Tip> _tips = new Dictionary<LabwareAddress, Tip>();
 
-        public TipRack(TipRackDefinition definition)
+        public TipRack(TipRackDefinition definition, int id = 0) : base(id) //InstanceId doesn't matter for tip racks
         {
             Definition = definition;
 
@@ -157,7 +157,7 @@ namespace LHRP.Api.Labware
 
         public override Labware CreateSnapshot()
         {
-            var tipRack = new TipRack(Definition);
+            var tipRack = new TipRack(Definition, _instanceId);
             tipRack._tips = new Dictionary<LabwareAddress, Tip>();
             foreach(var tip in _tips)
             {

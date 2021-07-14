@@ -20,14 +20,14 @@ namespace LHRP.Scripting
         {
             //TODO labware definitions
             _runtimeEngine.Instrument.Deck.AddLabware(positionId,
-                    new Plate(new PlateDefinition("Costar 96", new WellDefinition(), 8, 12, new Coordinates(86, 127, 14), 9.0)));
+                    new Plate(new PlateDefinition("Costar 96", new WellDefinition(), 8, 12, new Coordinates(86, 127, 14), 9.0), 1));
         }
 
         public void AddTips(string labwareDefinitinon, int positionId, int tipTypeId)
         {
             //TODO labware definitions
             _runtimeEngine.Instrument.Deck.AddLabware(positionId,
-                new TipRack(new TipRackDefinition(300, "300uL Tips", 300.0, false, 8, 12, new Coordinates(9.0, 9.0, 9.0), 9.0)));
+                new TipRack(new TipRackDefinition(300, "300uL Tips", 300.0, false, 8, 12, new Coordinates(9.0, 9.0, 9.0), 9.0), 1));
         }
 
         public void PickUpTips(int tipTypeId, string channelPattern)

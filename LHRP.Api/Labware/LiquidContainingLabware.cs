@@ -19,6 +19,11 @@ namespace LHRP.Api.Labware
             return _containers.Values.Where(x => x.Liquid != null && x.Liquid.Match(withLiquid));
         }
 
+        public LiquidContainingLabware(int id) : base(id)
+        {
+
+        }
+
         public override Coordinates? GetRealCoordinates(LabwareAddress address)
         {
             if (!_containers.ContainsKey(address))

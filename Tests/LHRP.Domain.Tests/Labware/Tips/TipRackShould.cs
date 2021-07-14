@@ -26,7 +26,7 @@ namespace LHRP.Domain.Tests.Labware.Tips
         public void GetNextAvailableTip()
         {
             var tipRack = new TipRack(
-                new TipRackDefinition(300, "", 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0));
+                new TipRackDefinition(300, "", 300, true, 8, 12, new Coordinates(0, 0, 0), 0.0), 1);
 
             var nextTipResult = tipRack.GetNextAvailableTip();
 
