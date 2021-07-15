@@ -7,6 +7,13 @@ namespace LHRP.Api.Labware
 {
     public class CylindricalLabwareShape : ILabwareShape
     {
+        public CylindricalLabwareShape(double radius, double height)
+        {
+            Origin = new Coordinates();
+            Dimensions = new Dimensions(radius, radius, height);
+            Center = new Coordinates(Origin.X + radius, Origin.Y + radius, Origin.Z + height / 2.0);
+        }
+
         public CylindricalLabwareShape(double radius, double height, Coordinates origin)
         {
             Origin = origin;

@@ -30,6 +30,10 @@ namespace LHRP.Api.Labware
             }
         }
 
+        public CustomLabwareShape()
+        {
+            Origin = new Coordinates();
+        }
         public CustomLabwareShape(Coordinates origin)
         {
             Origin = origin;
