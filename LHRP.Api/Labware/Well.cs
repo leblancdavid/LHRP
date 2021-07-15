@@ -7,7 +7,7 @@ namespace LHRP.Api.Labware
         public WellDefinition Definition { get; private set; }
 
         public Well(LabwareAddress address, Coordinates absolutePosition, WellDefinition definition)
-            : base(address, absolutePosition, definition.WellCapacity)
+            : base(address, absolutePosition, definition.WellShape)
         {
             
             Definition = definition;

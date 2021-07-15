@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LHRP.Api.Labware.Definitions
+namespace LHRP.Api.Labware
 {
     public class CylindricalLabwareShape : ILabwareShape
     {

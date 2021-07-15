@@ -12,14 +12,17 @@ namespace LHRP.Api.Labware
         public int Columns { get; private set; }
         public Coordinates Offset { get; private set; }
         public double Spacing { get; private set; }
+        public ILabwareShape Shape { get; private set; }
 
         public PlateDefinition(string displayName,
+            ILabwareShape shape,
             WellDefinition wellDefinition,
             int rows, int columns, 
             Coordinates offset, double spacing)
         {
             Id = 0;
             DisplayName = displayName;
+            Shape = shape;
             WellDefinition = wellDefinition;
             Rows = rows;
             Columns = columns;

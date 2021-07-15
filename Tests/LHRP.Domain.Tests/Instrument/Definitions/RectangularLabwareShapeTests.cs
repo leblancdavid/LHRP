@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LHRP.Api.Instrument;
-using LHRP.Api.Labware.Definitions;
+using LHRP.Api.Labware;
 using System;
 using System.Collections.Generic;
 using System.Text;

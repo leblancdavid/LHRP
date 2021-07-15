@@ -2,13 +2,11 @@ namespace LHRP.Api.Labware
 {
     public class WellDefinition
     {
-        public double WellCapacity { get; private set; }
-        public double DeadVolume { get; private set; }
+        public ILabwareShape WellShape { get; private set; }
 
-        public WellDefinition(double wellCapacity = 0.0, double deadVolume = 0.0)
+        public WellDefinition(ILabwareShape wellShape)
         {
-            WellCapacity = wellCapacity;
-            DeadVolume = deadVolume;
+            WellShape = wellShape;
         }
     }
 }

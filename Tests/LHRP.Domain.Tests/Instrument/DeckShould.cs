@@ -39,7 +39,9 @@ namespace LHRP.Domain.Tests.Instrument
         [Fact]
         public void Successfully_AssignLabware()
         {
-            var result = deck.AddLabware(1, new Plate(new PlateDefinition("Plate1", new WellDefinition(), 8, 12, new Coordinates(0, 0, 0), 9.0), 1));
+            var result = deck.AddLabware(1, new Plate(new PlateDefinition("Plate1",
+                new RectangularLabwareShape(0.0, 0.0, 0.0, new Coordinates(0.0, 0.0, 0.0)),
+                new WellDefinition(new CylindricalLabwareShape(4.5, 14.5, new Coordinates())), 8, 12, new Coordinates(0, 0, 0), 9.0), 1));
             result.IsSuccess.Should().BeTrue();
             var position = deck.GetDeckPosition(1);
             (position != null).Should().BeTrue();
@@ -50,7 +52,9 @@ namespace LHRP.Domain.Tests.Instrument
         [Fact]
         public void Fail_WhenAssigningLabware_ToAnInvalidPosition()
         {
-            var result = deck.AddLabware(99, new Plate(new PlateDefinition("Plate1", new WellDefinition(), 8, 12, new Coordinates(0, 0, 0), 9.0), 1));
+            var result = deck.AddLabware(99, new Plate(new PlateDefinition("Plate1",
+                new RectangularLabwareShape(0.0, 0.0, 0.0, new Coordinates(0.0, 0.0, 0.0)), 
+                new WellDefinition(new CylindricalLabwareShape(4.5, 14.5, new Coordinates())), 8, 12, new Coordinates(0, 0, 0), 9.0), 1));
             result.IsSuccess.Should().BeFalse();
         }
 

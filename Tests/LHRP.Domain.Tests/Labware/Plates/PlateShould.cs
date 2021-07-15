@@ -12,7 +12,9 @@ namespace LHRP.Domain.Tests.Labware.Plates
         private Plate _plate96;
         public PlateShould()
         {
-            _plate96 = new Plate(new PlateDefinition("Plate96", new WellDefinition(300), 8, 12, new Coordinates(85.0, 127.0, 14.5), 9.0));
+            _plate96 = new Plate(new PlateDefinition("Plate96",
+                new RectangularLabwareShape(0.0, 0.0, 0.0, new Coordinates(0.0, 0.0, 0.0)), 
+                new WellDefinition(new CylindricalLabwareShape(4.5, 14.5, new Coordinates())), 8, 12, new Coordinates(85.0, 127.0, 14.5), 9.0));
         }
 
         [Fact]

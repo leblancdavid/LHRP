@@ -1,6 +1,6 @@
 ﻿using LHRP.Api.Instrument;
 
-namespace LHRP.Api.Labware.Definitions
+namespace LHRP.Api.Labware
 {
     public class RectangularLabwareShape : ILabwareShape
     {
