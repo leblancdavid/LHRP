@@ -1,4 +1,5 @@
-﻿using LHRP.Api.Labware;
+﻿using LHRP.Api.Devices.Pipettor;
+using LHRP.Api.Labware;
 using LHRP.Api.Protocol;
 using LHRP.Api.Protocol.Steps;
 using LHRP.Api.Protocol.Transfers;
@@ -28,6 +29,8 @@ namespace LHRP.TestConsole
             var protocol = new Protocol();
             var transferSampleStep = new OneToOneTransferStep(
                 new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(2, 3, 50.0),
+                new AspirateParameters(),
+                new DispenseParameters(),
                 300, false));
             protocol.AddStep(transferSampleStep);
 
