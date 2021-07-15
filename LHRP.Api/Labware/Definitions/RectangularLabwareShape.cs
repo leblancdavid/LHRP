@@ -1,7 +1,4 @@
 ﻿using LHRP.Api.Instrument;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LHRP.Api.Labware.Definitions
 {
@@ -11,6 +8,7 @@ namespace LHRP.Api.Labware.Definitions
         {
             Origin = origin;
             Dimensions = new Dimensions(width, length, height);
+            Center = new Coordinates(Origin.X + width / 2.0, Origin.Y + length / 2.0, Origin.Z + height / 2.0);
         }
 
         public double ClearanceHeight => Origin.Z + Dimensions.Height;
@@ -20,5 +18,17 @@ namespace LHRP.Api.Labware.Definitions
         public Coordinates Origin { get; private set; }
 
         public Dimensions Dimensions { get; private set; }
+
+        public Coordinates Center { get; private set; }
+
+        public double GetHeightAtVolume(double volume)
+        {
+            if(volume >= TotalVolume)
+            {
+                return Dimensions.Height;
+            }
+
+            return (volume / (Dimensions.Width * Dimensions.Length)) + Origin.Z;
+        }
     }
 }

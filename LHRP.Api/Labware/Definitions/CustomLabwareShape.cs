@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LHRP.Api.Labware.Definitions
 {
-    public abstract class CustomLabwareShape : ILabwareShape
+    public class CustomLabwareShape : ILabwareShape
     {
         protected List<ILabwareShape> _segments = new List<ILabwareShape>();
         public IEnumerable<ILabwareShape> Segments => _segments;
@@ -19,6 +19,17 @@ namespace LHRP.Api.Labware.Definitions
 
         public Dimensions Dimensions => CalculateDimensions();
 
+        public Coordinates Center
+        {
+            get
+            {
+                var dimensions = Dimensions;
+                return new Coordinates(Origin.X + dimensions.Width / 2.0,
+                    Origin.Y + dimensions.Length / 2.0,
+                    Origin.Z + dimensions.Height / 2.0);
+            }
+        }
+
         public CustomLabwareShape(Coordinates origin)
         {
             Origin = origin;
@@ -27,11 +38,8 @@ namespace LHRP.Api.Labware.Definitions
         public void AddSegment(ILabwareShape segment)
         {
             _segments.Add(segment);
-        }
-
-        public void insertSegmentAt(int index, ILabwareShape segment)
-        {
-            _segments.Insert(index, segment);
+            //
+            _segments = _segments.OrderBy(x => x.Origin.Z).ToList();
         }
 
         public void RemoveSegmentAt(int index)
@@ -61,9 +69,30 @@ namespace LHRP.Api.Labware.Definitions
             {
                 minY = Origin.Y;
             }
-            double maxZ = _segments.Max(x => x.Origin.X + x.Dimensions.Height);
+            double maxZ = _segments.Max(x => x.Origin.Z + x.Dimensions.Height);
 
             return new Dimensions(maxX - minX, maxY - minY, maxZ - minZ);
+        }
+
+        public double GetHeightAtVolume(double volume)
+        {
+            if(!_segments.Any())
+            {
+                return 0.0;
+            }
+               
+            double remainingVolume = volume;
+            int i;
+            for (i = 0; i < _segments.Count - 1; ++i)
+            {
+                if(remainingVolume < _segments[i].TotalVolume)
+                {
+                    break;
+                }
+                remainingVolume -= _segments[i].TotalVolume;
+            }
+
+            return _segments[i].GetHeightAtVolume(remainingVolume) + Origin.Z;
         }
     }
 }

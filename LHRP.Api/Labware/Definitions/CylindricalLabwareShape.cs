@@ -11,6 +11,7 @@ namespace LHRP.Api.Labware.Definitions
         {
             Origin = origin;
             Dimensions = new Dimensions(radius, radius, height);
+            Center = new Coordinates(Origin.X + radius, Origin.Y + radius, Origin.Z + height / 2.0);
         }
 
         public double ClearanceHeight => Origin.Z + Dimensions.Height;
@@ -20,5 +21,16 @@ namespace LHRP.Api.Labware.Definitions
         public Coordinates Origin { get; private set; }
 
         public Dimensions Dimensions { get; private set; }
+        public Coordinates Center { get; private set; }
+
+        public double GetHeightAtVolume(double volume)
+        {
+            if (volume >= TotalVolume)
+            {
+                return Dimensions.Height;
+            }
+
+            return (volume / (Math.PI * Dimensions.Width * Dimensions.Width)) + Origin.Z;
+        }
     }
 }
