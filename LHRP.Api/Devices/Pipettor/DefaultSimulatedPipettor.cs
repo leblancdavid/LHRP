@@ -57,8 +57,8 @@ namespace LHRP.Api.Devices.Pipettor
                 if (targets[i] != null)
                 {
                     var target = targets[i];
-                    sb.Append($"Pos{target!.Address.InstanceId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
-                    process.Combine(PipettorStatus[i].OnAspiratedVolume(target.Liquid, target.Volume));
+                    sb.Append($"Pos{target!.Container.Address.InstanceId}-({target.Container.Address.ToAlphaAddress()}), {target.Volume}uL; ");
+                    process.Combine(PipettorStatus[i].OnAspiratedVolume(target.Container.Liquid!, target.Volume));
 
                 }
                 else
@@ -95,7 +95,7 @@ namespace LHRP.Api.Devices.Pipettor
                 if (targets[i] != null)
                 {
                     var target = targets[i];
-                    sb.Append($"Pos{target!.Address.InstanceId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
+                    sb.Append($"Pos{target!.Container.Address.InstanceId}-({target.Container.Address.ToAlphaAddress()}), {target.Volume}uL; ");
                     process.Combine(PipettorStatus[i].OnDispensedVolume(target.Volume));
                 }
                 else

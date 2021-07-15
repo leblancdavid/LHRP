@@ -15,10 +15,10 @@ namespace LHRP.Domain.Tests.Instrument
         {
             deck = new Deck(new List<DeckPosition>()
             {
-                new DeckPosition(1, new Coordinates(0,0,0), new Coordinates(0,0,0)),
-                new DeckPosition(2, new Coordinates(0,0,0), new Coordinates(0,0,0)),
-                new DeckPosition(3, new Coordinates(0,0,0), new Coordinates(0,0,0)),
-                new DeckPosition(4, new Coordinates(0,0,0), new Coordinates(0,0,0)),
+                new DeckPosition(1, new Dimensions(0,0,0), new Coordinates(0,0,0)),
+                new DeckPosition(2, new Dimensions(0,0,0), new Coordinates(0,0,0)),
+                new DeckPosition(3, new Dimensions(0,0,0), new Coordinates(0,0,0)),
+                new DeckPosition(4, new Dimensions(0,0,0), new Coordinates(0,0,0)),
             });
         }
         [Fact]

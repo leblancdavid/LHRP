@@ -3,7 +3,7 @@ using LHRP.Api.Protocol.Transfers;
 
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class AspirateParameters
+    public class AspirateParameters : ILiquidHandlingParameters
     {
         public double PipettingHeight { get; set; }
         public PipettePositionType PipettingPositionType { get; set; }

@@ -63,7 +63,7 @@ namespace LHRP.Api.Protocol.Pipetting
             {
                 foreach (var target in transferTargets.Value.GetActiveChannels())
                 {
-                    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
+                    liquidManager.RemoveLiquidFromPosition(target.Container.Address, target.Volume);
                 }
             }
 

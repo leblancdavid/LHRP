@@ -6,7 +6,7 @@ namespace LHRP.Api.Instrument
     public class DeckPosition : ISnapshotCreator<DeckPosition>
     {
         public DeckPosition(int positionId,
-            Coordinates dimensions,
+            Dimensions dimensions,
             Coordinates position)
         {
             this.PositionId = positionId;
@@ -15,7 +15,7 @@ namespace LHRP.Api.Instrument
         }
         
         public int PositionId { get; private set; }
-        public Coordinates Dimensions { get; private set; }
+        public Dimensions Dimensions { get; private set; }
         public Coordinates Position { get; private set; }
         public Labware.Labware? AssignedLabware { get; private set; }
 

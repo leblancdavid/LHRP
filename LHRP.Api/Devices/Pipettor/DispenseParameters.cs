@@ -1,6 +1,6 @@
 namespace LHRP.Api.Devices.Pipettor
 {
-    public class DispenseParameters
+    public class DispenseParameters : ILiquidHandlingParameters
     {
         public double PipettingHeight { get; set; }
         public PipettePositionType PipettingPositionType { get; set; }
