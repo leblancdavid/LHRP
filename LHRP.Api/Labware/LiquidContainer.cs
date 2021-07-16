@@ -8,7 +8,13 @@ namespace LHRP.Api.Labware
     {
         public double Volume { get; protected set; }
 
-        public double MaxVolume { get; protected set; }
+        public double MaxVolume 
+        { 
+            get
+            {
+                return ContainerShape.TotalVolume;
+            }
+        }
 
         public double AvailableVolume
         {
@@ -36,16 +42,25 @@ namespace LHRP.Api.Labware
                 return _liquid != null;
             }
         }
+        
+        public bool IsEmpty
+        {
+            get
+            {
+                return _liquid == null || Volume == 0.0;
+            }
+        }
 
 
         public Coordinates AbsolutePosition { get; protected set; }
         public LabwareAddress Address { get; protected set; }
+        public ILabwareShape ContainerShape { get; protected set; }
 
-        public LiquidContainer(LabwareAddress address, Coordinates absolutePosition, double maxVolume)
+        public LiquidContainer(LabwareAddress address, Coordinates absolutePosition, ILabwareShape containerShape)
         {
             Address = address;
             AbsolutePosition = absolutePosition;
-            MaxVolume = maxVolume;
+            ContainerShape = containerShape;
         }
 
 
@@ -111,9 +126,26 @@ namespace LHRP.Api.Labware
             Volume = 0.0;
         }
 
+        public Coordinates GetAbsoluteBottomPosition()
+        {
+            var center = ContainerShape.Center;
+            return new Coordinates(AbsolutePosition.X + center.X,
+                AbsolutePosition.Y + center.Y,
+                AbsolutePosition.Z + ContainerShape.Origin.Z);
+        }
+
+        public Coordinates GetLiquidLevelPosition()
+        {
+            var center = ContainerShape.Center;
+            var liquidHeight = ContainerShape.GetHeightAtVolume(Volume);
+            return new Coordinates(AbsolutePosition.X + center.X,
+                AbsolutePosition.Y + center.Y,
+                AbsolutePosition.Z + liquidHeight);
+        }
+
         public virtual LiquidContainer CreateSnapshot()
         {
-            var container = new LiquidContainer(Address, AbsolutePosition, MaxVolume);
+            var container = new LiquidContainer(Address, AbsolutePosition, ContainerShape);
             if(IsAssigned)
             {
                 container.AssignLiquid(this.Liquid!);

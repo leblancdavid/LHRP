@@ -34,34 +34,34 @@ namespace LHRP.Api.Labware
                 //Before we update the absolute position, move all the tips along with the rack.
                 foreach (var tip in _tips.Values)
                 {
-                    tip.AbsolutePosition.X = value.X - _absolutePosition.X;
-                    tip.AbsolutePosition.Y = value.Y - _absolutePosition.Y;
-                    tip.AbsolutePosition.Z = value.Z - _absolutePosition.Z;
+                    tip.AbsolutePosition.X += value.X - _absolutePosition.X;
+                    tip.AbsolutePosition.Y += value.Y - _absolutePosition.Y;
+                    tip.AbsolutePosition.Z += value.Z - _absolutePosition.Z;
                 }
                 _absolutePosition = value;
             }
         }
 
-        public override int PositionId
+        public override int InstanceId
         {
             get
             {
-                return _positionId;
+                return _instanceId;
             }
-            protected set
+            set
             {
-                _positionId = value;
+                _instanceId = value;
                 foreach (var tip in _tips)
                 {
-                    tip.Key.PositionId = value;
-                    tip.Value.Address.PositionId = value;
+                    tip.Key.InstanceId = value;
+                    tip.Value.Address.InstanceId = value;
                 }
             }
         }
 
         private Dictionary<LabwareAddress, Tip> _tips = new Dictionary<LabwareAddress, Tip>();
 
-        public TipRack(TipRackDefinition definition)
+        public TipRack(TipRackDefinition definition, int id = 0) : base(id) //InstanceId doesn't matter for tip racks
         {
             Definition = definition;
 
@@ -83,7 +83,7 @@ namespace LHRP.Api.Labware
                         Z = AbsolutePosition.Z + Definition.Offset.Z
                     };
 
-                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _positionId);
+                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _instanceId);
 
                     _tips.Add(labwareAddress, new Tip(labwareAddress, absolutePosition, Definition.TipVolume, Definition.AreFilteredTips, Definition.Id));
                 }
@@ -131,7 +131,7 @@ namespace LHRP.Api.Labware
         {
             if (RemainingTips < numberTips)
             {
-                return Result.Failure<Tip[]>($"Insufficient tips on tip-rack at position {PositionId}");
+                return Result.Failure<Tip[]>($"Insufficient tips on tip-rack at position {InstanceId}");
             }
 
             //TODO This will need to be optimized, but for now just grab the first N tips you find...
@@ -157,7 +157,7 @@ namespace LHRP.Api.Labware
 
         public override Labware CreateSnapshot()
         {
-            var tipRack = new TipRack(Definition);
+            var tipRack = new TipRack(Definition, _instanceId);
             tipRack._tips = new Dictionary<LabwareAddress, Tip>();
             foreach(var tip in _tips)
             {

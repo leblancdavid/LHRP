@@ -8,20 +8,20 @@ namespace LHRP.Api.Labware
     {
         public int Row { get; private set; }
         public int Column { get; private set; }
-        public int PositionId { get; set; }
+        public int InstanceId { get; set; }
 
         public LabwareAddress(int row, int column)
         {
             Row = row;
             Column = column;
-            PositionId = 0;
+            InstanceId = 0;
         }
 
         public LabwareAddress(int row, int column, int positionId)
         {
             Row = row;
             Column = column;
-            PositionId = positionId;
+            InstanceId = positionId;
         }
 
         public LabwareAddress(string alphaAddress, int positionId)
@@ -50,14 +50,14 @@ namespace LHRP.Api.Labware
             }
             Column = columnInt;
 
-            PositionId = positionId;
+            InstanceId = positionId;
         }
 
         public bool Equals(LabwareAddress? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return other.Row == Row && other.Column == Column && other.PositionId == PositionId;
+            return other.Row == Row && other.Column == Column && other.InstanceId == InstanceId;
         }
 
         public override bool Equals(object? obj)

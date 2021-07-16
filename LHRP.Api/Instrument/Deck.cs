@@ -28,41 +28,46 @@ namespace LHRP.Api.Instrument
             return _deckPositions[positionId];
         }
 
-        public Result AssignLabware(int positionId, Labware.Labware labware)
+        public Result AddLabware(int positionId, Labware.Labware labware)
         {
             if (!_deckPositions.ContainsKey(positionId))
             {
                 return Result.Failure("Invalid deck position ID");
             }
 
+            if(_deckPositions.Values.Any(x => x.IsOccupied && x.AssignedLabware!.InstanceId == labware.InstanceId))
+            {
+                return Result.Failure($"Invalid labware instance ID: Deck already contains a labware with ID {labware.InstanceId}");
+            }
+
             return _deckPositions[positionId].Assign(labware);
         }
 
-        public Labware.Labware? GetLabware(int positionId)
+        public Labware.Labware? GetLabware(int instanceId)
         {
-            if (!_deckPositions.ContainsKey(positionId))
+            foreach(var position in _deckPositions)
             {
-                return null;
+                if(position.Value.IsOccupied && position.Value.AssignedLabware!.InstanceId == instanceId)
+                {
+                    return position.Value.AssignedLabware;
+                }
             }
-            if (!_deckPositions[positionId].IsOccupied)
-            {
-                return null;
-            }
-            return _deckPositions[positionId].AssignedLabware;
+
+            return null;
         }
 
         public Coordinates? GetCoordinates(LabwareAddress address)
         {
-            if (!_deckPositions.ContainsKey(address.PositionId))
+            if (!_deckPositions.ContainsKey(address.InstanceId))
             {
                 return null;
             }
-            if (!_deckPositions[address.PositionId].IsOccupied)
+            if (!_deckPositions[address.InstanceId].IsOccupied)
             {
                 return null;
             }
 
-            return _deckPositions[address.PositionId].AssignedLabware!.GetRealCoordinates(address);
+            return _deckPositions[address.InstanceId].AssignedLabware!.GetRealCoordinates(address);
         }
 
         public IEnumerable<TipRack> GetTipRacks()
@@ -110,13 +115,13 @@ namespace LHRP.Api.Instrument
 
         public LiquidContainer? GetLiquidContainer(LabwareAddress address)
         {
-            if (!_deckPositions.ContainsKey(address.PositionId) ||
-                !_deckPositions[address.PositionId].IsOccupied)
+            if (!_deckPositions.ContainsKey(address.InstanceId) ||
+                !_deckPositions[address.InstanceId].IsOccupied)
             {
                 return null;
             }
 
-            var liquidContainerLabware = _deckPositions[address.PositionId].AssignedLabware as LiquidContainingLabware;
+            var liquidContainerLabware = _deckPositions[address.InstanceId].AssignedLabware as LiquidContainingLabware;
             if(liquidContainerLabware == null)
             {
                 return null;
@@ -143,6 +148,14 @@ namespace LHRP.Api.Instrument
             }
 
             return liquidContainers;
+        }
+
+        public void Clear()
+        {
+            foreach(var position in _deckPositions)
+            {
+                position.Value.RemoveLabware();
+            }
         }
     }
 }

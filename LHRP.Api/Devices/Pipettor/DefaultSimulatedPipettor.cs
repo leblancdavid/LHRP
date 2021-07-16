@@ -57,8 +57,8 @@ namespace LHRP.Api.Devices.Pipettor
                 if (targets[i] != null)
                 {
                     var target = targets[i];
-                    sb.Append($"Pos{target!.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
-                    process.Combine(PipettorStatus[i].OnAspiratedVolume(target.Liquid, target.Volume));
+                    sb.Append($"Pos{target!.Container.Address.InstanceId}-({target.Container.Address.ToAlphaAddress()}) {target.GetPipetteCoordinates()}, {target.Volume}uL, Liquid: {target.Liquid?.GetId()}; ");
+                    process.Combine(PipettorStatus[i].OnAspiratedVolume(target.Container, target.Volume));
 
                 }
                 else
@@ -95,8 +95,8 @@ namespace LHRP.Api.Devices.Pipettor
                 if (targets[i] != null)
                 {
                     var target = targets[i];
-                    sb.Append($"Pos{target!.Address.PositionId}-({target.Address.ToAlphaAddress()}), {target.Volume}uL; ");
-                    process.Combine(PipettorStatus[i].OnDispensedVolume(target.Volume));
+                    sb.Append($"Pos{target!.Container.Address.InstanceId}-({target.Container.Address.ToAlphaAddress()}) {target.GetPipetteCoordinates()}, {target.Volume}uL, Liquid: {PipettorStatus[i].CurrentLiquid?.GetId()}; ");
+                    process.Combine(PipettorStatus[i].OnDispensedVolume(target.Container, target.Volume));
                 }
                 else
                 {
@@ -134,7 +134,7 @@ namespace LHRP.Api.Devices.Pipettor
                 {
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip!.AbsolutePosition;
-                    sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
+                    sb.Append($"Pos{tip.Address.InstanceId}-({tip.Address.ToAlphaAddress()}) {tip.AbsolutePosition}; ");
                     errorPattern.SetInUse(i, random.NextDouble() < _tipPickupFailureRate);
                     if (!errorPattern.IsInUse(i))
                     {
@@ -177,7 +177,7 @@ namespace LHRP.Api.Devices.Pipettor
                     {
                         var tip = parameters.Pattern.GetTip(i);
                         position = tip!.AbsolutePosition;
-                        sb.Append($"Pos{tip.Address.PositionId}-({tip.Address.ToAlphaAddress()}); ");
+                        sb.Append($"Pos{tip.Address.InstanceId}-({tip.Address.ToAlphaAddress()}) {tip.AbsolutePosition}; ");
                         process.Combine(PipettorStatus[i].OnDroppedTip());
                     }
                     else

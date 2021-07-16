@@ -71,7 +71,7 @@ namespace LHRP.Api.Devices.Pipettor
             return true;
         }
 
-        public ProcessResult OnAspiratedVolume(Liquid liquid, double volume)
+        public ProcessResult OnAspiratedVolume(LiquidContainer container, double volume)
         {
             var process = new ProcessResult();
             if (!HasTip)
@@ -90,16 +90,27 @@ namespace LHRP.Api.Devices.Pipettor
                 return process;
             }
 
+            if(container.IsEmpty)
+            {
+                var msg = $"No liquid found to aspirate from in container at {container.Address}";
+                process.AddError(new RuntimeError(msg));
+                _errorMessages.Add(msg);
+                return process;
+            }
+
             if(CurrentLiquid == null)
             {
                 CurrentLiquid = new HeterogeneousLiquid();
             }
-            CurrentLiquid.Mix(liquid, volume / (CurrentVolume + volume));
+
+            container.Remove(volume);
+
+            CurrentLiquid.Mix(container.Liquid!, volume / (CurrentVolume + volume));
             CurrentVolume += volume;
             return process;
         }
 
-        public ProcessResult OnDispensedVolume(double volume)
+        public ProcessResult OnDispensedVolume(LiquidContainer container, double volume)
         {
             var process = new ProcessResult();
             if (!HasTip)
@@ -109,6 +120,16 @@ namespace LHRP.Api.Devices.Pipettor
                 _errorMessages.Add(msg);
                 return process;
             }
+
+            if(CurrentVolume <= 0.0 || CurrentLiquid == null)
+            {
+                var msg = $"Attempted to dispense {volume}uL from a channel with no liquid";
+                process.AddError(new RuntimeError(msg));
+                _errorMessages.Add(msg);
+                return process;
+            }
+
+            container.AddLiquid(CurrentLiquid, volume);
 
             CurrentVolume -= volume;
             if (CurrentVolume < 0)

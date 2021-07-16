@@ -19,15 +19,17 @@ namespace LHRP.Scripting
         public void AddLabware(string labwareDefinition, int positionId, int labwareId)
         {
             //TODO labware definitions
-            _runtimeEngine.Instrument.Deck.AssignLabware(positionId,
-                    new Plate(new PlateDefinition("Costar 96", new WellDefinition(), 8, 12, new Coordinates(86, 127, 14), 9.0)));
+            _runtimeEngine.Instrument.Deck.AddLabware(positionId,
+                    new Plate(new PlateDefinition("Costar 96",
+                new RectangularLabwareShape(0.0, 0.0, 0.0, new Coordinates(0.0, 0.0, 0.0)), 
+                new WellDefinition(new CylindricalLabwareShape(4.5, 14.5, new Coordinates())), 8, 12, new Coordinates(86, 127, 14), 9.0), 1));
         }
 
         public void AddTips(string labwareDefinitinon, int positionId, int tipTypeId)
         {
             //TODO labware definitions
-            _runtimeEngine.Instrument.Deck.AssignLabware(positionId,
-                new TipRack(new TipRackDefinition(300, "300uL Tips", 300.0, false, 8, 12, new Coordinates(9.0, 9.0, 9.0), 9.0)));
+            _runtimeEngine.Instrument.Deck.AddLabware(positionId,
+                new TipRack(new TipRackDefinition(300, "300uL Tips", 300.0, false, 8, 12, new Coordinates(9.0, 9.0, 9.0), 9.0), 1));
         }
 
         public void PickUpTips(int tipTypeId, string channelPattern)

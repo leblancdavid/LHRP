@@ -28,17 +28,17 @@ namespace LHRP.Api.Devices.Pipettor
 
         public bool HasTransferedLiquid(Liquid liquid)
         {
-            return _transfers.Any(x => x.Liquid.ContainsLiquid(liquid));
+            return _transfers.Any(x => x.Liquid != null && x.Liquid.ContainsLiquid(liquid));
         }
 
         public bool HasTransferedFrom(LabwareAddress address)
         {
-            return _transfers.Any(x => x.Address == address && x.Transfer == TransferType.Aspirate);
+            return _transfers.Any(x => x.Container.Address == address && x.Transfer == TransferType.Aspirate);
         }
 
         public bool HasTransferedTo(LabwareAddress address)
         {
-            return _transfers.Any(x => x.Address == address && x.Transfer == TransferType.Dispense);
+            return _transfers.Any(x => x.Container.Address == address && x.Transfer == TransferType.Dispense);
         }
 
         public void Add(ChannelPipettingTransfer transfer)

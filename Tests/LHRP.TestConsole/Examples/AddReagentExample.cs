@@ -28,12 +28,12 @@ namespace LHRP.TestConsole
             
             var reagent = new Liquid("TestReagent");
 
-            var reagentTrough = ExampleLabwareCreator.GetReagentPlate1();
+            var reagentTrough = ExampleLabwareCreator.GetReagentPlate1(2);
             reagentTrough.GetWell(new LabwareAddress(1, 1))?.AssignLiquid(reagent);
 
-            deck.AssignLabware(1, ExampleLabwareCreator.GetTipRack());
-            deck.AssignLabware(2, reagentTrough);
-            deck.AssignLabware(3, ExampleLabwareCreator.GetPlate());
+            deck.AddLabware(1, ExampleLabwareCreator.GetTipRack(1));
+            deck.AddLabware(2, reagentTrough);
+            deck.AddLabware(3, ExampleLabwareCreator.GetPlate(3));
             //Setup protocol and steps
             var protocol = new Protocol();
             var addReagent = new LiquidTransferStep(

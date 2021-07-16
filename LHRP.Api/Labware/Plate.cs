@@ -25,38 +25,39 @@ namespace LHRP.Api.Labware
             } 
             set
             {
-                //Before we update the absolute position, move all the tips along with the rack.
-                foreach(var well in _containers.Values)
+                foreach (var well in _containers.Values)
                 {
-                    well.AbsolutePosition.X = value.X - _absolutePosition.X;
-                    well.AbsolutePosition.Y = value.Y - _absolutePosition.Y;
-                    well.AbsolutePosition.Z = value.Z - _absolutePosition.Z;
+                    well.AbsolutePosition.X += value.X - _absolutePosition.X;
+                    well.AbsolutePosition.Y += value.Y - _absolutePosition.Y;
+                    well.AbsolutePosition.Z += value.Z - _absolutePosition.Z;
                 }
                 _absolutePosition = value;
             }
         }
 
-         public override int PositionId
+         public override int InstanceId
         {
             get
             {
-                return _positionId;
+                return _instanceId;
             }
-            protected set
+            set
             {
-                _positionId = value;
+                _instanceId = value;
                 foreach (var well in _containers)
                 {
-                    well.Key.PositionId = value;
-                    well.Value.Address.PositionId = value;
+                    well.Key.InstanceId = value;
+                    well.Value.Address.InstanceId = value;
                 }
             }
         }
 
-        public Plate(PlateDefinition definition)
+        public Plate(PlateDefinition definition, int id = 0) :
+            base(id)
         {
             Definition = definition;
             InitializeWells(definition);
+            InstanceId = id;
         }
 
         public Well? GetWell(LabwareAddress address)
@@ -89,7 +90,7 @@ namespace LHRP.Api.Labware
                         Z = AbsolutePosition.Z + Definition.Offset.Z
                     };
 
-                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _positionId);
+                    var labwareAddress = new LabwareAddress(i + 1, j + 1, _instanceId);
 
                     _containers.Add(labwareAddress, new Well(labwareAddress, absolutePosition, definition.WellDefinition));
                 }
@@ -98,7 +99,7 @@ namespace LHRP.Api.Labware
 
         public override Labware CreateSnapshot()
         {
-            var plate = new Plate(Definition);
+            var plate = new Plate(Definition, _instanceId);
 
             foreach (var well in _containers)
             {

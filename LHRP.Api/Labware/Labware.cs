@@ -12,16 +12,16 @@ namespace LHRP.Api.Labware
         public double Height { get; protected set; }
         public double Depth { get; protected set; }
 
-        protected int _positionId;
-        public virtual int PositionId 
+        protected int _instanceId;
+        public virtual int InstanceId 
         { 
             get
             {
-                return _positionId;
+                return _instanceId;
             } 
-            protected set
+            set
             {
-                _positionId = value;
+                _instanceId = value;
             } 
         }
         protected Coordinates _absolutePosition = new Coordinates();
@@ -37,16 +37,16 @@ namespace LHRP.Api.Labware
             }
         }
 
-        public Labware()
+        public Labware(int id)
         {
             Name = "";
+            _instanceId = id;
         }
 
         public abstract Coordinates? GetRealCoordinates(LabwareAddress address);
-        public void UpdatePosition(Coordinates position, int positionId)
+        public void UpdatePosition(Coordinates position)
         {
             AbsolutePosition = position;
-            PositionId = positionId;
         }
 
         public abstract Labware CreateSnapshot();

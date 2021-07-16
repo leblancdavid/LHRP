@@ -2,7 +2,7 @@ namespace LHRP.Api.Instrument
 {
     public class Coordinates
     {
-        public double X { get;  set; }
+        public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
 
@@ -18,6 +18,11 @@ namespace LHRP.Api.Instrument
             X = 0.0;
             Y = 0.0;
             Z = 0.0;
+        }
+
+        public override string ToString()
+        {
+            return $"({X},{Y},{Z})";
         }
     }
 }

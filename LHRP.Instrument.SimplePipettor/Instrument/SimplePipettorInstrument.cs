@@ -21,8 +21,8 @@ namespace LHRP.Instrument.SimplePipettor.Instrument
             {
                 //just temporary position assignement
                 deckPositions.Add(new DeckPosition(i + 1,
-                    new Coordinates(1.0, 1.0, 1.0),
-                    new Coordinates(i, i, i)));
+                    new Dimensions(127.76, 85.48, 0.0),
+                    new Coordinates(i * 127.76, i * 85.48, 0.0)));
             }
 
             return new Deck(deckPositions);

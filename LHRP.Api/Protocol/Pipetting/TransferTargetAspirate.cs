@@ -52,20 +52,13 @@ namespace LHRP.Api.Protocol.Pipetting
             var liquidManager = engine.Instrument.LiquidManager;
 
             var errors = new List<RuntimeError>();
-            var pipetteTargets = _targets.ToChannelPatternPipettingContext(engine.Instrument, out errors);
+            var pipetteTargets = _targets.ToChannelPatternPipettingContext(_parameters, engine.Instrument, out errors);
             if(errors.Any())
             {
                 return new ProcessResult(errors.ToArray());
             }
             var processResult = pipettor.Aspirate(new AspirateContext(pipetteTargets, _parameters));
-            if(!processResult.ContainsErrors)
-            {
-                foreach (var target in _targets.GetActiveChannels())
-                {
-                    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
-                }
-            }
-            
+           
             return processResult;
         }
 

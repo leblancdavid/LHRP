@@ -13,7 +13,7 @@ namespace LHRP.Domain.Tests.Instrument
             var positions = new List<DeckPosition>();
             for(int i = 0; i < numPositions; ++i)
             {
-                positions.Add(new DeckPosition(i + 1, new Coordinates(), new Coordinates()));
+                positions.Add(new DeckPosition(i + 1, new Dimensions(), new Coordinates()));
             }
             return new Deck(positions);
         }

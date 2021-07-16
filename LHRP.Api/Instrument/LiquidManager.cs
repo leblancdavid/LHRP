@@ -16,10 +16,10 @@ namespace LHRP.Api.Instrument
         public Result RemoveLiquidFromPosition(LabwareAddress address, double volume)
         {
             var plates = _deck.GetPlates();
-            var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
+            var targetPlate = plates.FirstOrDefault(x => x.InstanceId == address.InstanceId);
             if(targetPlate == null)
             {
-                return Result.Failure($"No plate found in position {address.PositionId}");
+                return Result.Failure($"No plate found in position {address.InstanceId}");
             }
             
             var well = targetPlate.GetWell(address);
@@ -41,10 +41,10 @@ namespace LHRP.Api.Instrument
         public Result AddLiquidToPosition(LabwareAddress address, Liquid liquidToAssign, double volume)
         {
             var plates = _deck.GetPlates();
-            var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
+            var targetPlate = plates.FirstOrDefault(x => x.InstanceId == address.InstanceId);
             if(targetPlate == null)
             {
-                return Result.Failure($"No plate found in position {address.PositionId}");
+                return Result.Failure($"No plate found in position {address.InstanceId}");
             }
             
             var well = targetPlate.GetWell(address);
@@ -107,10 +107,10 @@ namespace LHRP.Api.Instrument
         public Result ClearLiquidAtPosition(LabwareAddress address)
         {
             var plates = _deck.GetPlates();
-            var targetPlate = plates.FirstOrDefault(x => x.PositionId == address.PositionId);
+            var targetPlate = plates.FirstOrDefault(x => x.InstanceId == address.InstanceId);
             if (targetPlate == null)
             {
-                return Result.Failure($"No plate found in position {address.PositionId}");
+                return Result.Failure($"No plate found in position {address.InstanceId}");
             }
 
             var well = targetPlate.GetWell(address);

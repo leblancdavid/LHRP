@@ -11,9 +11,9 @@ using System;
 
 namespace LHRP.TestConsole
 {
-    public class TransferSamplesExample : IProtocolExampleRunner
+    public class TransferSamplesExample2 : IProtocolExampleRunner
     {
-        public TransferSamplesExample()
+        public TransferSamplesExample2()
         {
         }
         public ProcessResult RunExample()
@@ -28,10 +28,14 @@ namespace LHRP.TestConsole
             //Setup protocol and steps
             var protocol = new Protocol();
             var transferSampleStep = new OneToOneTransferStep(
-                new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(1, 2, 100.0),
-                new AspirateParameters(),
-                new DispenseParameters(),
+                new OneToOneTransferStepData(GetOneToOneTransferFor96Wells(1, 2, 150.0),
+                //Aspirate from the liquid level -1mm
+                new AspirateParameters(pipettingHeight: -1.0, pipettePositionType: PipettePositionType.FromLiquidLevel),
+                //Dispense to 5mm above the liquid level
+                new DispenseParameters(pipettingHeight: 5.0, pipettePositionType: PipettePositionType.FromLiquidLevel),
                 300, false));
+            //Repeat the step twice so that we can see how the aspirate and dispense positions change
+            protocol.AddStep(transferSampleStep);
             protocol.AddStep(transferSampleStep);
 
             return protocol.Run(simplePipettorSimulation);
@@ -40,7 +44,7 @@ namespace LHRP.TestConsole
         TransferPattern<OneToOneTransfer> GetOneToOneTransferFor96Wells(int sourcePositionId, int destinationPositionId, double volume)
         {
             var tp = new TransferPattern<OneToOneTransfer>();
-            int rows = 8, cols = 12;
+            int rows = 2, cols = 1;
             for (int i = 1; i <= rows; ++i)
             {
                 for (int j = 1; j <= cols; ++j)

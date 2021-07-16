@@ -4,13 +4,20 @@ namespace LHRP.Api.Instrument
     {
         public double Width {get; private set;}
         public double Height {get; private set;}
-        public double Depth {get; private set;}
+        public double Length {get; private set;}
 
-        public Dimensions(double width, double height, double depth)
+        public Dimensions()
+        {
+            Width = 0;
+            Height = 0;
+            Length = 0;
+        }
+
+        public Dimensions(double width, double length, double height)
         {
             Width = width;
             Height = height;
-            Depth = depth;
+            Length = length;
         }
     }
 }
