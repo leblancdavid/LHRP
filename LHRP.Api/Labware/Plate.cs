@@ -25,12 +25,11 @@ namespace LHRP.Api.Labware
             } 
             set
             {
-                //Before we update the absolute position, move all the tips along with the rack.
-                foreach(var well in _containers.Values)
+                foreach (var well in _containers.Values)
                 {
-                    well.AbsolutePosition.X = value.X - _absolutePosition.X;
-                    well.AbsolutePosition.Y = value.Y - _absolutePosition.Y;
-                    well.AbsolutePosition.Z = value.Z - _absolutePosition.Z;
+                    well.AbsolutePosition.X += value.X - _absolutePosition.X;
+                    well.AbsolutePosition.Y += value.Y - _absolutePosition.Y;
+                    well.AbsolutePosition.Z += value.Z - _absolutePosition.Z;
                 }
                 _absolutePosition = value;
             }

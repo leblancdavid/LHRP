@@ -62,16 +62,6 @@ namespace LHRP.Api.Protocol.Pipetting
             }
 
             var processResult = pipettor.Dispense(new DispenseContext(pipetteTargets, _parameters));
-            if(!processResult.ContainsErrors)
-            {
-                for(int i = 0; i < _targets.NumChannels; ++i)
-                {
-                    if(pipettorStatus[i].HasTip && pipettorStatus[i].ContainsLiquid && _targets.IsInUse(i))
-                    {
-                        liquidManager.AddLiquidToPosition(_targets[i]!.Address, pipettorStatus[i].CurrentLiquid!, _targets[i]!.Volume);
-                    }
-                }
-            }
             
             return processResult;
         }

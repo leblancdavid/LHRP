@@ -28,7 +28,7 @@ namespace LHRP.Api.Devices.Pipettor
 
         public bool HasTransferedLiquid(Liquid liquid)
         {
-            return _transfers.Any(x => x.Liquid.ContainsLiquid(liquid));
+            return _transfers.Any(x => x.Liquid != null && x.Liquid.ContainsLiquid(liquid));
         }
 
         public bool HasTransferedFrom(LabwareAddress address)

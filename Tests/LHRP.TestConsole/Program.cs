@@ -7,7 +7,7 @@ namespace LHRP.TestConsole
         static void Main(string[] args)
         {
             //var example = new AddReagentExample(scheduleStream);
-            var example = new TransferSamplesExample();
+            var example = new TransferSamplesExample2();
             example.RunExample();
 
             Console.WriteLine("Done... Hit enter key to continue.");

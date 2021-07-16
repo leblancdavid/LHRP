@@ -42,6 +42,14 @@ namespace LHRP.Api.Labware
                 return _liquid != null;
             }
         }
+        
+        public bool IsEmpty
+        {
+            get
+            {
+                return _liquid == null || Volume == 0.0;
+            }
+        }
 
 
         public Coordinates AbsolutePosition { get; protected set; }
