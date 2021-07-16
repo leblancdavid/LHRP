@@ -14,7 +14,8 @@ namespace LHRP.TestConsole.Examples
                     false,
                     8, 12,
                     new Coordinates(9.0, 9.0, 9.0),
-                    9.0), id
+                    9.0,
+                    new RectangularLabwareShape(127.76, 85.48, 55.0)), id
             );
             return tipRack;
         }

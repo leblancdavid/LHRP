@@ -2,7 +2,7 @@ using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Labware
 {
-    public class TipRackDefinition
+    public class TipRackDefinition : ILabwareDefinition
     {
         public int Id { get; private set; }
         public string DisplayName { get; private set; }
@@ -13,11 +13,14 @@ namespace LHRP.Api.Labware
         public Coordinates Offset { get; private set; }
         public double Spacing { get; private set; }
 
+        public ILabwareShape Shape { get; private set; }
+
         public TipRackDefinition(int id,
             string displayName,
             double tipVolume,
             bool areFilteredTips, int rows, int columns, 
-            Coordinates offset, double spacing)
+            Coordinates offset, double spacing,
+            ILabwareShape shape)
         {
             Id = id;
             DisplayName = displayName;
@@ -27,7 +30,12 @@ namespace LHRP.Api.Labware
             Columns = columns;
             Offset = offset;
             Spacing = spacing;
+            Shape = shape;
         }
 
+        public Labware CreateInstance(int instanceId)
+        {
+            return new TipRack(this, instanceId);
+        }
     }
 }

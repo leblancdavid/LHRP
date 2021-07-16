@@ -61,8 +61,10 @@ namespace LHRP.Domain.Tests.Instrument
         [Fact]
         public void Successfully_RetrieveAllTipRacks()
         {
-            deck.AddLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8, 12, new Coordinates(0, 0, 0), 9.0), 1));
-            deck.AddLabware(2, new TipRack(new TipRackDefinition(300, "whatever2", 33, true, 8, 12, new Coordinates(0, 0, 0), 9.0), 2));
+            deck.AddLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8, 12, new Coordinates(0, 0, 0), 9.0,
+                    new RectangularLabwareShape(127.76, 85.48, 55.0)), 1));
+            deck.AddLabware(2, new TipRack(new TipRackDefinition(300, "whatever2", 33, true, 8, 12, new Coordinates(0, 0, 0), 9.0,
+                    new RectangularLabwareShape(127.76, 85.48, 55.0)), 2));
             var tipRacks = deck.GetTipRacks().ToList();
             tipRacks.Count.Should().Be(2);
             tipRacks[0].Definition.DisplayName.Should().Be("whatever1");
@@ -72,7 +74,8 @@ namespace LHRP.Domain.Tests.Instrument
         [Fact]
         public void Successfully_RetrieveCoordinates_GivenAPositionAndAddess()
         {
-            deck.AddLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8, 12, new Coordinates(0, 0, 0), 9.0), 1));
+            deck.AddLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8, 12, new Coordinates(0, 0, 0), 9.0,
+                    new RectangularLabwareShape(127.76, 85.48, 55.0)), 1));
             var coordinates = deck.GetCoordinates(new LabwareAddress(1, 1, 1));
             (coordinates != null).Should().BeTrue();
             coordinates.X.Should().BeApproximately(0.0, 0.0001);
@@ -83,7 +86,8 @@ namespace LHRP.Domain.Tests.Instrument
         [Fact]
         public void Fail_WhenRetrievingCoordinates_OfInvalidPositionsOrAddress()
         {
-            deck.AddLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8, 12, new Coordinates(0, 0, 0), 9.0), 1));
+            deck.AddLabware(1, new TipRack(new TipRackDefinition(300, "whatever1", 33, true, 8, 12, new Coordinates(0, 0, 0), 9.0,
+                    new RectangularLabwareShape(127.76, 85.48, 55.0)), 1));
             var coordinates = deck.GetCoordinates(new LabwareAddress(1, 1, 999));
             (coordinates != null).Should().BeFalse();
             coordinates = deck.GetCoordinates(new LabwareAddress(999, 999, 1));

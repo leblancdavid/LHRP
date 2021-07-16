@@ -3,7 +3,7 @@ using LHRP.Api.Instrument;
 
 namespace LHRP.Api.Labware
 {
-    public class PlateDefinition
+    public class PlateDefinition : ILabwareDefinition
     {
         public int Id { get; private set; }
         public string DisplayName { get; private set; }
@@ -28,6 +28,11 @@ namespace LHRP.Api.Labware
             Columns = columns;
             Offset = offset;
             Spacing = spacing;
+        }
+
+        public Labware CreateInstance(int instanceId)
+        {
+            return new Plate(this, instanceId);
         }
     }
 }

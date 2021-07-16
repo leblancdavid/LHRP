@@ -29,7 +29,8 @@ namespace LHRP.Scripting
         {
             //TODO labware definitions
             _runtimeEngine.Instrument.Deck.AddLabware(positionId,
-                new TipRack(new TipRackDefinition(300, "300uL Tips", 300.0, false, 8, 12, new Coordinates(9.0, 9.0, 9.0), 9.0), 1));
+                new TipRack(new TipRackDefinition(300, "300uL Tips", 300.0, false, 8, 12, new Coordinates(9.0, 9.0, 9.0), 9.0,
+                    new RectangularLabwareShape(127.76, 85.48, 55.0)), 1));
         }
 
         public void PickUpTips(int tipTypeId, string channelPattern)
