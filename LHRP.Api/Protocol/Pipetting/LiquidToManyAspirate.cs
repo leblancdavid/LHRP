@@ -97,9 +97,10 @@ namespace LHRP.Api.Protocol.Pipetting
                 }
 
                 double volume = TransferGroup[i]!.GetTotalTransferVolume() + AdditionalAspirateVolume;
-                transferContext[i] = new ChannelPipettingTransfer(volume, i, TransferGroup[i]!.Source,
-                    new Coordinates(), //TODO
-                    transferTarget.Value.Address,
+                transferContext[i] = new ChannelPipettingTransfer(volume, TransferGroup[i]!.Source,
+                    _parameters,
+                    i,
+                    transferTarget.Value,
                     TransferType.Aspirate);
             }
            

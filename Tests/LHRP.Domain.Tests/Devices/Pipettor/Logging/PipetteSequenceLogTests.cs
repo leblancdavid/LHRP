@@ -15,10 +15,19 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
         public void ShouldBeAbleToAddTransfers()
         {
             var sequence = new PipetteSequenceLog();
-            sequence.Add(new ChannelPipettingTransfer(33, 1, new Liquid("Test"), new Coordinates(),
-                new LabwareAddress(1, 1), TransferType.Aspirate));
+            sequence.Add(new ChannelPipettingTransfer(33, 
+                new Liquid("Test"), 
+                new AspirateParameters(), 
+                1, 
+                GetTestContainer(new LabwareAddress(1, 1)), 
+                TransferType.Aspirate));
 
             sequence.Transfers.Count().Should().Be(1);
+        }
+
+        private LiquidContainer GetTestContainer(LabwareAddress address)
+        {
+            return new LiquidContainer(address, new Coordinates(), new RectangularLabwareShape(10.0, 10.0, 10.0));
         }
 
         [Fact]
@@ -26,8 +35,12 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
         {
             var sequence = new PipetteSequenceLog();
             var testLiquid = new Liquid("Test");
-            sequence.Add(new ChannelPipettingTransfer(33, 1, testLiquid, new Coordinates(),
-                new LabwareAddress(1, 1), TransferType.Aspirate));
+            sequence.Add(new ChannelPipettingTransfer(33,
+               testLiquid,
+               new AspirateParameters(),
+               1,
+               GetTestContainer(new LabwareAddress(1, 1)),
+               TransferType.Aspirate));
 
             sequence.HasTransferedLiquid(testLiquid).Should().BeTrue();
         }
@@ -38,9 +51,13 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
             var sequence = new PipetteSequenceLog();
             var testLiquid1 = new Liquid("Test1");
             var testLiquid2 = new Liquid("Test2");
-            sequence.Add(new ChannelPipettingTransfer(33, 1, testLiquid1, new Coordinates(),
-                new LabwareAddress(1, 1), TransferType.Aspirate));
-
+            sequence.Add(new ChannelPipettingTransfer(33,
+               testLiquid1,
+               new AspirateParameters(),
+               1,
+               GetTestContainer(new LabwareAddress(1, 1)),
+               TransferType.Aspirate));
+           
             sequence.HasTransferedLiquid(testLiquid2).Should().BeFalse();
         }
 
@@ -50,8 +67,12 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
             var sequence = new PipetteSequenceLog();
             var testLiquid = new Liquid("Test");
             var testAddress = new LabwareAddress(1, 1, 1);
-            sequence.Add(new ChannelPipettingTransfer(33, 1, testLiquid, new Coordinates(),
-                testAddress, TransferType.Aspirate));
+            sequence.Add(new ChannelPipettingTransfer(33,
+               testLiquid,
+               new AspirateParameters(),
+               1,
+               GetTestContainer(testAddress),
+               TransferType.Aspirate));
 
             sequence.HasTransferedFrom(testAddress).Should().BeTrue();
         }
@@ -63,8 +84,12 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
             var testLiquid = new Liquid("Test");
             var testAddress1 = new LabwareAddress(1, 1, 1);
             var testAddress2 = new LabwareAddress(1, 33, 1);
-            sequence.Add(new ChannelPipettingTransfer(33, 1, testLiquid, new Coordinates(),
-                testAddress1, TransferType.Aspirate));
+            sequence.Add(new ChannelPipettingTransfer(33,
+               testLiquid,
+               new AspirateParameters(),
+               1,
+               GetTestContainer(testAddress1),
+               TransferType.Aspirate));
 
             sequence.HasTransferedFrom(testAddress2).Should().BeFalse();
         }
@@ -75,8 +100,12 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
             var sequence = new PipetteSequenceLog();
             var testLiquid = new Liquid("Test");
             var testAddress = new LabwareAddress(1, 1, 1);
-            sequence.Add(new ChannelPipettingTransfer(33, 1, testLiquid, new Coordinates(),
-                testAddress, TransferType.Dispense));
+            sequence.Add(new ChannelPipettingTransfer(33,
+               testLiquid,
+               new AspirateParameters(),
+               1,
+               GetTestContainer(testAddress),
+               TransferType.Dispense));
 
             sequence.HasTransferedTo(testAddress).Should().BeTrue();
         }
@@ -88,8 +117,12 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
             var testLiquid = new Liquid("Test");
             var testAddress1 = new LabwareAddress(1, 1, 1);
             var testAddress2 = new LabwareAddress(1, 33, 1);
-            sequence.Add(new ChannelPipettingTransfer(33, 1, testLiquid, new Coordinates(),
-                testAddress1, TransferType.Dispense));
+            sequence.Add(new ChannelPipettingTransfer(33,
+               testLiquid,
+               new AspirateParameters(),
+               1,
+               GetTestContainer(testAddress1),
+               TransferType.Dispense));
 
             sequence.HasTransferedTo(testAddress2).Should().BeFalse();
         }

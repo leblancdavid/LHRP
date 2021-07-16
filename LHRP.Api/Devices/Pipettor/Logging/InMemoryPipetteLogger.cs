@@ -80,7 +80,7 @@ namespace LHRP.Api.Devices.Pipettor
             for(int i = 0; i < allTransfers.Count; ++i)
             {
                 if(allTransfers[i].Transfer == TransferType.Aspirate &&
-                    !allTransfers.Take(i).Any(x => x.Address == allTransfers[i].Address))
+                    !allTransfers.Take(i).Any(x => x.Container.Address == allTransfers[i].Container.Address))
                 {
                     sourceTransfers.Add(allTransfers[i]);
                 }

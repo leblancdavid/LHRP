@@ -13,6 +13,7 @@ namespace LHRP.Api.Protocol.Transfers
     {
         public static ChannelPattern<ChannelPipettingTransfer> ToChannelPatternPipettingContext(
             this ChannelPattern<TransferTarget> transferPattern,
+            ILiquidHandlingParameters parameters,
             IInstrument instrument,
             out List<RuntimeError> errors)
         {
@@ -45,8 +46,7 @@ namespace LHRP.Api.Protocol.Transfers
                 }
 
 
-                transferContext[i] = new ChannelPipettingTransfer(transfer.Volume, i, container.Liquid!,
-                    container.AbsolutePosition, transfer.Address, transfer.TransferType);
+                transferContext[i] = new ChannelPipettingTransfer(transfer.Volume, container.Liquid!, parameters, i, container, transfer.TransferType);
             }
 
             return transferContext;

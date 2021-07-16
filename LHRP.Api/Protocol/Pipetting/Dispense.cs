@@ -55,7 +55,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var pipettorStatus = pipettor.PipettorStatus;
 
             var errors = new List<RuntimeError>();
-            var pipetteTargets = _targets.ToChannelPatternPipettingContext(engine.Instrument, out errors);
+            var pipetteTargets = _targets.ToChannelPatternPipettingContext(_parameters, engine.Instrument, out errors);
             if (errors.Any())
             {
                 return new ProcessResult(errors.ToArray());

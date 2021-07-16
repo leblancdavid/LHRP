@@ -124,8 +124,7 @@ namespace LHRP.Api.Protocol.Transfers.LiquidTransfers
                     continue;
                 }
 
-                transferContext[i] = new ChannelPipettingTransfer(transfer.Target.Volume, i, transfer.Source,
-                    transferTarget.Value.AbsolutePosition, transferTarget.Value.Address, TransferType.Aspirate);
+                transferContext[i] = new ChannelPipettingTransfer(transfer.Target.Volume, transfer.Source, parameters, i, transferTarget.Value, TransferType.Aspirate);
             }
 
             return transferContext;

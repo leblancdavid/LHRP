@@ -53,7 +53,7 @@ namespace LHRP.Api.Protocol.Pipetting
             var liquidManager = engine.Instrument.LiquidManager;
 
             List<RuntimeError> errors;
-            var transferContext = TransferGroup.ToChannelPatternPipettingContext(engine.Instrument, out errors);
+            var transferContext = TransferGroup.ToChannelPatternPipettingContext(_parameters, engine.Instrument, out errors);
             if (errors.Any())
             {
                 return new ProcessResult(errors.ToArray());
@@ -64,7 +64,7 @@ namespace LHRP.Api.Protocol.Pipetting
             {
                 foreach (var target in transferContext.GetActiveChannels())
                 {
-                    liquidManager.RemoveLiquidFromPosition(target.Address, target.Volume);
+                    liquidManager.RemoveLiquidFromPosition(target.Container.Address, target.Volume);
                 }
             }
 

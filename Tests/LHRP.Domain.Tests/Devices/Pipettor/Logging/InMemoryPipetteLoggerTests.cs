@@ -34,7 +34,7 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
             
             var sources = logger.GetSourceTransfers().ToList();
             sources.Count().Should().Be(1);
-            sources[0].Address.Should().Be(sourceAddress);
+            sources[0].Container.Address.Should().Be(sourceAddress);
 
         }
 
@@ -85,14 +85,30 @@ namespace LHRP.Domain.Tests.Devices.Pipettor.Logging
             logger.BeginSequence(ChannelPattern.Full(1));
             logger.LogTransfer(new ChannelPattern<ChannelPipettingTransfer>(new ChannelPipettingTransfer[]
             {
-                new ChannelPipettingTransfer(33, 0, new Liquid("Test"), new Coordinates(), sourceAddress, TransferType.Aspirate)
+                new ChannelPipettingTransfer(33,
+                   new Liquid("Test"),
+                   new AspirateParameters(),
+                   1,
+                   GetTestContainer(sourceAddress),
+                   TransferType.Aspirate)
             }));
             logger.LogTransfer(new ChannelPattern<ChannelPipettingTransfer>(new ChannelPipettingTransfer[]
             {
-                new ChannelPipettingTransfer(33, 0, new Liquid("Test"), new Coordinates(), new LabwareAddress(1, 1, 2), TransferType.Dispense)
+                new ChannelPipettingTransfer(33,
+                   new Liquid("Test"),
+                   new DispenseParameters(),
+                   1,
+                   GetTestContainer(new LabwareAddress(1, 1, 2)),
+                   TransferType.Dispense)
             }));
             logger.EndSequence(ChannelPattern.Full(1));
             return logger;
         }
+
+        private LiquidContainer GetTestContainer(LabwareAddress address)
+        {
+            return new LiquidContainer(address, new Coordinates(), new RectangularLabwareShape(10.0, 10.0, 10.0));
+        }
+
     }
 }
