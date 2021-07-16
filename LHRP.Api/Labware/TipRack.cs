@@ -34,9 +34,9 @@ namespace LHRP.Api.Labware
                 //Before we update the absolute position, move all the tips along with the rack.
                 foreach (var tip in _tips.Values)
                 {
-                    tip.AbsolutePosition.X = value.X - _absolutePosition.X;
-                    tip.AbsolutePosition.Y = value.Y - _absolutePosition.Y;
-                    tip.AbsolutePosition.Z = value.Z - _absolutePosition.Z;
+                    tip.AbsolutePosition.X += value.X - _absolutePosition.X;
+                    tip.AbsolutePosition.Y += value.Y - _absolutePosition.Y;
+                    tip.AbsolutePosition.Z += value.Z - _absolutePosition.Z;
                 }
                 _absolutePosition = value;
             }

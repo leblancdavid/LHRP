@@ -134,7 +134,7 @@ namespace LHRP.Api.Devices.Pipettor
                 {
                     var tip = parameters.Pattern.GetTip(i);
                     position = tip!.AbsolutePosition;
-                    sb.Append($"Pos{tip.Address.InstanceId}-({tip.Address.ToAlphaAddress()}); ");
+                    sb.Append($"Pos{tip.Address.InstanceId}-({tip.Address.ToAlphaAddress()}) {tip.AbsolutePosition}; ");
                     errorPattern.SetInUse(i, random.NextDouble() < _tipPickupFailureRate);
                     if (!errorPattern.IsInUse(i))
                     {
@@ -177,7 +177,7 @@ namespace LHRP.Api.Devices.Pipettor
                     {
                         var tip = parameters.Pattern.GetTip(i);
                         position = tip!.AbsolutePosition;
-                        sb.Append($"Pos{tip.Address.InstanceId}-({tip.Address.ToAlphaAddress()}); ");
+                        sb.Append($"Pos{tip.Address.InstanceId}-({tip.Address.ToAlphaAddress()}) {tip.AbsolutePosition}; ");
                         process.Combine(PipettorStatus[i].OnDroppedTip());
                     }
                     else
